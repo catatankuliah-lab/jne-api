@@ -1,0 +1,174 @@
+import Armada from "../models/armadaModel.js"; // Ensure the model is created
+
+// Get all Armada
+export const getAllArmada = async (req, res) => {
+  try {
+    const armadas = await Armada.getAllArmada();
+    res.status(200).json({
+      status: "success",
+      data: armadas,
+      message: "Armada records fetched successfully."
+    });
+  } catch (error) {
+    console.error("Error fetching Armada records:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
+// Get Armada by ID
+export const getArmadaById = async (req, res) => {
+  const { id_armada } = req.params;
+
+  try {
+    const armada = await Armada.getArmadaById(id_armada);
+    if (armada) {
+      res.status(200).json({
+        status: "success",
+        data: armada,
+        message: "Armada fetched successfully."
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        message: "Armada not found."
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching Armada by ID:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
+// Get Armada by Jenis Kendaraan ID
+export const getArmadaByJenisKendaraan = async (req, res) => {
+  const { id_jenis_kendaraan } = req.params;
+
+  try {
+    const armadas = await Armada.getArmadaByJenisKendaraan(id_jenis_kendaraan);
+    if (armadas.length > 0) {
+      res.status(200).json({
+        status: "success",
+        data: armadas,
+        message: "Armada records fetched successfully by Jenis Kendaraan ID."
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        message: "No Armada records found for the given Jenis Kendaraan ID."
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching Armada by Jenis Kendaraan ID:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
+// Get Armada by Nopol
+export const getArmadaByNopol = async (req, res) => {
+  const { nopol_armada } = req.params;
+
+  try {
+    const armadas = await Armada.getArmadaByNopol(nopol_armada);
+    if (armadas.length > 0) {
+      res.status(200).json({
+        status: "success",
+        data: armadas,
+        message: "Armada records fetched successfully by Nopol."
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        message: "No Armada records found for the given Nopol."
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching Armada by Nopol:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
+// Add a new Armada
+export const addArmada = async (req, res) => {
+  const armadaData = req.body;
+
+  try {
+    const newArmada = await Armada.addArmada(armadaData);
+    res.status(201).json({
+      status: "success",
+      data: newArmada,
+      message: "Armada created successfully."
+    });
+  } catch (error) {
+    console.error("Error creating Armada:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
+// Update Armada
+export const updateArmada = async (req, res) => {
+  const { id_armada } = req.params;
+  const armadaData = req.body;
+
+  try {
+    const updatedArmada = await Armada.updateArmada(id_armada, armadaData);
+    if (updatedArmada) {
+      res.status(200).json({
+        status: "success",
+        data: updatedArmada,
+        message: "Armada updated successfully."
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        message: "Armada not found."
+      });
+    }
+  } catch (error) {
+    console.error("Error updating Armada:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
+// Delete Armada
+export const deleteArmada = async (req, res) => {
+  const { id_armada } = req.params;
+
+  try {
+    const deleted = await Armada.deleteArmada(id_armada);
+    if (deleted) {
+      res.status(200).json({
+        status: "success",
+        message: "Armada deleted successfully."
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        message: "Armada not found."
+      });
+    }
+  } catch (error) {
+    console.error("Error deleting Armada:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};

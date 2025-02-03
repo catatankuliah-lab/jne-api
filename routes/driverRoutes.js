@@ -1,0 +1,50 @@
+import express from "express";
+import * as driverController from "../controller/driverController.js";
+import * as authMiddleware from "../middlewares/authMiddleware.js";
+
+const router = express.Router();
+
+// Routes untuk driver dengan otentikasi dan otorisasi
+router.get(
+  "/driver",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3]),
+  driverController.getAllDrivers
+);
+
+router.get(
+  "/driver/:id_driver",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3]),
+  driverController.getDriverById
+);
+
+router.post(
+  "/driver",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2]),
+  driverController.addDriver
+);
+
+router.put(
+  "/driver/:id_driver",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2]),
+  driverController.updateDriver
+);
+
+router.delete(
+  "/driver/:id_driver",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1]),
+  driverController.deleteDriver
+);
+
+// Routes untuk pengembangan (tanpa otentikasi dan otorisasi)
+router.get("/dev/driver", driverController.getAllDrivers);
+router.get("/dev/driver/:id_driver", driverController.getDriverById);
+router.post("/dev/driver", driverController.addDriver);
+router.put("/dev/driver/:id_driver", driverController.updateDriver);
+router.delete("/dev/driver/:id_driver", driverController.deleteDriver);
+
+export default router;

@@ -1,0 +1,201 @@
+import PO from "../models/poModel.js"; // Ensure the model is created
+
+// Get all PO
+export const getAllPO = async (req, res) => {
+  try {
+    const pos = await PO.getAllPO();
+    res.status(200).json({
+      status: "success",
+      data: pos,
+      message: "PO records fetched successfully."
+    });
+  } catch (error) {
+    console.error("Error fetching PO records:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
+// Get PO by ID
+export const getPOById = async (req, res) => {
+  const { id_po } = req.params;
+
+  try {
+    const po = await PO.getPOById(id_po);
+    if (po) {
+      res.status(200).json({
+        status: "success",
+        data: po,
+        message: "PO fetched successfully."
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        message: "PO not found."
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching PO by ID:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
+// Get PO by Customer ID
+export const getPOByCustomerId = async (req, res) => {
+  const { id_customer } = req.params;
+
+  try {
+    const pos = await PO.getPOByCustomerId(id_customer);
+    if (pos.length > 0) {
+      res.status(200).json({
+        status: "success",
+        data: pos,
+        message: "PO records fetched successfully by Customer ID."
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        message: "No PO records found for the given Customer ID."
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching PO by Customer ID:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
+// Get PO by Armada ID
+export const getPOByArmadaId = async (req, res) => {
+  const { id_armada } = req.params;
+
+  try {
+    const pos = await PO.getPOByArmadaId(id_armada);
+    if (pos.length > 0) {
+      res.status(200).json({
+        status: "success",
+        data: pos,
+        message: "PO records fetched successfully by Armada ID."
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        message: "No PO records found for the given Armada ID."
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching PO by Armada ID:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
+// Get PO by Driver ID
+export const getPOByDriverId = async (req, res) => {
+  const { id_driver } = req.params;
+
+  try {
+    const pos = await PO.getPOByDriverId(id_driver);
+    if (pos.length > 0) {
+      res.status(200).json({
+        status: "success",
+        data: pos,
+        message: "PO records fetched successfully by Driver ID."
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        message: "No PO records found for the given Driver ID."
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching PO by Driver ID:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
+// Add a new PO
+export const addPO = async (req, res) => {
+  const poData = req.body;
+
+  try {
+    const newPO = await PO.addPO(poData);
+    res.status(201).json({
+      status: "success",
+      data: newPO,
+      message: "PO created successfully."
+    });
+  } catch (error) {
+    console.error("Error creating PO:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
+// Update PO
+export const updatePO = async (req, res) => {
+  const { id_po } = req.params;
+  const poData = req.body;
+
+  try {
+    const updatedPO = await PO.updatePO(id_po, poData);
+    if (updatedPO) {
+      res.status(200).json({
+        status: "success",
+        data: updatedPO,
+        message: "PO updated successfully."
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        message: "PO not found."
+      });
+    }
+  } catch (error) {
+    console.error("Error updating PO:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
+// Delete PO
+export const deletePO = async (req, res) => {
+  const { id_po } = req.params;
+
+  try {
+    const deleted = await PO.deletePO(id_po);
+    if (deleted) {
+      res.status(200).json({
+        status: "success",
+        message: "PO deleted successfully."
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        message: "PO not found."
+      });
+    }
+  } catch (error) {
+    console.error("Error deleting PO:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
