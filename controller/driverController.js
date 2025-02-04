@@ -1,20 +1,25 @@
 import Driver from "../models/driverModel.js";
 
 // Get all drivers
+
 export const getAllDrivers = async (req, res) => {
+  const { page = 1, limit = 10, } = req.query;
+
   try {
-    const drivers = await Driver.getAllDrivers();
-    res.status(200).json({
-      status: "success",
-      data: drivers,
-      message: "Drivers fetched successfully."
+    const { data, total } = await Driver.getAllDrivers(
+      parseInt(page),
+      parseInt(limit),
+    );
+
+    res.json({
+      data,
+      currentPage: parseInt(page),
+      limit: parseInt(limit),
+      totalData: total,
+      totalPages: Math.ceil(total / parseInt(limit)),
     });
   } catch (error) {
-    console.error("Error fetching drivers:", error);
-    res.status(500).json({
-      status: "error",
-      message: "Internal Server Error"
-    });
+    res.status(500).json({ message: error.message });
   }
 };
 

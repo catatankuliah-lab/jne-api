@@ -2,22 +2,54 @@ import sequelize from "../config/config.js";
 
 const Driver = {
   // Mendapatkan semua driver
-  getAllDrivers: async () => {
-    const [results] = await sequelize.query(`
-      SELECT 
-        id_driver,
-        id_user,
-        nik,
-        telpon_driver,
-        nama_kontak_darurat_driver,
-        telpon_kontak_darurat_driver,
-        masa_berlaku_sim,
-        foto_ktp_driver,
-        foto_sim_driver,
-        status_driver
-      FROM driver
-    `);
-    return results;
+  getAllDrivers: async (page = 1, per_page = 10) => {
+    try {
+      const offset = (page - 1) * per_page;
+      const query = `
+        SELECT
+          id_driver,
+          id_user,
+          nik,
+          nama_driver,
+          telpon_driver,
+          nama_kontak_darurat_driver,
+          telpon_kontak_darurat_driver,
+          masa_berlaku_sim,
+          foto_ktp_driver,
+          foto_sim_driver,
+          status_driver
+        FROM
+            driver
+        LIMIT :per_page OFFSET :offset;
+      `;
+      const data = await sequelize.query(query, {
+        replacements: {
+          per_page: parseInt(per_page),
+          offset: parseInt(offset)
+        },
+        type: sequelize.QueryTypes.SELECT,
+      });
+
+      const countQuery = `
+        SELECT COUNT(*) AS total
+        FROM driver
+      `;
+
+      const [countResult] = await sequelize.query(countQuery, {
+        type: sequelize.QueryTypes.SELECT,
+      });
+
+      console.log('Count Query Result:', countResult);
+
+      return {
+        data,
+        total: countResult.total,
+        page,
+        per_page,
+      };
+    } catch (error) {
+      throw new Error("Error fetching paginated data: " + error.message);
+    }
   },
 
   // Mendapatkan driver berdasarkan ID
@@ -48,6 +80,7 @@ const Driver = {
     const {
       id_user,
       nik,
+      nama_driver,
       telpon_driver,
       nama_kontak_darurat_driver,
       telpon_kontak_darurat_driver,
@@ -58,13 +91,14 @@ const Driver = {
     } = driverData;
     const [result] = await sequelize.query(
       `
-      INSERT INTO driver (id_user, nik, telpon_driver, nama_kontak_darurat_driver, telpon_kontak_darurat_driver, masa_berlaku_sim, foto_ktp_driver, foto_sim_driver, status_driver)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO driver (id_user, nik, nama_driver, telpon_driver, nama_kontak_darurat_driver, telpon_kontak_darurat_driver, masa_berlaku_sim, foto_ktp_driver, foto_sim_driver, status_driver)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `,
       {
         replacements: [
           id_user,
           nik,
+          nama_driver,
           telpon_driver,
           nama_kontak_darurat_driver,
           telpon_kontak_darurat_driver,

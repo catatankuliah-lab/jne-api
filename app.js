@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import sequelize from "./config/config.js";
+import authRoutes from "./routes/authRoutes.js";
 import roleRoutes from "./routes/roleRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
@@ -32,6 +33,7 @@ const init = async () => {
         console.log("Connected to the database.");
         await sequelize.sync();
         console.log("Database & tables created!");
+        app.use("/api/v1", authRoutes);
         app.use("/api/v1", roleRoutes);
         app.use("/api/v1", userRoutes);
         app.use("/api/v1", customerRoutes);

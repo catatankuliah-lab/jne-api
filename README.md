@@ -1,4 +1,4 @@
-# aws-88-mid-stunting-api
+# aws-kasma-api
 
 This is an API project built with Express.js designed to manage and track stunting data.
 

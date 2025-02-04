@@ -50,11 +50,11 @@ export const createUser = async (req, res) => {
   try {
     const hashedPassword = bcrypt.hashSync(password, 10);
 
-    await User.addUser(id_role, username, hashedPassword, status_user);
+    const id_user = await User.addUser(id_role, username, hashedPassword, status_user);
 
     res.status(201).json({
       status: "success",
-      data: { id_role, username, status_user },
+      data: { id_user, id_role, username, status_user },
       message: "User created successfully.",
     });
   } catch (error) {
