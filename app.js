@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import multer from "multer"; // Tambahkan multer
 import sequelize from "./config/config.js";
 import authRoutes from "./routes/authRoutes.js";
 import roleRoutes from "./routes/roleRoutes.js";
@@ -13,9 +14,9 @@ import kasjalanRoutes from "./routes/kasjalanRoutes.js";
 import poRoutes from "./routes/poRoutes.js";
 import titikbongkarRoutes from "./routes/titikbongkarRoutes.js";
 
-
 const app = express();
 const PORT = process.env.PORT || 3090;
+const upload = multer(); // Inisialisasi multer
 
 app.use(
     cors({
@@ -25,7 +26,12 @@ app.use(
     })
 );
 
+// Middleware untuk membaca JSON dan URL-encoded
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Middleware untuk menangani `multipart/form-data`
+app.use(upload.none()); // Ini akan membuat req.body bisa terbaca jika pakai FormData
 
 const init = async () => {
     try {
@@ -33,6 +39,7 @@ const init = async () => {
         console.log("Connected to the database.");
         await sequelize.sync();
         console.log("Database & tables created!");
+
         app.use("/api/v1", authRoutes);
         app.use("/api/v1", roleRoutes);
         app.use("/api/v1", userRoutes);

@@ -60,6 +60,7 @@ const Driver = {
         id_driver,
         id_user,
         nik,
+        nama_driver,
         telpon_driver,
         nama_kontak_darurat_driver,
         telpon_kontak_darurat_driver,
@@ -117,6 +118,7 @@ const Driver = {
     const {
       id_user,
       nik,
+      nama_driver,
       telpon_driver,
       nama_kontak_darurat_driver,
       telpon_kontak_darurat_driver,
@@ -125,16 +127,29 @@ const Driver = {
       foto_sim_driver,
       status_driver,
     } = driverData;
+
     const [result] = await sequelize.query(
       `
       UPDATE driver
-      SET id_user = ?, nik = ?, telpon_driver = ?, nama_kontak_darurat_driver = ?, telpon_kontak_darurat_driver = ?, masa_berlaku_sim = ?, foto_ktp_driver = ?, foto_sim_driver = ?, status_driver = ?
-      WHERE id_driver = ?
+      SET 
+        id_user = ?,
+        nik = ?,
+        nama_driver = ?,
+        telpon_driver = ?,
+        nama_kontak_darurat_driver = ?,
+        telpon_kontak_darurat_driver = ?,
+        masa_berlaku_sim = ?,
+        foto_ktp_driver = ?,
+        foto_sim_driver = ?,
+        status_driver = ?
+      WHERE 
+        id_driver = ?
     `,
       {
         replacements: [
           id_user,
           nik,
+          nama_driver,
           telpon_driver,
           nama_kontak_darurat_driver,
           telpon_kontak_darurat_driver,
@@ -142,7 +157,7 @@ const Driver = {
           foto_ktp_driver,
           foto_sim_driver,
           status_driver,
-          id_driver,
+          id_driver
         ],
       }
     );

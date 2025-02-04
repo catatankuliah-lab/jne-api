@@ -1,4 +1,6 @@
 import Driver from "../models/driverModel.js";
+import multer from "multer";
+const upload = multer();
 
 // Get all drivers
 

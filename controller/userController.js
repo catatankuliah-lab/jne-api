@@ -1,5 +1,7 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
+import multer from "multer";
+const upload = multer();
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -72,6 +74,7 @@ export const updateUser = async (req, res) => {
   const userData = req.body;
 
   try {
+    userData.password = bcrypt.hashSync(userData.password, 10);
     const updatedUser = await User.updateUser(id_user, userData);
     if (updatedUser) {
       res.status(200).json({
