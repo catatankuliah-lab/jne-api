@@ -21,14 +21,14 @@ router.get(
 router.post(
   "/customer",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1]),
+  authMiddleware.authorizeRole([1,9]),
   customerController.createCustomer
 );
 
 router.put(
   "/customer/:id_customer",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1]),
+  authMiddleware.authorizeRole([1,9]),
   customerController.updateCustomer
 );
 

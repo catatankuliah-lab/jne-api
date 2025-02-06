@@ -1,4 +1,6 @@
 import Customer from "../models/customerModel.js";
+import multer from "multer";
+const upload = multer();
 
 export const getAllCustomers = async (req, res) => {
   try {
