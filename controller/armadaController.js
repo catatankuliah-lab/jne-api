@@ -2,19 +2,23 @@ import Armada from "../models/armadaModel.js"; // Ensure the model is created
 
 // Get all Armada
 export const getAllArmada = async (req, res) => {
+  const { page = 1, limit = 10, } = req.query;
+
   try {
-    const armadas = await Armada.getAllArmada();
-    res.status(200).json({
-      status: "success",
-      data: armadas,
-      message: "Armada records fetched successfully."
+    const { data, total } = await Armada.getAllArmada(
+      parseInt(page),
+      parseInt(limit),
+    );
+
+    res.json({
+      data,
+      currentPage: parseInt(page),
+      limit: parseInt(limit),
+      totalData: total,
+      totalPages: Math.ceil(total / parseInt(limit)),
     });
   } catch (error) {
-    console.error("Error fetching Armada records:", error);
-    res.status(500).json({
-      status: "error",
-      message: "Internal Server Error"
-    });
+    res.status(500).json({ message: error.message });
   }
 };
 

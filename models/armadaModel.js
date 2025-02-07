@@ -2,18 +2,55 @@ import sequelize from "../config/config.js";
 
 const Armada = {
   // Get all Armada
-  getAllArmada: async () => {
-    const [results] = await sequelize.query(`
-      SELECT 
-        id_armada,
-        id_jenis_kendaraan,
-        nopol_armada,
-        lokasi_terakhir,
-        status_armada
-      FROM armada
-    `);
-    return results;
+  getAllArmada: async (page = 1, per_page = 10) => {
+    try {
+      const offset = (page - 1) * per_page;
+      const query = `
+        SELECT
+          armada.id_armada,
+          armada.id_jenis_kendaraan,
+          armada.nopol_armada,
+          armada.lokasi_terakhir,
+          armada.status_armada,
+          jenis_kendaraan.nama_jenis_kendaraan
+        FROM
+          armada
+        LEFT JOIN
+          jenis_kendaraan
+        ON
+          armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
+        LIMIT :per_page OFFSET :offset;
+      `;
+      const data = await sequelize.query(query, {
+        replacements: {
+          per_page: parseInt(per_page),
+          offset: parseInt(offset)
+        },
+        type: sequelize.QueryTypes.SELECT,
+      });
+
+      const countQuery = `
+        SELECT COUNT(*) AS total
+        FROM armada
+      `;
+
+      const [countResult] = await sequelize.query(countQuery, {
+        type: sequelize.QueryTypes.SELECT,
+      });
+
+      console.log('Count Query Result:', countResult);
+
+      return {
+        data,
+        total: countResult.total,
+        page,
+        per_page,
+      };
+    } catch (error) {
+      throw new Error("Error fetching paginated data: " + error.message);
+    }
   },
+
 
   // Get Armada by ID
   getArmadaById: async (id_armada) => {

@@ -8,35 +8,35 @@ const router = express.Router();
 router.get(
   "/driver",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 7]),
+  authMiddleware.authorizeRole([1, 7, 9]),
   driverController.getAllDrivers
 );
 
 router.get(
   "/driver/:id_driver",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 7]),
+  authMiddleware.authorizeRole([1, 7, 9]),
   driverController.getDriverById
 );
 
 router.post(
   "/driver",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 7]),
+  authMiddleware.authorizeRole([1, 7, 9]),
   driverController.addDriver
 );
 
 router.put(
   "/driver/:id_driver",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 7]),
+  authMiddleware.authorizeRole([1, 7, 9]),
   driverController.updateDriver
 );
 
 router.delete(
   "/driver/:id_driver",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 7]),
+  authMiddleware.authorizeRole([1, 7, 9]),
   driverController.deleteDriver
 );
 

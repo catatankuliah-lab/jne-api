@@ -3,7 +3,6 @@ import multer from "multer";
 const upload = multer();
 
 // Get all drivers
-
 export const getAllDrivers = async (req, res) => {
   const { page = 1, limit = 10, } = req.query;
 

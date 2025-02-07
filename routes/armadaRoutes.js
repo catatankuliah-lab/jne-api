@@ -8,49 +8,49 @@ const router = express.Router();
 router.get(
   "/armada",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3]), // Adjust roles that are allowed
+  authMiddleware.authorizeRole([1, 2, 3, 12]), // Adjust roles that are allowed
   armadaController.getAllArmada
 );
 
 router.get(
   "/armada/:id_armada",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3]),
+  authMiddleware.authorizeRole([1, 2, 3, 12]),
   armadaController.getArmadaById
 );
 
 router.get(
   "/armada/jenis/:id_jenis_kendaraan",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3]),
+  authMiddleware.authorizeRole([1, 2, 3, 12]),
   armadaController.getArmadaByJenisKendaraan
 );
 
 router.get(
   "/armada/nopol/:nopol_armada",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3]),
+  authMiddleware.authorizeRole([1, 2, 3, 12]),
   armadaController.getArmadaByNopol
 );
 
 router.post(
   "/armada",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2]), // Adjust the roles that are allowed to add data
+  authMiddleware.authorizeRole([1, 2, 3, 12]), // Adjust the roles that are allowed to add data
   armadaController.addArmada
 );
 
 router.put(
   "/armada/:id_armada",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2]), // Adjust roles that are allowed to update data
+  authMiddleware.authorizeRole([1, 2, 3, 12]), // Adjust roles that are allowed to update data
   armadaController.updateArmada
 );
 
 router.delete(
   "/armada/:id_armada",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1]), // Adjust roles that are allowed to delete data
+  authMiddleware.authorizeRole([1, 2, 3, 12]), // Adjust roles that are allowed to delete data
   armadaController.deleteArmada
 );
 
