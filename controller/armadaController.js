@@ -1,4 +1,6 @@
 import Armada from "../models/armadaModel.js"; // Ensure the model is created
+import multer from "multer";
+const upload = multer();
 
 // Get all Armada
 export const getAllArmada = async (req, res) => {
@@ -130,18 +132,11 @@ export const updateArmada = async (req, res) => {
 
   try {
     const updatedArmada = await Armada.updateArmada(id_armada, armadaData);
-    if (updatedArmada) {
-      res.status(200).json({
+     res.status(200).json({
         status: "success",
         data: updatedArmada,
         message: "Armada updated successfully."
       });
-    } else {
-      res.status(404).json({
-        status: "error",
-        message: "Armada not found."
-      });
-    }
   } catch (error) {
     console.error("Error updating Armada:", error);
     res.status(500).json({
