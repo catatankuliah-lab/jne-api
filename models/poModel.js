@@ -18,6 +18,28 @@ const PO = {
     return results;
   },
 
+  // Mendapatkan Jumlah PO berdasarkan Bulan
+  getJumlahPOBulanan: async (bulan) => {
+    try {
+      const tahunSekarang = new Date().getFullYear(); // Ambil tahun sekarang
+      const bulanFormatted = bulan.toString().padStart(2, "0"); // Format jadi '01', '02', dst.
+
+      const [results] = await sequelize.query(
+        `
+        SELECT COUNT(*) as jumlahPO
+        FROM po
+        WHERE tanggal_po LIKE ?
+      `,
+        { replacements: [`${tahunSekarang}-${bulanFormatted}%`] }
+      );
+
+      return results[0].jumlahPO || 0;
+    } catch (error) {
+      console.error("Error in getJumlahPOBulanan:", error);
+      throw new Error("Gagal mengambil jumlah PO bulanan");
+    }
+  },
+
   // Mendapatkan PO berdasarkan ID
   getPOById: async (id_po) => {
     const [results] = await sequelize.query(
@@ -104,14 +126,14 @@ const PO = {
 
   // Menambahkan PO baru
   addPO: async (poData) => {
-    const { tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, status_po } = poData;
+    const { nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po } = poData;
     const [result] = await sequelize.query(
       `
-      INSERT INTO po (tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, status_po)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO po (nomor_po,tanggal_po,jam_pemesanan_po,jam_muat,id_customer,id_armada,id_driver,destination,status_po)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `,
       {
-        replacements: [tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, status_po],
+        replacements: [nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po],
       }
     );
     return { id_po: result.insertId, ...poData };

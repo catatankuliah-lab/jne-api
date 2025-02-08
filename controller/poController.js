@@ -18,6 +18,26 @@ export const getAllPO = async (req, res) => {
   }
 };
 
+// Get Jumlah PO by Bulan
+export const getJumlahPOBulanan = async (req, res) => {
+  try {
+    const { bulan } = req.params;
+
+    // Validasi bulan (1-12)
+    if (!bulan || isNaN(bulan) || bulan < 1 || bulan > 12) {
+      return res.status(400).json({ message: "Bulan tidak valid" });
+    }
+
+    // Ambil jumlah PO berdasarkan LIKE
+    const jumlahPO = await PO.getJumlahPOBulanan(bulan);
+
+    return res.status(200).json({ bulan, jumlahPO });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Terjadi kesalahan server" });
+  }
+};
+
 // Get PO by ID
 export const getPOById = async (req, res) => {
   const { id_po } = req.params;

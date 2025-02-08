@@ -8,56 +8,63 @@ const router = express.Router();
 router.get(
   "/po",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3]), // Adjust roles that are allowed
+  authMiddleware.authorizeRole([1, 2, 3, 9]),
   poController.getAllPO
+);
+
+router.get(
+  "/po/jumlahpobulanan/:bulan",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 9]),
+  poController.getJumlahPOBulanan
 );
 
 router.get(
   "/po/:id_po",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3]),
+  authMiddleware.authorizeRole([1, 2, 3, 9]),
   poController.getPOById
 );
 
 router.get(
   "/po/customer/:id_customer",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3]),
+  authMiddleware.authorizeRole([1, 2, 3, 9]),
   poController.getPOByCustomerId
 );
 
 router.get(
   "/po/armada/:id_armada",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3]),
+  authMiddleware.authorizeRole([1, 2, 3, 9]),
   poController.getPOByArmadaId
 );
 
 router.get(
   "/po/driver/:id_driver",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3]),
+  authMiddleware.authorizeRole([1, 2, 3, 9]),
   poController.getPOByDriverId
 );
 
 router.post(
   "/po",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2]), // Adjust the roles that are allowed to add data
+  authMiddleware.authorizeRole([1, 2, 3, 9]), // Adjust the roles that are allowed to add data
   poController.addPO
 );
 
 router.put(
   "/po/:id_po",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2]), // Adjust roles that are allowed to update data
+  authMiddleware.authorizeRole([1, 2, 3, 9]), // Adjust roles that are allowed to update data
   poController.updatePO
 );
 
 router.delete(
   "/po/:id_po",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1]), // Adjust roles that are allowed to delete data
+  authMiddleware.authorizeRole([1, 2, 3, 9]), // Adjust roles that are allowed to delete data
   poController.deletePO
 );
 
