@@ -2,19 +2,24 @@ import PO from "../models/poModel.js"; // Ensure the model is created
 
 // Get all PO
 export const getAllPO = async (req, res) => {
+  const { page = 1, limit = 10, nomor_po, customer, nopol_armada, nama_driver, startDate, endDate, status_po } = req.query;
+
   try {
-    const pos = await PO.getAllPO();
-    res.status(200).json({
-      status: "success",
-      data: pos,
-      message: "PO records fetched successfully."
+    const { data, total } = await PO.getAllPO(
+      parseInt(page),
+      parseInt(limit),
+      { nomor_po, customer, nopol_armada, nama_driver, startDate, endDate, status_po }
+    );
+
+    res.json({
+      data,
+      currentPage: parseInt(page),
+      limit: parseInt(limit),
+      totalData: total,
+      totalPages: Math.ceil(total / parseInt(limit)),
     });
   } catch (error) {
-    console.error("Error fetching PO records:", error);
-    res.status(500).json({
-      status: "error",
-      message: "Internal Server Error"
-    });
+    res.status(500).json({ message: error.message });
   }
 };
 
