@@ -13,6 +13,13 @@ router.get(
 );
 
 router.get(
+  "/armada/availability",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 9, 12]),
+  armadaController.getArmadaAvailability
+);
+
+router.get(
   "/armada/:id_armada",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 9, 12]),
@@ -62,5 +69,6 @@ router.get("/dev/armada/nopol/:nopol_armada", armadaController.getArmadaByNopol)
 router.post("/dev/armada", armadaController.addArmada);
 router.put("/dev/armada/:id_armada", armadaController.updateArmada);
 router.delete("/dev/armada/:id_armada", armadaController.deleteArmada);
+router.get("/armada/availability", armadaController.getArmadaAvailability);
 
 export default router;

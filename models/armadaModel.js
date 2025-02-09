@@ -145,6 +145,15 @@ const Armada = {
     );
     return result.affectedRows > 0;
   },
+
+  getArmadaAvailability: async () => {
+    const [ available ] = await sequelize.query("SELECT COUNT(*) AS available FROM armada WHERE status_armada = 'TERSEDIA';");
+    console.log(available);
+    const [ unavailable ] = await sequelize.query("SELECT COUNT(*) AS unavailable FROM armada WHERE status_armada = 'DALAM PENGIRIMAN';");
+    console.log(unavailable);
+
+    return { available, unavailable };
+  },
 };
 
 export default Armada;

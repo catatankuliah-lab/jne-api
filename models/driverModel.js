@@ -172,6 +172,15 @@ const Driver = {
     );
     return result.affectedRows > 0;
   },
+
+  getDriverAvailability: async () => {
+    const [ available ] = await sequelize.query("SELECT COUNT(*) AS available FROM driver WHERE status_driver = 'TERSEDIA';");
+    console.log(available);
+    const [ unavailable ] = await sequelize.query("SELECT COUNT(*) AS unavailable FROM driver WHERE status_driver = 'TIDAK TERSEDIA';");
+    console.log(unavailable);
+
+    return { available, unavailable };
+  },
 };
 
 export default Driver;

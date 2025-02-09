@@ -13,6 +13,13 @@ router.get(
 );
 
 router.get(
+  "/driver/availability",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 7, 9]),
+  driverController.getDriverAvailability
+);
+
+router.get(
   "/driver/:id_driver",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 7, 9]),
@@ -40,11 +47,14 @@ router.delete(
   driverController.deleteDriver
 );
 
+
 // Routes untuk pengembangan (tanpa otentikasi dan otorisasi)
 router.get("/dev/driver", driverController.getAllDrivers);
 router.get("/dev/driver/:id_driver", driverController.getDriverById);
 router.post("/dev/driver", driverController.addDriver);
 router.put("/dev/driver/:id_driver", driverController.updateDriver);
 router.delete("/dev/driver/:id_driver", driverController.deleteDriver);
+router.get("/driver/availability", driverController.getDriverAvailability);
+
 
 export default router;

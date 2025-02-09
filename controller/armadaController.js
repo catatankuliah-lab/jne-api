@@ -171,3 +171,12 @@ export const deleteArmada = async (req, res) => {
     });
   }
 };
+
+export const getArmadaAvailability = async (req, res) => {
+  try {
+      const availability = await Armada.getArmadaAvailability();
+      res.json({ status: "success", data: availability });
+  } catch (error) {
+      res.status(500).json({ status: "error", message: error.message });
+  }
+};

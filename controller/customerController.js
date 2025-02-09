@@ -73,11 +73,7 @@ export const updateCustomer = async (req, res) => {
   try {
     const updatedCustomer = await Customer.updateCustomer(id_customer, customerData);
     if (updatedCustomer) {
-      res.status(200).json({
-        status: "success",
-        data: updatedCustomer,
-        message: "Customer updated successfully."
-      });
+      
     } else {
       res.status(404).json({
         status: "error",

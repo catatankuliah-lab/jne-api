@@ -78,18 +78,11 @@ export const updateDriver = async (req, res) => {
 
   try {
     const updatedDriver = await Driver.updateDriver(id_driver, driverData);
-    if (updatedDriver) {
-      res.status(200).json({
-        status: "success",
-        data: updatedDriver,
-        message: "Driver updated successfully."
-      });
-    } else {
-      res.status(404).json({
-        status: "error",
-        message: "Driver not found."
-      });
-    }
+    res.status(200).json({
+      status: "success",
+      data: updatedDriver,
+      message: "Driver updated successfully."
+    });
   } catch (error) {
     console.error("Error updating driver:", error);
     res.status(500).json({
@@ -122,5 +115,17 @@ export const deleteDriver = async (req, res) => {
       status: "error",
       message: "Internal Server Error"
     });
+  }
+};
+
+// driverController.js
+
+// Fungsi untuk mendapatkan ketersediaan driver
+export const getDriverAvailability = async (req, res) => {
+  try {
+      const availability = await Driver.getDriverAvailability();
+      res.json({ status: "success", data: availability });
+  } catch (error) {
+      res.status(500).json({ status: "error", message: error.message });
   }
 };
