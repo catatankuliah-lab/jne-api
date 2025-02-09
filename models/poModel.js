@@ -126,17 +126,76 @@ const PO = {
   getPOById: async (id_po) => {
     const [results] = await sequelize.query(
       `
-      SELECT 
-        id_po,
-        tanggal_po,
-        jam_pemesanan_po,
-        jam_muat,
-        id_customer,
-        id_armada,
-        id_driver,
-        status_po
+      SELECT
+        po.id_po,
+        po.nomor_po,
+        po.tanggal_po,
+        po.jam_pemesanan_po,
+        po.jam_muat,
+        po.id_customer,
+        po.id_armada,
+        po.id_driver,
+        po.destination,
+        po.status_po,
+        customer.nama_customer,
+        customer.alamat_customer,
+        driver.nama_driver,
+        armada.nopol_armada,
+        jenis_kendaraan.nama_jenis_kendaraan,
+        COALESCE(
+          JSON_OBJECT(
+            'REGULER', (
+              SELECT JSON_OBJECT(
+                'jenis_kas_jalan', kas_jalan.jenis_kas_jalan,
+                'jarak_isi', kas_jalan.jarak_isi,
+                'jarak_kosong', kas_jalan.jarak_kosong,
+                'jam_tunggu', kas_jalan.jam_tunggu,
+                'gaji_driver', kas_jalan.gaji_driver,
+                'e_toll', kas_jalan.e_toll,
+                'keterangan_rute', kas_jalan.keterangan_rute,
+                'tonase', kas_jalan.tonase
+              )
+              FROM kas_jalan
+              WHERE kas_jalan.id_po = po.id_po AND kas_jalan.jenis_kas_jalan = 'REGULER'
+              LIMIT 1
+            ),
+            'KOSONGAN', (
+              SELECT JSON_OBJECT(
+                'jenis_kas_jalan', kas_jalan.jenis_kas_jalan,
+                'jarak_isi', kas_jalan.jarak_isi,
+                'jarak_kosong', kas_jalan.jarak_kosong,
+                'jam_tunggu', kas_jalan.jam_tunggu,
+                'gaji_driver', kas_jalan.gaji_driver,
+                'e_toll', kas_jalan.e_toll,
+                'keterangan_rute', kas_jalan.keterangan_rute,
+                'tonase', kas_jalan.tonase
+              )
+              FROM kas_jalan
+              WHERE kas_jalan.id_po = po.id_po AND kas_jalan.jenis_kas_jalan = 'KOSONGAN'
+              LIMIT 1
+            )
+          ), '{}'
+        ) AS kas_jalan,
+        COALESCE(
+          JSON_ARRAYAGG(
+            JSON_OBJECT(
+              'id_titik_bongkar', titik_bongkar.id_titik_bongkar,
+              'id_kabupaten_kota', titik_bongkar.id_kabupaten_kota,
+              'nama_kabupaten_kota', kabupaten_kota.nama_kabupaten_kota,
+              'alamat_titik_bongkar', titik_bongkar.alamat_titik_bongkar,
+              'jam_bongkar', titik_bongkar.jam_bongkar
+            )
+          ), '[]'
+        ) AS titik_bongkar
       FROM po
-      WHERE id_po = ?
+      LEFT JOIN customer ON po.id_customer = customer.id_customer
+      LEFT JOIN driver ON po.id_driver = driver.id_driver
+      LEFT JOIN armada ON po.id_armada = armada.id_armada
+      LEFT JOIN jenis_kendaraan ON armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
+      LEFT JOIN titik_bongkar ON po.id_po = titik_bongkar.id_po
+      LEFT JOIN kabupaten_kota ON titik_bongkar.id_kabupaten_kota = kabupaten_kota.id_kabupaten_kota
+      WHERE po.id_po = ?
+      GROUP BY po.id_po;
     `,
       { replacements: [id_po] }
     );
