@@ -37,6 +37,8 @@ router.put(
   "/driver/:id_driver",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 7, 9]),
+  driverController.upload.single('foto_ktp_driver'),
+  driverController.uploadFileDriver,
   driverController.updateDriver
 );
 

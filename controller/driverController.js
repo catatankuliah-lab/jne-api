@@ -1,6 +1,36 @@
 import Driver from "../models/driverModel.js";
 import multer from "multer";
-const upload = multer();
+import path from "path";
+import fs from "fs";
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const  id_driver  = req.params.id_driver;
+    const uploadPath = path.join('./uploads', 'driver');
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+    req.uploadPath = uploadPath;
+
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    let currentDate = new Date();
+    let year = currentDate.getFullYear(); // Mendapatkan tahun (e.g., 2024)
+    let month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Mendapatkan bulan (e.g., 12)
+    let date = String(currentDate.getDate()).padStart(2, '0'); // Mendapatkan tanggal (e.g., 23)
+
+    // Menggabungkan menjadi format tahunbulantanggal
+    let formattedDate = `${year}${month}${date}`;
+
+    const uniqueSuffix = Date.now().toString().slice(-8);
+
+    cb(null, `${formattedDate}_${uniqueSuffix}_DTT88LOG013273011001.pdf`);
+  },
+});
+
+
+const upload = multer({ storage });
 
 // Get all drivers
 export const getAllDrivers = async (req, res) => {
@@ -129,3 +159,32 @@ export const getDriverAvailability = async (req, res) => {
       res.status(500).json({ status: "error", message: error.message });
   }
 };
+
+export const uploadFileDriver = async (req, res) => {
+  const { id_driver } = req.params;
+  const file_driver = req.file.filename;
+
+  try {
+    const result = await Driver.uploadFileDriver(id_driver, {
+      file_driver
+    });
+    if (result.affectedRows > 0) {
+      res.status(200).json({
+        status: "success",
+        message: "Driver updated successfully.",
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        message: "Driver not found for the given ID.",
+      });
+    }
+  } catch (error) {
+    console.error("Error updating Driver:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
+    });
+  }
+};
+export { upload };

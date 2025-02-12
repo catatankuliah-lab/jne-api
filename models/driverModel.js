@@ -181,6 +181,29 @@ const Driver = {
 
     return { available, unavailable };
   },
+
+  uploadFileDriver: async (id_driver, { file_driver }) => {
+    const [results] = await sequelize.query(
+
+      `
+    UPDATE driver
+    SET foto_ktp_driver = ?
+    WHERE id_driver = ?
+    `,
+    
+      {
+        replacements: [file_driver, id_driver],
+      }
+    );
+    console.log(results);
+
+    // Validasi hasil
+    if (results.affectedRows === 0) {
+      throw new Error("No rows updated. ID may not exist.");
+    }
+
+    return results;
+  }
 };
 
 export default Driver;
