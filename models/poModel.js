@@ -142,6 +142,8 @@ const PO = {
         driver.nama_driver,
         armada.nopol_armada,
         jenis_kendaraan.nama_jenis_kendaraan,
+        jenis_kendaraan.rasio_perkalian,
+        jenis_kendaraan.rasio_perkalian_kosong,
         COALESCE(
           JSON_OBJECT(
             'REGULER', (

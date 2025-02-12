@@ -8,42 +8,42 @@ const router = express.Router();
 router.get(
   "/kasjalan",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3]), // Sesuaikan peran yang diizinkan
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10]), // Sesuaikan peran yang diizinkan
   kasjalanController.getAllKasjalan
 );
 
 router.get(
   "/kasjalan/:id_kas_jalan",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3]),
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
   kasjalanController.getKasjalanById
 );
 
 router.get(
   "/kasjalan/po/:id_po",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3]),
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
   kasjalanController.getKasjalanByIdPO
 );
 
 router.post(
   "/kasjalan",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2]), // Sesuaikan peran yang diizinkan untuk menambahkan data
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10]), // Sesuaikan peran yang diizinkan untuk menambahkan data
   kasjalanController.addKasjalan
 );
 
 router.put(
   "/kasjalan/:id_kas_jalan",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2]), // Sesuaikan peran yang diizinkan untuk memperbarui data
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10]), // Sesuaikan peran yang diizinkan untuk memperbarui data
   kasjalanController.updateKasjalan
 );
 
 router.delete(
   "/kasjalan/:id_kas_jalan",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1]), // Sesuaikan peran yang diizinkan untuk menghapus data
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10]), // Sesuaikan peran yang diizinkan untuk menghapus data
   kasjalanController.deleteKasjalan
 );
 
