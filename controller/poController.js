@@ -178,18 +178,11 @@ export const updatePO = async (req, res) => {
 
   try {
     const updatedPO = await PO.updatePO(id_po, poData);
-    if (updatedPO) {
-      res.status(200).json({
-        status: "success",
-        data: updatedPO,
-        message: "PO updated successfully."
-      });
-    } else {
-      res.status(404).json({
-        status: "error",
-        message: "PO not found."
-      });
-    }
+    res.status(200).json({
+      status: "success",
+      data: updatedPO,
+      message: "PO updated successfully."
+    });
   } catch (error) {
     console.error("Error updating PO:", error);
     res.status(500).json({
