@@ -7,7 +7,7 @@ const router = express.Router();
 router.get(
   "/jenis-kendaraan",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 9, 12]),
+  authMiddleware.authorizeRole([1, 9, 11, 12]),
   jenisKendaraanController.getAllJenisKendaraan
 );
 

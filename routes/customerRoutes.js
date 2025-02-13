@@ -7,28 +7,28 @@ const router = express.Router();
 router.get(
   "/customer",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 9]),
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
   customerController.getAllCustomers
 );
 
 router.get(
   "/customer/:id_customer",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 9, 11]),
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
   customerController.getCustomerById
 );
 
 router.post(
   "/customer",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1,9]),
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
   customerController.createCustomer
 );
 
 router.put(
   "/customer/:id_customer",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1,9]),
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
   customerController.updateCustomer
 );
 

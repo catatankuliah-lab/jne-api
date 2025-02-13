@@ -8,7 +8,7 @@ const router = express.Router();
 router.get(
   "/driver",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 7, 9]),
+  authMiddleware.authorizeRole([1, 7, 9, 10]),
   driverController.getAllDrivers
 );
 
@@ -22,30 +22,28 @@ router.get(
 router.get(
   "/driver/:id_driver",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 7, 9]),
+  authMiddleware.authorizeRole([1, 7, 9, 10]),
   driverController.getDriverById
 );
 
 router.post(
   "/driver",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 7, 9]),
+  authMiddleware.authorizeRole([1, 7, 9, 10]),
   driverController.addDriver
 );
 
 router.put(
   "/driver/:id_driver",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 7, 9]),
-  driverController.upload.single('foto_ktp_driver'),
-  driverController.uploadFileDriver,
+  authMiddleware.authorizeRole([1, 7, 9, 10]),
   driverController.updateDriver
 );
 
 router.delete(
   "/driver/:id_driver",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 7, 9]),
+  authMiddleware.authorizeRole([1, 7, 9, 10]),
   driverController.deleteDriver
 );
 
