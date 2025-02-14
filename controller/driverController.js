@@ -33,11 +33,11 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Get all drivers
-export const getAllDrivers = async (req, res) => {
+export const getAllDriver = async (req, res) => {
   const { page = 1, limit = 10, } = req.query;
 
   try {
-    const { data, total } = await Driver.getAllDrivers(
+    const { data, total } = await Driver.getAllDriver(
       parseInt(page),
       parseInt(limit),
     );
@@ -51,6 +51,23 @@ export const getAllDrivers = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const getAllDrivers = async (req, res) => {
+  try {
+    const driver = await Driver.getAllDrivers();
+    res.status(200).json({
+      status: "success",
+      data: driver,
+      message: "Drivers fetched successfully."
+    });
+  } catch (error) {
+    console.error("Error fetching Drivers:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
   }
 };
 

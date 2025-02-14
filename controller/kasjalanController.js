@@ -101,18 +101,11 @@ export const updateKasjalan = async (req, res) => {
   try {
     // Include 'status_kas_jalan' field in the update process
     const updatedKasjalan = await Kasjalan.updateKasjalan(id_kas_jalan, kasjalanData);
-    if (updatedKasjalan) {
-      res.status(200).json({
-        status: "success",
-        data: updatedKasjalan,
-        message: "Kasjalan updated successfully."
-      });
-    } else {
-      res.status(404).json({
-        status: "error",
-        message: "Kasjalan not found."
-      });
-    }
+    res.status(200).json({
+      status: "success",
+      data: updatedKasjalan,
+      message: "Kasjalan updated successfully."
+    });
   } catch (error) {
     console.error("Error updating Kasjalan:", error);
     res.status(500).json({

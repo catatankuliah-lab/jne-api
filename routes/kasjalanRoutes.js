@@ -27,7 +27,7 @@ router.get(
 );
 
 router.post(
-  "/kasjalan",
+  "/kas_jalan",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 9, 10]), // Sesuaikan peran yang diizinkan untuk menambahkan data
   kasjalanController.addKasjalan
@@ -51,7 +51,7 @@ router.delete(
 router.get("/dev/kasjalan", kasjalanController.getAllKasjalan);
 router.get("/dev/kasjalan/:id_kas_jalan", kasjalanController.getKasjalanById);
 router.get("/dev/kasjalan/po/:id_po", kasjalanController.getKasjalanByIdPO);
-router.post("/dev/kasjalan", kasjalanController.addKasjalan);
+router.post("/dev/kas_jalan", kasjalanController.addKasjalan);
 router.put("/dev/kasjalan/:id_kas_jalan", kasjalanController.updateKasjalan);
 router.delete("/dev/kasjalan/:id_kas_jalan", kasjalanController.deleteKasjalan);
 

@@ -11,6 +11,12 @@ router.get(
   authMiddleware.authorizeRole([1, 2, 3, 9, 10, 12]), // Adjust roles that are allowed
   armadaController.getAllArmada
 );
+router.get(
+  "/armadas",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 12]), // Adjust roles that are allowed
+  armadaController.getAllArmadas
+);
 
 router.get(
   "/armada/availability",
@@ -63,6 +69,7 @@ router.delete(
 
 // Routes for development (without authentication and authorization)
 router.get("/dev/armada", armadaController.getAllArmada);
+router.get("/dev/armadas", armadaController.getAllArmadas);
 router.get("/dev/armada/:id_armada", armadaController.getArmadaById);
 router.get("/dev/armada/jenis/:id_jenis_kendaraan", armadaController.getArmadaByJenisKendaraan);
 router.get("/dev/armada/nopol/:nopol_armada", armadaController.getArmadaByNopol);

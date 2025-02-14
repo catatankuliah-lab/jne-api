@@ -24,6 +24,23 @@ export const getAllArmada = async (req, res) => {
   }
 };
 
+export const getAllArmadas = async (req, res) => {
+  try {
+    const armada = await Armada.getAllArmadas();
+    res.status(200).json({
+      status: "success",
+      data: armada,
+      message: "Armadas fetched successfully."
+    });
+  } catch (error) {
+    console.error("Error fetching Armadas:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
 // Get Armada by ID
 export const getArmadaById = async (req, res) => {
   const { id_armada } = req.params;
