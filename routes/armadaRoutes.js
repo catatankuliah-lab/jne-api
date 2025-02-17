@@ -8,7 +8,7 @@ const router = express.Router();
 router.get(
   "/armada",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 12]), // Adjust roles that are allowed
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 12]), // Adjust roles that are allowed
   armadaController.getAllArmada
 );
 router.get(
@@ -28,7 +28,7 @@ router.get(
 router.get(
   "/armada/:id_armada",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 12]),
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 12]),
   armadaController.getArmadaById
 );
 

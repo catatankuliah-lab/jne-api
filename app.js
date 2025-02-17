@@ -13,6 +13,7 @@ import armadaRoutes from "./routes/armadaRoutes.js";
 import kasjalanRoutes from "./routes/kasjalanRoutes.js";
 import poRoutes from "./routes/poRoutes.js";
 import titikbongkarRoutes from "./routes/titikbongkarRoutes.js";
+import cicilanRoutes from "./routes/cicilanRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3090;
@@ -51,6 +52,7 @@ const init = async () => {
         app.use("/api/v1", kasjalanRoutes);
         app.use("/api/v1", poRoutes);
         app.use("/api/v1", titikbongkarRoutes);
+        app.use("/api/v1", cicilanRoutes);
 
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
