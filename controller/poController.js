@@ -153,13 +153,14 @@ export const getPOByDriverId = async (req, res) => {
 
 // Add a new PO
 export const addPO = async (req, res) => {
-  const poData = req.body;
+  const {nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po} = req.body;
 
   try {
-    const newPO = await PO.addPO(poData);
+    const id_po = await PO.addPO(nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po);
+    console.log(id_po);
     res.status(201).json({
       status: "success",
-      data: newPO,
+      data: {id_po},
       message: "PO created successfully."
     });
   } catch (error) {
@@ -178,18 +179,11 @@ export const updatePO = async (req, res) => {
 
   try {
     const updatedPO = await PO.updatePO(id_po, poData);
-    if (updatedPO) {
-      res.status(200).json({
-        status: "success",
-        data: updatedPO,
-        message: "PO updated successfully."
-      });
-    } else {
-      res.status(404).json({
-        status: "error",
-        message: "PO not found."
-      });
-    }
+    res.status(200).json({
+      status: "success",
+      data: updatedPO,
+      message: "PO updated successfully."
+    });
   } catch (error) {
     console.error("Error updating PO:", error);
     res.status(500).json({

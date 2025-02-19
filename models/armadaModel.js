@@ -1,4 +1,5 @@
 import sequelize from "../config/config.js";
+import { getAllArmadas } from "../controller/armadaController.js";
 
 const Armada = {
   // Get all Armada
@@ -51,6 +52,17 @@ const Armada = {
     }
   },
 
+  getAllArmadas: async () => {
+    const [results] = await sequelize.query(`
+      SELECT
+        armada.*,
+        jenis_kendaraan.nama_jenis_kendaraan
+      FROM armada
+      LEFT JOIN
+        jenis_kendaraan ON armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
+    `);
+    return results;
+  },
 
   // Get Armada by ID
   getArmadaById: async (id_armada) => {
@@ -147,12 +159,16 @@ const Armada = {
   },
 
   getArmadaAvailability: async () => {
-    const [ available ] = await sequelize.query("SELECT COUNT(*) AS available FROM armada WHERE status_armada = 'TERSEDIA';");
-    console.log(available);
-    const [ unavailable ] = await sequelize.query("SELECT COUNT(*) AS unavailable FROM armada WHERE status_armada = 'DALAM PENGIRIMAN';");
-    console.log(unavailable);
+    const [ tersedia ] = await sequelize.query("SELECT COUNT(*) AS tersedia FROM armada WHERE status_armada = 'TERSEDIA';");
+    console.log(tersedia);
+    const [ muat ] = await sequelize.query("SELECT COUNT(*) AS muat FROM armada WHERE status_armada = 'MUAT';");
+    console.log(muat);
+    const [ bongkar ] = await sequelize.query("SELECT COUNT(*) AS bongkar FROM armada WHERE status_armada = 'BONGKAR';");
+    console.log(bongkar);
+    const [ selesai ] = await sequelize.query("SELECT COUNT(*) AS selesai FROM armada WHERE status_armada = 'SELESAI';");
+    console.log(selesai);
 
-    return { available, unavailable };
+    return { tersedia, muat, bongkar, selesai };
   },
 };
 

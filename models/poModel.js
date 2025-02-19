@@ -148,6 +148,7 @@ const PO = {
           JSON_OBJECT(
             'REGULER', (
               SELECT JSON_OBJECT(
+                'id_kas_jalan', kas_jalan.id_kas_jalan,
                 'jenis_kas_jalan', kas_jalan.jenis_kas_jalan,
                 'jarak_isi', kas_jalan.jarak_isi,
                 'jarak_kosong', kas_jalan.jarak_kosong,
@@ -163,6 +164,7 @@ const PO = {
             ),
             'KOSONGAN', (
               SELECT JSON_OBJECT(
+                'id_kas_jalan', kas_jalan.id_kas_jalan,
                 'jenis_kas_jalan', kas_jalan.jenis_kas_jalan,
                 'jarak_isi', kas_jalan.jarak_isi,
                 'jarak_kosong', kas_jalan.jarak_kosong,
@@ -268,9 +270,7 @@ const PO = {
   },
 
   // Menambahkan PO baru
-  addPO: async (poData) => {
-    const { nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po } = poData;
-    const [result] = await sequelize.query(
+  addPO: async (nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po) => { const result = await sequelize.query(
       `
       INSERT INTO po (nomor_po,tanggal_po,jam_pemesanan_po,jam_muat,id_customer,id_armada,id_driver,destination,status_po)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -279,7 +279,7 @@ const PO = {
         replacements: [nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po],
       }
     );
-    return { id_po: result.insertId, ...poData };
+    return result[0];
   },
 
   // Memperbarui PO

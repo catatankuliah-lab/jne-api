@@ -2,7 +2,7 @@ import sequelize from "../config/config.js";
 
 const Driver = {
   // Mendapatkan semua driver
-  getAllDrivers: async (page = 1, per_page = 10) => {
+  getAllDriver: async (page = 1, per_page = 10) => {
     try {
       const offset = (page - 1) * per_page;
       const query = `
@@ -50,6 +50,13 @@ const Driver = {
     } catch (error) {
       throw new Error("Error fetching paginated data: " + error.message);
     }
+  },
+
+  getAllDrivers: async () => {
+    const [results] = await sequelize.query(`
+      SELECT * FROM driver
+    `);
+    return results;
   },
 
   // Mendapatkan driver berdasarkan ID
