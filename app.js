@@ -21,7 +21,7 @@ const upload = multer(); // Inisialisasi multer
 
 app.use(
     cors({
-        origin: "https://82.29.160.250.nip.io",
+        origin: "http://82.29.160.250.nip.io",
         methods: ["GET", "POST", "PUT", "DELETE"],
         allowedHeaders: ["Content-Type", "Authorization"],
     })
