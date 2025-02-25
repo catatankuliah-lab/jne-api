@@ -8,7 +8,7 @@ const router = express.Router();
 router.get(
   "/driver",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 7, 9, 10]),
+  authMiddleware.authorizeRole([1, 7, 9, 10, 12]),
   driverController.getAllDrivers
 );
 router.get(

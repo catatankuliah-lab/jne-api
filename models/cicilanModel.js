@@ -26,37 +26,38 @@ const Cicilan = {
       LEFT JOIN 
         armada ON cicilan.id_armada = armada.id_armada
       WHERE 
-        cicilan.id_cicilan = ?
+        cicilan.id_armada = ?
       `,
       {
         replacements: [id_cicilan],
       }
-    );       
-     console.log(results);
-    return results[0];
+    );
+    console.log(results);
+    return results;
   },
 
   // Menambahkan cicilan baru
   addCicilan: async (cicilanData) => {
-    const {id_armada, angsuran, tanggal_angsuran, besaran_angsuran, file_angsuran} = cicilanData;
+    const { id_armada, angsuran, tanggal_angsuran, besaran_angsuran, file_angsuran } = cicilanData;
     console.log(cicilanData);
-    // const result = await sequelize.query(
-    //   `
-    //   INSERT INTO cicilan (
-    //     id_armada, angsuran, tanggal_angsuran, besaran_angsuran, file_angsuran
-    //   ) VALUES (?, ?, ?, ?, ?)
-    //   `,
-    //   {
-    //     replacements: [
-    //       id_armada,
-    //       angsuran,
-    //       tanggal_angsuran,
-    //       besaran_angsuran,
-    //       file_angsuran
-    //     ],
-    //   }
-    // );
-    // return result[0];
+    const result = await sequelize.query(
+      `
+      INSERT INTO cicilan (
+        id_armada, angsuran, tanggal_angsuran, besaran_angsuran, file_angsuran
+      ) VALUES (?, ?, ?, ?, ?)
+      `,
+      {
+        replacements: [
+          id_armada,
+          angsuran,
+          tanggal_angsuran,
+          besaran_angsuran,
+          file_angsuran
+        ],
+      }
+    );
+    return { id_cicilan: result.insertId, ...cicilanData };
+    
   },
 
   // Mengupdate cicilan berdasarkan id_cicilan
