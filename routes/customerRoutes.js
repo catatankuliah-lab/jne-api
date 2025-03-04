@@ -7,14 +7,14 @@ const router = express.Router();
 router.get(
   "/customer",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 13]),
   customerController.getAllCustomers
 );
 
 router.get(
   "/customer/:id_customer",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 13]),
   customerController.getCustomerById
 );
 
