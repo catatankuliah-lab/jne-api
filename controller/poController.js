@@ -126,41 +126,37 @@ export const getPOByArmadaId = async (req, res) => {
 
 // Get PO by Driver ID
 export const getPOByDriverId = async (req, res) => {
-  const { id_driver } = req.params;
-
+  const { page = 1, limit = 10, id_user, nomor_po, customer, nopol_armada, nama_driver, startDate, endDate, status_po } = req.query;
   try {
-    const pos = await PO.getPOByDriverId(id_driver);
-    if (pos.length > 0) {
-      res.status(200).json({
-        status: "success",
-        data: pos,
-        message: "PO records fetched successfully by Driver ID."
-      });
-    } else {
-      res.status(404).json({
-        status: "error",
-        message: "No PO records found for the given Driver ID."
-      });
-    }
-  } catch (error) {
-    console.error("Error fetching PO by Driver ID:", error);
-    res.status(500).json({
-      status: "error",
-      message: "Internal Server Error"
+    const { data, total } = await PO.getPOByDriverId(
+      parseInt(page),
+      parseInt(limit),
+      parseInt(id_user),
+      { nomor_po, customer, nopol_armada, nama_driver, startDate, endDate, status_po }
+    );
+
+    res.json({
+      data,
+      currentPage: parseInt(page),
+      limit: parseInt(limit),
+      totalData: total,
+      totalPages: Math.ceil(total / parseInt(limit)),
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
 // Add a new PO
 export const addPO = async (req, res) => {
-  const {nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po} = req.body;
+  const { nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po } = req.body;
 
   try {
     const id_po = await PO.addPO(nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po);
     console.log(id_po);
     res.status(201).json({
       status: "success",
-      data: {id_po},
+      data: { id_po },
       message: "PO created successfully."
     });
   } catch (error) {

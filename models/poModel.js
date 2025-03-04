@@ -249,24 +249,104 @@ const PO = {
   },
 
   // Mendapatkan PO berdasarkan ID Driver
-  getPOByDriverId: async (id_driver) => {
-    const [results] = await sequelize.query(
-      `
-      SELECT 
-        id_po,
-        tanggal_po,
-        jam_pemesanan_po,
-        jam_muat,
-        id_customer,
-        id_armada,
-        id_driver,
-        status_po
+  getPOByDriverId: async (page = 1, per_page = 10, id_user, filters = {} ) => {
+  console.log("model"+id_user);
+    try {
+      const offset = (page - 1) * per_page;
+      let replacements = { per_page: parseInt(per_page), offset: parseInt(offset),id_user };
+      let whereClause = "WHERE driver.id_user = :id_user";
+
+      if (filters.nomor_po) {
+        whereClause += " AND po.nomor_po LIKE :nomor_po";
+        replacements.nomor_po = `%${filters.nomor_po}%`;
+      }
+
+      if (filters.customer) {
+        whereClause += " AND customer.nama_customer LIKE :customer";
+        replacements.customer = `%${filters.customer}%`;
+      }
+
+      if (filters.nopol_armada) {
+        whereClause += " AND armada.nopol_armada LIKE :nopol_armada";
+        replacements.nopol_armada = `%${filters.nopol_armada}%`;
+      }
+
+      if (filters.nama_driver) {
+        whereClause += " AND driver.nama_driver LIKE :nama_driver";
+        replacements.nama_driver = `%${filters.nama_driver}%`;
+      }
+
+      if (filters.startDate && filters.endDate) {
+        whereClause += " AND po.tanggal_po BETWEEN :startDate AND :endDate";
+        replacements.startDate = filters.startDate;
+        replacements.endDate = filters.endDate;
+      } else if (filters.startDate) {
+        whereClause += " AND po.tanggal_po >= :startDate";
+        replacements.startDate = filters.startDate;
+      } else if (filters.endDate) {
+        whereClause += " AND po.tanggal_po <= :endDate";
+        replacements.endDate = filters.endDate;
+      }
+
+      if (filters.status_po) {
+        whereClause += " AND po.status_po = :status_po";
+        replacements.status_po = filters.status_po;
+      }
+
+      const query = `
+      SELECT
+        po.id_po,
+        po.nomor_po,
+        po.tanggal_po,
+        po.jam_pemesanan_po,
+        po.jam_muat,
+        po.id_customer,
+        po.id_armada,
+        po.id_driver,
+        po.destination,
+        po.status_po,
+        customer.nama_customer,
+        customer.alamat_customer,
+        driver.nama_driver,
+        armada.nopol_armada,
+        jenis_kendaraan.nama_jenis_kendaraan
       FROM po
-      WHERE id_driver = ?
-    `,
-      { replacements: [id_driver] }
-    );
-    return results;
+      LEFT JOIN customer ON po.id_customer = customer.id_customer
+      LEFT JOIN driver ON po.id_driver = driver.id_driver
+      LEFT JOIN armada ON po.id_armada = armada.id_armada
+      LEFT JOIN jenis_kendaraan ON armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
+      ${whereClause}
+      LIMIT :per_page OFFSET :offset;
+    `;
+
+      const data = await sequelize.query(query, {
+        replacements,
+        type: sequelize.QueryTypes.SELECT,
+      });
+
+      const countQuery = `
+      SELECT COUNT(*) AS total FROM po
+      LEFT JOIN customer ON po.id_customer = customer.id_customer
+      LEFT JOIN driver ON po.id_driver = driver.id_driver
+      LEFT JOIN armada ON po.id_armada = armada.id_armada
+      LEFT JOIN jenis_kendaraan ON armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
+      ${whereClause};
+    `;
+
+      const [countResult] = await sequelize.query(countQuery, {
+        replacements,
+        type: sequelize.QueryTypes.SELECT,
+      });
+
+      return {
+        data,
+        total: countResult.total,
+        page,
+        per_page,
+      };
+    } catch (error) {
+      throw new Error("Error fetching paginated data: " + error.message);
+    }
   },
 
   // Menambahkan PO baru
