@@ -61,13 +61,6 @@ router.put(
 );
 
 router.put(
-  "/po/titikbongkar/:id_po",
-  authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
-  poController.updateTBPO
-);
-
-router.put(
   "/po/:id_po",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
