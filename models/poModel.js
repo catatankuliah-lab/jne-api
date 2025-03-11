@@ -56,6 +56,8 @@ const PO = {
         po.id_driver,
         po.destination,
         po.status_po,
+        po.origin,
+        po.jenis_muatan,
         customer.nama_customer,
         customer.alamat_customer,
         driver.nama_driver,
@@ -137,6 +139,8 @@ const PO = {
         po.id_driver,
         po.destination,
         po.status_po,
+        po.origin,
+        po.jenis_muatan,
         customer.nama_customer,
         customer.alamat_customer,
         driver.nama_driver,
@@ -350,14 +354,14 @@ const PO = {
   },
 
   // Menambahkan PO baru
-  addPO: async (nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po) => {
+  addPO: async (nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po, origin, jenis_muatan) => {
     const result = await sequelize.query(
       `
-      INSERT INTO po (nomor_po,tanggal_po,jam_pemesanan_po,jam_muat,id_customer,id_armada,id_driver,destination,status_po)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO po (nomor_po,tanggal_po,jam_pemesanan_po,jam_muat,id_customer,id_armada,id_driver,destination,status_po,origin,jenis_muatan)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `,
       {
-        replacements: [nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po],
+        replacements: [nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po, origin, jenis_muatan],
       }
     );
     return result[0];
@@ -365,15 +369,15 @@ const PO = {
 
   // Memperbarui PO
   updatePO: async (id_po, poData) => {
-    const { tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, status_po } = poData;
+    const { tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, status_po, origin, jenis_muatan } = poData;
     const [result] = await sequelize.query(
       `
       UPDATE po
-      SET tanggal_po = ?, jam_pemesanan_po = ?, jam_muat = ?, id_customer = ?, id_armada = ?, id_driver = ?, status_po = ?
+      SET tanggal_po = ?, jam_pemesanan_po = ?, jam_muat = ?, id_customer = ?, id_armada = ?, id_driver = ?, status_po = ?, origin = ?, jenis_muatan = ?
       WHERE id_po = ?
     `,
       {
-        replacements: [tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, status_po, id_po],
+        replacements: [tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, status_po, id_po, origin, jenis_muatan],
       }
     );
     return result.affectedRows > 0;

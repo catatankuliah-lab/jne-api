@@ -60,6 +60,7 @@ const Armada = {
       FROM armada
       LEFT JOIN
         jenis_kendaraan ON armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
+      WHERE status_armada = 'TERSEDIA'
     `);
     return results;
   },
@@ -132,6 +133,22 @@ const Armada = {
     );
     return { id_armada: result.insertId, ...armadaData };
   },
+
+      // Memperbarui Status Armada
+      updateStatusArmada: async (id_armada, armadaData) => {
+        const { status_armada } = armadaData;
+        const [result] = await sequelize.query(
+          `
+          UPDATE armada
+          SET status_armada = ?
+          WHERE id_armada = ?
+        `,
+          {
+            replacements: [status_armada, id_armada],
+          }
+        );
+        return result.affectedRows > 0;
+      },
 
   // Update Armada
   updateArmada: async (id_armada, armadaData) => {

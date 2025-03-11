@@ -118,6 +118,26 @@ export const addDriver = async (req, res) => {
   }
 };
 
+// Update Status Driver
+export const updateStatusDriver = async (req, res) => {
+  const { id_driver } = req.params;
+  const driverData = req.body;
+  console.log(driverData, id_driver);
+  try {
+    const updatedStatusDriver = await Driver.updateStatusDriver(id_driver, driverData);
+    res.status(200).json({
+      status: "success",
+      data: updatedStatusDriver,
+      message: "Driver updated successfully."
+    });
+  } catch (error) {
+    console.error("Error updating Driver:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
 // Update driver
 export const updateDriver = async (req, res) => {
   const { id_driver } = req.params;

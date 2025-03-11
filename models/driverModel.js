@@ -55,6 +55,7 @@ const Driver = {
   getAllDrivers: async () => {
     const [results] = await sequelize.query(`
       SELECT * FROM driver
+      WHERE status_driver = 'TERSEDIA'
     `);
     return results;
   },
@@ -120,6 +121,23 @@ const Driver = {
     return { id_driver: result.insertId, ...driverData };
   },
 
+
+    // Memperbarui Status Driver
+    updateStatusDriver: async (id_driver, driverData) => {
+      const { status_driver } = driverData;
+      const [result] = await sequelize.query(
+        `
+        UPDATE driver
+        SET status_driver = ?
+        WHERE id_driver = ?
+      `,
+        {
+          replacements: [status_driver, id_driver],
+        }
+      );
+      return result.affectedRows > 0;
+    },
+
   // Memperbarui data driver
   updateDriver: async (id_driver, driverData) => {
     const {
@@ -134,7 +152,6 @@ const Driver = {
       foto_sim_driver,
       status_driver,
     } = driverData;
-
     const [result] = await sequelize.query(
       `
       UPDATE driver
@@ -168,6 +185,7 @@ const Driver = {
         ],
       }
     );
+    console.log("Query Result:", result);
     return result.affectedRows > 0;
   },
 
