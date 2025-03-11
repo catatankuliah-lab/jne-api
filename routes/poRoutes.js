@@ -4,7 +4,6 @@ import * as authMiddleware from "../middlewares/authMiddleware.js"; // Ensure th
 
 const router = express.Router();
 
-// Routes for PO with authentication and authorization
 router.get(
   "/po",
   authMiddleware.authenticate,
@@ -50,21 +49,35 @@ router.get(
 router.post(
   "/po",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10]), // Adjust the roles that are allowed to add data
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
   poController.addPO
+);
+
+router.put(
+  "/po/status/:id_po",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
+  poController.updateStatusPO
+);
+
+router.put(
+  "/po/titikbongkar/:id_po",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
+  poController.updateTBPO
 );
 
 router.put(
   "/po/:id_po",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10]), // Adjust roles that are allowed to update data
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
   poController.updatePO
 );
 
 router.delete(
   "/po/:id_po",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10]), // Adjust roles that are allowed to delete data
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
   poController.deletePO
 );
 
