@@ -249,11 +249,11 @@ const PO = {
   },
 
   // Mendapatkan PO berdasarkan ID Driver
-  getPOByDriverId: async (page = 1, per_page = 10, id_user, filters = {} ) => {
-  console.log("model"+id_user);
+  getPOByDriverId: async (page = 1, per_page = 10, id_user, filters = {}) => {
+    console.log("model" + id_user);
     try {
       const offset = (page - 1) * per_page;
-      let replacements = { per_page: parseInt(per_page), offset: parseInt(offset),id_user };
+      let replacements = { per_page: parseInt(per_page), offset: parseInt(offset), id_user };
       let whereClause = "WHERE driver.id_user = :id_user";
 
       if (filters.nomor_po) {
@@ -350,7 +350,8 @@ const PO = {
   },
 
   // Menambahkan PO baru
-  addPO: async (nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po) => { const result = await sequelize.query(
+  addPO: async (nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po) => {
+    const result = await sequelize.query(
       `
       INSERT INTO po (nomor_po,tanggal_po,jam_pemesanan_po,jam_muat,id_customer,id_armada,id_driver,destination,status_po)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -373,6 +374,38 @@ const PO = {
     `,
       {
         replacements: [tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, status_po, id_po],
+      }
+    );
+    return result.affectedRows > 0;
+  },
+
+  // Memperbarui Status PO
+  updateStatusPO: async (id_po, poData) => {
+    const { status_po } = poData;
+    const [result] = await sequelize.query(
+      `
+      UPDATE po
+      SET status_po = ?
+      WHERE id_po = ?
+    `,
+      {
+        replacements: [status_po, id_po],
+      }
+    );
+    return result.affectedRows > 0;
+  },
+
+  // Memperbarui TB PO
+  updateTBPO: async (id_po, poData) => {
+    const { titik_bongkar } = poData;
+    const [result] = await sequelize.query(
+      `
+      UPDATE po
+      SET titik_bongkar = ?
+      WHERE id_po = ?
+    `,
+      {
+        replacements: [titik_bongkar, id_po],
       }
     );
     return result.affectedRows > 0;
