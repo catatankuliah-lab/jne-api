@@ -2,11 +2,53 @@ import sequelize from "../config/config.js";
 
 const Customer = {
   // Mendapatkan semua customer
-  getAllCustomers: async () => {
-    const [results] = await sequelize.query(`
+  getAllCustomers: async (page = 1, per_page = 10, filters = {}) => {
+    try {
+      const offset = (page - 1) * per_page;
+      let whereClause = "WHERE 1=1";
+      let replacements = { per_page: parseInt(per_page), offset: parseInt(offset) };
+
+      if (filters.nama_customer) {
+        whereClause += " AND customer.nama_customer LIKE :nama_customer";
+        replacements.nama_customer = `%${filters.nama_customer}%`;
+      }
+
+      if (filters.alamat_customer) {
+        whereClause += " AND customer.alamat_customer LIKE :alamat_customer";
+        replacements.alamat_customer = `%${filters.alamat_customer}%`;
+      }
+
+      const query = `
       SELECT * FROM customer
-    `);
-    return results;
+      ${whereClause}
+      LIMIT :per_page OFFSET :offset;
+    `;
+
+      const data = await sequelize.query(query, {
+        replacements,
+        type: sequelize.QueryTypes.SELECT,
+      });
+
+      const countQuery = `
+      SELECT COUNT(*) AS total FROM customer
+      ${whereClause};
+    `;
+
+      const [countResult] = await sequelize.query(countQuery, {
+        replacements,
+        type: sequelize.QueryTypes.SELECT,
+      });
+
+      return {
+        data,
+        total: countResult.total,
+        page,
+        per_page,
+      };
+    } catch (error) {
+      throw new Error("Error fetching paginated data: " + error.message);
+    }
+    
   },
 
   getCustomerById: async (id_customer) => {

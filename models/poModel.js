@@ -369,15 +369,15 @@ const PO = {
 
   // Memperbarui PO
   updatePO: async (id_po, poData) => {
-    const { tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, status_po, origin, jenis_muatan } = poData;
+    const { nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, status_po, origin, jenis_muatan, destination } = poData;
     const [result] = await sequelize.query(
       `
       UPDATE po
-      SET tanggal_po = ?, jam_pemesanan_po = ?, jam_muat = ?, id_customer = ?, id_armada = ?, id_driver = ?, status_po = ?, origin = ?, jenis_muatan = ?
+      SET nomor_po = ?, tanggal_po = ?, jam_pemesanan_po = ?, jam_muat = ?, id_customer = ?, id_armada = ?, id_driver = ?, status_po = ?, origin = ?, jenis_muatan = ?, destination = ?
       WHERE id_po = ?
     `,
       {
-        replacements: [tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, status_po, id_po, origin, jenis_muatan],
+        replacements: [nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, status_po, origin, jenis_muatan, destination, id_po],
       }
     );
     return result.affectedRows > 0;

@@ -34,12 +34,13 @@ const upload = multer({ storage });
 
 // Get all drivers
 export const getAllDriver = async (req, res) => {
-  const { page = 1, limit = 10, } = req.query;
+  const { page = 1, limit = 10, nik, nama_driver, status_driver} = req.query;
 
   try {
     const { data, total } = await Driver.getAllDriver(
       parseInt(page),
       parseInt(limit),
+      { nik, nama_driver, status_driver}
     );
 
     res.json({
@@ -50,7 +51,11 @@ export const getAllDriver = async (req, res) => {
       totalPages: Math.ceil(total / parseInt(limit)),
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error fetching drivers:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
   }
 };
 

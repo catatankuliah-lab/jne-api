@@ -2,9 +2,27 @@ import sequelize from "../config/config.js";
 
 const Driver = {
   // Mendapatkan semua driver
-  getAllDriver: async (page = 1, per_page = 10) => {
+  getAllDriver: async (page = 1, per_page = 10, filters = {}) => {
     try {
       const offset = (page - 1) * per_page;
+      let whereClause = "WHERE 1=1";
+      let replacements = { per_page: parseInt(per_page), offset: parseInt(offset) };
+
+      if (filters.nik) {
+        whereClause += " AND driver.nik LIKE :nik";
+        replacements.nik = `%${filters.nik}%`;
+      }
+
+      if (filters.nama_driver) {
+        whereClause += " AND driver.nama_driver LIKE :nama_driver";
+        replacements.nama_driver = `%${filters.nama_driver}%`;
+      }
+      
+      if (filters.status_driver) {
+        whereClause += " AND customer.status_driver LIKE :status_driver";
+        replacements.status_driver = `%${filters.status_driver}%`;
+      }
+
       const query = `
         SELECT
           id_driver,
@@ -20,26 +38,23 @@ const Driver = {
           status_driver
         FROM
             driver
-        LIMIT :per_page OFFSET :offset;
+      ${whereClause}
+      LIMIT :per_page OFFSET :offset;
       `;
       const data = await sequelize.query(query, {
-        replacements: {
-          per_page: parseInt(per_page),
-          offset: parseInt(offset)
-        },
+        replacements,
         type: sequelize.QueryTypes.SELECT,
       });
 
       const countQuery = `
-        SELECT COUNT(*) AS total
-        FROM driver
-      `;
+      SELECT COUNT(*) AS total FROM driver
+      ${whereClause};
+    `;
 
       const [countResult] = await sequelize.query(countQuery, {
+        replacements,
         type: sequelize.QueryTypes.SELECT,
       });
-
-      console.log('Count Query Result:', countResult);
 
       return {
         data,

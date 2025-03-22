@@ -21,7 +21,7 @@ const upload = multer(); // Inisialisasi multer
 
 app.use(
     cors({
-        origin: "https://kasma.delapandelapanlogistics.com",
+        origin: "http://localhost:5173",
         methods: ["GET", "POST", "PUT", "DELETE"],
         allowedHeaders: ["Content-Type", "Authorization"],
     })

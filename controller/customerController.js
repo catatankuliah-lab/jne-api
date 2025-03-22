@@ -3,13 +3,21 @@ import multer from "multer";
 const upload = multer();
 
 export const getAllCustomers = async (req, res) => {
-  try {
-    const customers = await Customer.getAllCustomers();
-    res.status(200).json({
-      status: "success",
-      data: customers,
-      message: "Customers fetched successfully."
-    });
+  const { page = 1, limit = 10, nama_customer, alamat_customer} = req.query;
+    try {
+      const { data, total } = await Customer.getAllCustomers(
+        parseInt(page),
+        parseInt(limit),
+        { nama_customer, alamat_customer}
+      );
+  
+      res.json({
+        data,
+        currentPage: parseInt(page),
+        limit: parseInt(limit),
+        totalData: total,
+        totalPages: Math.ceil(total / parseInt(limit)),
+      });
   } catch (error) {
     console.error("Error fetching customers:", error);
     res.status(500).json({
