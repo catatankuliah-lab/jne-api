@@ -3,6 +3,7 @@ import Armada from "../models/armadaModel.js";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+const upload = multer();
 
 export const getAllCicilan = async (req, res) => {
   try {
@@ -49,10 +50,7 @@ export const getCicilanById = async (req, res) => {
 export const createCicilan = async (req, res) => {
   const cicilanData = req.body;
   try {
-    const newCicilan = await Cicilan.addCicilan({
-      cicilanData
-    });
-
+    const newCicilan = await Cicilan.addCicilan(cicilanData);
     res.status(201).json({
       status: "success",
       data: newCicilan,

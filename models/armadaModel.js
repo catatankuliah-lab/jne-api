@@ -3,9 +3,27 @@ import { getAllArmadas } from "../controller/armadaController.js";
 
 const Armada = {
   // Get all Armada
-  getAllArmada: async (page = 1, per_page = 10) => {
+  getAllArmada: async (page = 1, per_page = 10, filters = {}) => {
     try {
       const offset = (page - 1) * per_page;
+      let whereClause = "WHERE 1=1";
+      let replacements = { per_page: parseInt(per_page), offset: parseInt(offset) };
+
+      if (filters.nama_jenis_kendaraan) {
+        whereClause += " AND jenis_kendaraan.nama_jenis_kendaraan LIKE :nama_jenis_kendaraan";
+        replacements.nama_jenis_kendaraan = `%${filters.nama_jenis_kendaraan}%`;
+      }
+
+      if (filters.nopol_armada) {
+        whereClause += " AND armada.nopol_armada LIKE :nopol_armada";
+        replacements.nopol_armada = `%${filters.nopol_armada}%`;
+      }
+
+      if (filters.status_armada) {
+        whereClause += " AND armada.status_armada LIKE :status_armada";
+        replacements.status_armada = `%${filters.status_armada}%`;
+      }
+
       const query = `
         SELECT
           armada.id_armada,
@@ -20,26 +38,24 @@ const Armada = {
           jenis_kendaraan
         ON
           armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
-        LIMIT :per_page OFFSET :offset;
+        ${whereClause}
+      LIMIT :per_page OFFSET :offset;
       `;
+
       const data = await sequelize.query(query, {
-        replacements: {
-          per_page: parseInt(per_page),
-          offset: parseInt(offset)
-        },
+        replacements,
         type: sequelize.QueryTypes.SELECT,
       });
 
       const countQuery = `
-        SELECT COUNT(*) AS total
-        FROM armada
-      `;
+      SELECT COUNT(*) AS total FROM armada
+      ${whereClause};
+    `;
 
       const [countResult] = await sequelize.query(countQuery, {
+        replacements,
         type: sequelize.QueryTypes.SELECT,
       });
-
-      console.log('Count Query Result:', countResult);
 
       return {
         data,
@@ -60,6 +76,7 @@ const Armada = {
       FROM armada
       LEFT JOIN
         jenis_kendaraan ON armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
+      WHERE status_armada = 'TERSEDIA'
     `);
     return results;
   },
@@ -131,6 +148,22 @@ const Armada = {
       }
     );
     return { id_armada: result.insertId, ...armadaData };
+  },
+
+  // Memperbarui Status Armada
+  updateStatusArmada: async (id_armada, armadaData) => {
+    const { status_armada } = armadaData;
+    const [result] = await sequelize.query(
+      `
+          UPDATE armada
+          SET status_armada = ?
+          WHERE id_armada = ?
+        `,
+      {
+        replacements: [status_armada, id_armada],
+      }
+    );
+    return result.affectedRows > 0;
   },
 
   // Update Armada

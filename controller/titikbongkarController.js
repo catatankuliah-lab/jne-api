@@ -1,4 +1,6 @@
 import TitikBongkar from "../models/titikbongkarModel.js"; // Ensure the model is created
+import multer from "multer";
+const upload = multer();
 
 // Get all Titik Bongkar
 export const getAllTitikBongkar = async (req, res) => {
@@ -71,16 +73,16 @@ export const getTitikBongkarByPO = async (req, res) => {
     });
   }
 };
-
 // Add a new Titik Bongkar
 export const addTitikBongkar = async (req, res) => {
-  const titikBongkarData = req.body;
+  const { id_po, id_kabupaten_kota, alamat_titik_bongkar, jam_bongkar, shareloc, nama_penerima, nomor_penerima } = req.body;
 
   try {
-    const newTitikBongkar = await TitikBongkar.addTitikBongkar(titikBongkarData);
+    const id_titik_bongkar = await TitikBongkar.addTitikBongkar(id_po, id_kabupaten_kota, alamat_titik_bongkar, jam_bongkar, shareloc, nama_penerima, nomor_penerima);
+    console.log(id_titik_bongkar);
     res.status(201).json({
       status: "success",
-      data: newTitikBongkar,
+      data: id_titik_bongkar,
       message: "Titik Bongkar created successfully."
     });
   } catch (error) {

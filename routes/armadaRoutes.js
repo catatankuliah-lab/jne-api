@@ -54,6 +54,13 @@ router.post(
 );
 
 router.put(
+  "/armada/status/:id_armada",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 12]),
+  armadaController.updateStatusArmada
+);
+
+router.put(
   "/armada/:id_armada",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 9, 10, 12]), // Adjust roles that are allowed to update data

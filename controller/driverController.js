@@ -34,12 +34,13 @@ const upload = multer({ storage });
 
 // Get all drivers
 export const getAllDriver = async (req, res) => {
-  const { page = 1, limit = 10, } = req.query;
+  const { page = 1, limit = 10, nik, nama_driver, status_driver} = req.query;
 
   try {
     const { data, total } = await Driver.getAllDriver(
       parseInt(page),
       parseInt(limit),
+      { nik, nama_driver, status_driver}
     );
 
     res.json({
@@ -50,7 +51,11 @@ export const getAllDriver = async (req, res) => {
       totalPages: Math.ceil(total / parseInt(limit)),
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error fetching drivers:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
   }
 };
 
@@ -118,6 +123,26 @@ export const addDriver = async (req, res) => {
   }
 };
 
+// Update Status Driver
+export const updateStatusDriver = async (req, res) => {
+  const { id_driver } = req.params;
+  const driverData = req.body;
+  console.log(driverData, id_driver);
+  try {
+    const updatedStatusDriver = await Driver.updateStatusDriver(id_driver, driverData);
+    res.status(200).json({
+      status: "success",
+      data: updatedStatusDriver,
+      message: "Driver updated successfully."
+    });
+  } catch (error) {
+    console.error("Error updating Driver:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
 // Update driver
 export const updateDriver = async (req, res) => {
   const { id_driver } = req.params;

@@ -38,12 +38,17 @@ const TitikBongkar = {
     const [results] = await sequelize.query(
       `
       SELECT 
-        id_titik_bongkar,
-        id_po,
-        id_kabupaten_kota,
-        alamat_titik_bongkar,
-        jam_bongkar
+        titik_bongkar.id_titik_bongkar,
+        titik_bongkar.id_po,
+        titik_bongkar.id_kabupaten_kota,
+        titik_bongkar.alamat_titik_bongkar,
+        titik_bongkar.jam_bongkar,
+        titik_bongkar.shareloc,
+        titik_bongkar.nama_penerima,
+        titik_bongkar.nomor_penerima,
+        kabupaten_kota.nama_kabupaten_kota
       FROM titik_bongkar
+      JOIN kabupaten_kota ON titik_bongkar.id_kabupaten_kota = kabupaten_kota.id_kabupaten_kota
       WHERE id_po = ?
     `,
       { replacements: [id_po] }
@@ -52,18 +57,20 @@ const TitikBongkar = {
   },
 
   // Menambahkan titik bongkar baru
-  addTitikBongkar: async (titikBongkarData) => {
-    const { id_po, id_kabupaten_kota, alamat_titik_bongkar, jam_bongkar } = titikBongkarData;
-    const [result] = await sequelize.query(
+
+  addTitikBongkar: async (id_po, id_kabupaten_kota, alamat_titik_bongkar, jam_bongkar, shareloc, nama_penerima, nomor_penerima) => {
+    // console.log("Received data:", titikBongkarData);
+
+    const result = await sequelize.query(
       `
-      INSERT INTO titik_bongkar (id_po, id_kabupaten_kota, alamat_titik_bongkar, jam_bongkar)
-      VALUES (?, ?, ?, ?)
+      INSERT INTO titik_bongkar (id_po, id_kabupaten_kota, alamat_titik_bongkar, jam_bongkar, shareloc, nama_penerima, nomor_penerima)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `,
       {
-        replacements: [id_po, id_kabupaten_kota, alamat_titik_bongkar, jam_bongkar],
+        replacements: [id_po, id_kabupaten_kota, alamat_titik_bongkar, jam_bongkar, shareloc, nama_penerima, nomor_penerima],
       }
     );
-    return { id_titik_bongkar: result.insertId, ...titikBongkarData };
+    return result[0];
   },
 
   // Memperbarui titik bongkar

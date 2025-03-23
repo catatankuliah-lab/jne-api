@@ -9,7 +9,7 @@ router.get(
   "/driver",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 7, 9, 10, 13]),
-  driverController.getAllDrivers
+  driverController.getAllDriver
 );
 router.get(
   "/drivers",
@@ -37,6 +37,13 @@ router.post(
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 7, 9, 10]),
   driverController.addDriver
+);
+
+router.put(
+  "/driver/status/:id_driver",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
+  driverController.updateStatusDriver
 );
 
 router.put(

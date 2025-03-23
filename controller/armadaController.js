@@ -4,12 +4,13 @@ const upload = multer();
 
 // Get all Armada
 export const getAllArmada = async (req, res) => {
-  const { page = 1, limit = 10, } = req.query;
+  const { page = 1, limit = 10, nama_jenis_kendaraan, nopol_armada, status_armada} = req.query;
 
   try {
     const { data, total } = await Armada.getAllArmada(
       parseInt(page),
       parseInt(limit),
+      {nama_jenis_kendaraan, nopol_armada, status_armada}
     );
 
     res.json({
@@ -20,7 +21,11 @@ export const getAllArmada = async (req, res) => {
       totalPages: Math.ceil(total / parseInt(limit)),
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error fetching armadas:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
   }
 };
 
@@ -143,6 +148,25 @@ export const addArmada = async (req, res) => {
   }
 };
 
+export const updateStatusArmada = async (req, res) => {
+  const { id_armada } = req.params;
+  const armadaData = req.body;
+  console.log(armadaData, id_armada);
+  try {
+    const updatedStatusArmada = await Armada.updateStatusArmada(id_armada, armadaData);
+    res.status(200).json({
+      status: "success",
+      data: updatedStatusArmada,
+      message: "Armada updated successfully."
+    });
+  } catch (error) {
+    console.error("Error updating Armada:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
 // Update Armada
 export const updateArmada = async (req, res) => {
   const { id_armada } = req.params;
