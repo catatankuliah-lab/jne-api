@@ -67,6 +67,13 @@ router.delete(
   armadaController.deleteArmada
 );
 
+router.get(
+  "/armada/availability",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 9, 12]),
+  armadaController.getArmadaRiwayatBulanan
+);
+
 // Routes for development (without authentication and authorization)
 router.get("/dev/armada", armadaController.getAllArmada);
 router.get("/dev/armadas", armadaController.getAllArmadas);

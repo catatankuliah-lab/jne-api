@@ -208,6 +208,26 @@ export const updateStatusPO = async (req, res) => {
   }
 };
 
+export const updateTBPO = async (req, res) => {
+  const { id_po } = req.params;
+  const poData = req.body;
+  console.log(poData, id_po);
+  try {
+    const updatedPO = await PO.updateTBPO(id_po, poData);
+    res.status(200).json({
+      status: "success",
+      data: updatedPO,
+      message: "PO updated successfully."
+    });
+  } catch (error) {
+    console.error("Error updating PO:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
 // Delete PO
 export const deletePO = async (req, res) => {
   const { id_po } = req.params;

@@ -418,7 +418,7 @@ const PO = {
       { replacements: [id_po] }
     );
     return result.affectedRows > 0;
-  },
+  }
 };
 
 export default PO;

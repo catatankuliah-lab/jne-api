@@ -24,6 +24,7 @@ export const getAllArmada = async (req, res) => {
   }
 };
 
+
 export const getAllArmadas = async (req, res) => {
   try {
     const armada = await Armada.getAllArmadas();
@@ -149,11 +150,11 @@ export const updateArmada = async (req, res) => {
 
   try {
     const updatedArmada = await Armada.updateArmada(id_armada, armadaData);
-     res.status(200).json({
-        status: "success",
-        data: updatedArmada,
-        message: "Armada updated successfully."
-      });
+    res.status(200).json({
+      status: "success",
+      data: updatedArmada,
+      message: "Armada updated successfully."
+    });
   } catch (error) {
     console.error("Error updating Armada:", error);
     res.status(500).json({
@@ -191,9 +192,31 @@ export const deleteArmada = async (req, res) => {
 
 export const getArmadaAvailability = async (req, res) => {
   try {
-      const availability = await Armada.getArmadaAvailability();
-      res.json({ status: "success", data: availability });
+    const availability = await Armada.getArmadaAvailability();
+    res.json({ status: "success", data: availability });
   } catch (error) {
-      res.status(500).json({ status: "error", message: error.message });
+    res.status(500).json({ status: "error", message: error.message });
+  }
+};
+
+export const getArmadaRiwayatBulanan = async (req, res) => {
+  const { page = 1, limit = 10, bulan, tahun, nopol_armada, status_armada, id_jenis_kendaraan } = req.query;
+
+  try {
+    const { data, total } = await Armada.getArmadaRiwayatBulanan(
+      parseInt(page),
+      parseInt(limit),
+      { bulan, tahun, nopol_armada, status_armada, id_jenis_kendaraan }
+    );
+
+    res.json({
+      data,
+      currentPage: parseInt(page),
+      limit: parseInt(limit),
+      totalData: total,
+      totalPages: Math.ceil(total / parseInt(limit)),
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
