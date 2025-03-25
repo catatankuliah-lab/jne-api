@@ -15,14 +15,14 @@ router.get(
 router.get(
   "/titikbongkar/:id_titik_bongkar",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 13]),
   titikBongkarController.getTitikBongkarById
 );
 
 router.get(
   "/titikbongkar/po/:id_po",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 13]),
   titikBongkarController.getTitikBongkarByPO
 );
 
@@ -31,6 +31,13 @@ router.post(
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 9, 10]), // Adjust roles that are allowed to add data
   titikBongkarController.addTitikBongkar
+);
+
+router.put(
+  "/titikbongkar/upload/:id_titik_bongkar",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 13]), // Adjust roles that are allowed to update data
+  titikBongkarController.uploadTitikBongkar
 );
 
 router.put(

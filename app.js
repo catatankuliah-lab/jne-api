@@ -31,8 +31,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Middleware untuk menangani `multipart/form-data`
-app.use(upload.none()); // Ini akan membuat req.body bisa terbaca jika pakai FormData
+app.use("/uploads", express.static("uploads"));
 
 const init = async () => {
     try {
