@@ -17,7 +17,7 @@ const Driver = {
         whereClause += " AND driver.nama_driver LIKE :nama_driver";
         replacements.nama_driver = `%${filters.nama_driver}%`;
       }
-      
+
       if (filters.status_driver) {
         whereClause += " AND customer.status_driver LIKE :status_driver";
         replacements.status_driver = `%${filters.status_driver}%`;
@@ -72,6 +72,30 @@ const Driver = {
       SELECT * FROM driver
       WHERE status_driver = 'TERSEDIA'
     `);
+    return results;
+  },
+
+  getAllDriverDetailPage: async (id_driver) => {
+    const [results] = await sequelize.query(
+      `
+      SELECT
+        id_driver,
+        id_user,
+        nik,
+        nama_driver,
+        telpon_driver,
+        nama_kontak_darurat_driver,
+        telpon_kontak_darurat_driver,
+        masa_berlaku_sim,
+        foto_ktp_driver,
+        foto_sim_driver,
+        status_driver
+      FROM driver
+      WHERE status_driver = 'TERSEDIA'
+      OR id_driver = ?
+    `,
+      { replacements: [id_driver] }
+    );
     return results;
   },
 
@@ -137,21 +161,21 @@ const Driver = {
   },
 
 
-    // Memperbarui Status Driver
-    updateStatusDriver: async (id_driver, driverData) => {
-      const { status_driver } = driverData;
-      const [result] = await sequelize.query(
-        `
+  // Memperbarui Status Driver
+  updateStatusDriver: async (id_driver, driverData) => {
+    const { status_driver } = driverData;
+    const [result] = await sequelize.query(
+      `
         UPDATE driver
         SET status_driver = ?
         WHERE id_driver = ?
       `,
-        {
-          replacements: [status_driver, id_driver],
-        }
-      );
-      return result.affectedRows > 0;
-    },
+      {
+        replacements: [status_driver, id_driver],
+      }
+    );
+    return result.affectedRows > 0;
+  },
 
   // Memperbarui data driver
   updateDriver: async (id_driver, driverData) => {
@@ -214,9 +238,9 @@ const Driver = {
   },
 
   getDriverAvailability: async () => {
-    const [ available ] = await sequelize.query("SELECT COUNT(*) AS available FROM driver WHERE status_driver = 'TERSEDIA';");
+    const [available] = await sequelize.query("SELECT COUNT(*) AS available FROM driver WHERE status_driver = 'TERSEDIA';");
     console.log(available);
-    const [ unavailable ] = await sequelize.query("SELECT COUNT(*) AS unavailable FROM driver WHERE status_driver = 'TIDAK TERSEDIA';");
+    const [unavailable] = await sequelize.query("SELECT COUNT(*) AS unavailable FROM driver WHERE status_driver = 'TIDAK TERSEDIA';");
     console.log(unavailable);
 
     return { available, unavailable };
@@ -230,7 +254,7 @@ const Driver = {
     SET foto_ktp_driver = ?
     WHERE id_driver = ?
     `,
-    
+
       {
         replacements: [file_driver, id_driver],
       }

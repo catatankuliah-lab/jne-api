@@ -8,21 +8,21 @@ const router = express.Router();
 router.get(
   "/kasjalan",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10]), // Sesuaikan peran yang diizinkan
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10]), // Sesuaikan peran yang diizinkan
   kasjalanController.getAllKasjalan
 );
 
 router.get(
   "/kasjalan/:id_kas_jalan",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10]),
   kasjalanController.getKasjalanById
 );
 
 router.get(
   "/kasjalan/po/:id_po",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10]),
   kasjalanController.getKasjalanByIdPO
 );
 

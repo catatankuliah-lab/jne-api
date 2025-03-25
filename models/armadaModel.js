@@ -1,5 +1,4 @@
 import sequelize from "../config/config.js";
-import { getAllArmadas } from "../controller/armadaController.js";
 
 const Armada = {
   // Get all Armada
@@ -67,6 +66,24 @@ const Armada = {
       throw new Error("Error fetching paginated data: " + error.message);
     }
   },
+
+  getAllArmadaDetailPage: async (id_armada) => {
+    const [results] = await sequelize.query(
+      `
+      SELECT
+        armada.*,
+        jenis_kendaraan.nama_jenis_kendaraan
+      FROM armada
+      JOIN
+        jenis_kendaraan ON armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
+      WHERE status_armada = 'TERSEDIA'
+      OR id_armada = ?
+    `,
+      { replacements: [id_armada] }
+    );
+    return results;
+  },
+
 
   getAllArmadas: async () => {
     const [results] = await sequelize.query(`

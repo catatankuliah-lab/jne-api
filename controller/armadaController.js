@@ -4,13 +4,13 @@ const upload = multer();
 
 // Get all Armada
 export const getAllArmada = async (req, res) => {
-  const { page = 1, limit = 10, nama_jenis_kendaraan, nopol_armada, status_armada} = req.query;
+  const { page = 1, limit = 10, nama_jenis_kendaraan, nopol_armada, status_armada } = req.query;
 
   try {
     const { data, total } = await Armada.getAllArmada(
       parseInt(page),
       parseInt(limit),
-      {nama_jenis_kendaraan, nopol_armada, status_armada}
+      { nama_jenis_kendaraan, nopol_armada, status_armada }
     );
 
     res.json({
@@ -22,6 +22,56 @@ export const getAllArmada = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching armadas:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
+export const getAllArmadaDetailPage = async (req, res) => {
+  const { id_armada } = req.params;
+  try {
+    const armada = await Armada.getAllArmadaDetailPage(id_armada);
+    if (armada) {
+      res.status(200).json({
+        status: "success",
+        data: armada,
+        message: "Armada fetched successfully."
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        message: "Armada not found."
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching Armada by ID:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
+export const getArmadaById = async (req, res) => {
+  const { id_armada } = req.params;
+  try {
+    const armada = await Armada.getArmadaById(id_armada);
+    if (armada) {
+      res.status(200).json({
+        status: "success",
+        data: armada,
+        message: "Armada fetched successfully."
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        message: "Armada not found."
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching Armada by ID:", error);
     res.status(500).json({
       status: "error",
       message: "Internal Server Error"
@@ -47,34 +97,6 @@ export const getAllArmadas = async (req, res) => {
   }
 };
 
-// Get Armada by ID
-export const getArmadaById = async (req, res) => {
-  const { id_armada } = req.params;
-
-  try {
-    const armada = await Armada.getArmadaById(id_armada);
-    if (armada) {
-      res.status(200).json({
-        status: "success",
-        data: armada,
-        message: "Armada fetched successfully."
-      });
-    } else {
-      res.status(404).json({
-        status: "error",
-        message: "Armada not found."
-      });
-    }
-  } catch (error) {
-    console.error("Error fetching Armada by ID:", error);
-    res.status(500).json({
-      status: "error",
-      message: "Internal Server Error"
-    });
-  }
-};
-
-// Get Armada by Jenis Kendaraan ID
 export const getArmadaByJenisKendaraan = async (req, res) => {
   const { id_jenis_kendaraan } = req.params;
 

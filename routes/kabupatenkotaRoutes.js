@@ -8,14 +8,14 @@ const router = express.Router();
 router.get(
   "/kabupaten-kota",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10]),
   kabupatenKotaController.getAllKabupatenKota
 );
 
 router.get(
   "/kabupaten-kota/:id_kabupaten_kota",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10]),
   kabupatenKotaController.getKabupatenKotaById
 );
 

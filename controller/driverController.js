@@ -5,7 +5,7 @@ import fs from "fs";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const  id_driver  = req.params.id_driver;
+    const id_driver = req.params.id_driver;
     const uploadPath = path.join('./uploads', 'driver');
     if (!fs.existsSync(uploadPath)) {
       fs.mkdirSync(uploadPath, { recursive: true });
@@ -34,13 +34,13 @@ const upload = multer({ storage });
 
 // Get all drivers
 export const getAllDriver = async (req, res) => {
-  const { page = 1, limit = 10, nik, nama_driver, status_driver} = req.query;
+  const { page = 1, limit = 10, nik, nama_driver, status_driver } = req.query;
 
   try {
     const { data, total } = await Driver.getAllDriver(
       parseInt(page),
       parseInt(limit),
-      { nik, nama_driver, status_driver}
+      { nik, nama_driver, status_driver }
     );
 
     res.json({
@@ -76,7 +76,32 @@ export const getAllDrivers = async (req, res) => {
   }
 };
 
-// Get driver by ID
+export const getAllDriverDetailPage = async (req, res) => {
+  const { id_driver } = req.params;
+
+  try {
+    const driver = await Driver.getAllDriverDetailPage(id_driver);
+    if (driver) {
+      res.status(200).json({
+        status: "success",
+        data: driver,
+        message: "Driver fetched successfully."
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        message: "Driver not found."
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching driver by ID:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
 export const getDriverById = async (req, res) => {
   const { id_driver } = req.params;
 
@@ -195,10 +220,10 @@ export const deleteDriver = async (req, res) => {
 // Fungsi untuk mendapatkan ketersediaan driver
 export const getDriverAvailability = async (req, res) => {
   try {
-      const availability = await Driver.getDriverAvailability();
-      res.json({ status: "success", data: availability });
+    const availability = await Driver.getDriverAvailability();
+    res.json({ status: "success", data: availability });
   } catch (error) {
-      res.status(500).json({ status: "error", message: error.message });
+    res.status(500).json({ status: "error", message: error.message });
   }
 };
 

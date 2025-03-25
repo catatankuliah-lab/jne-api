@@ -4,17 +4,24 @@ import * as authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-// Routes untuk driver dengan otentikasi dan otorisasi
 router.get(
   "/driver",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 7, 9, 10, 13]),
+  authMiddleware.authorizeRole([1, 7, 8, 9, 10, 13]),
   driverController.getAllDriver
 );
+
+router.get(
+  "/driverdetailpage/:id_driver",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 7, 8, 9, 10, 13]),
+  driverController.getAllDriverDetailPage
+);
+
 router.get(
   "/drivers",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 7, 9, 10, 13]),
+  authMiddleware.authorizeRole([1, 7, 8, 9, 10, 13]),
   driverController.getAllDrivers
 );
 
@@ -59,16 +66,5 @@ router.delete(
   authMiddleware.authorizeRole([1, 7, 9, 10]),
   driverController.deleteDriver
 );
-
-
-// Routes untuk pengembangan (tanpa otentikasi dan otorisasi)
-router.get("/dev/driver", driverController.getAllDriver);
-router.get("/dev/drivers", driverController.getAllDrivers);
-router.get("/dev/driver/:id_driver", driverController.getDriverById);
-router.post("/dev/driver", driverController.addDriver);
-router.put("/dev/driver/:id_driver", driverController.updateDriver);
-router.delete("/dev/driver/:id_driver", driverController.deleteDriver);
-router.get("/driver/availability", driverController.getDriverAvailability);
-
 
 export default router;
