@@ -164,6 +164,7 @@ export const uploadTitikBongkar = async (req, res) => {
 
     const nomorPO = req.body.nomor_po;
     const tanggalPO = req.body.tanggal_po;
+    const nomorUrut = req.body.nomor_urut;
     if (!nomorPO) {
       return res.status(400).json({ error: "Nomor PO tidak ditemukan" });
     }
@@ -175,7 +176,7 @@ export const uploadTitikBongkar = async (req, res) => {
     }
 
     // Tentukan nama file baru
-    const newFileName = `tes.jpg`;
+    const newFileName = `titikbongkar-${nomorUrut}.jpg`;
     const filePath = path.join(uploadPath, newFileName);
 
     // Simpan file dari buffer ke disk dengan nama yang diinginkan
@@ -187,18 +188,11 @@ export const uploadTitikBongkar = async (req, res) => {
         // Update database dengan nama file baru
         const fileFoto = uploadPath + "" + newFileName;
         const updateTitikBongkar = await TitikBongkar.uploadTitikBongkar(id_titik_bongkar, fileFoto);
-        if (updateTitikBongkar) {
           res.status(200).json({
             status: "success",
             data: updateTitikBongkar,
             message: "LO updated successfully.",
           });
-        } else {
-          res.status(404).json({
-            status: "error",
-            message: "LO not found.",
-          });
-        }
       } catch (error) {
         console.error("Error updating LO:", error);
         res.status(500).json({
