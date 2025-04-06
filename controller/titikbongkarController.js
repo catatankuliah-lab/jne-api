@@ -1,5 +1,7 @@
 import TitikBongkar from "../models/titikbongkarModel.js"; // Ensure the model is created
 import multer from "multer";
+import path from "path";
+import fs from "fs";
 const upload = multer();
 
 // Get all Titik Bongkar
@@ -146,4 +148,58 @@ export const deleteTitikBongkar = async (req, res) => {
       message: "Internal Server Error"
     });
   }
+};
+
+export const uploadTitikBongkar = async (req, res) => {
+  const { id_titik_bongkar } = req.params;
+  upload.single("file_titik_bongkar")(req, res, async (err) => {
+
+    if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: "File tidak ditemukan" });
+    }
+
+    const nomorPO = req.body.nomor_po;
+    const tanggalPO = req.body.tanggal_po;
+    const nomorUrut = req.body.nomor_urut;
+    if (!nomorPO) {
+      return res.status(400).json({ error: "Nomor PO tidak ditemukan" });
+    }
+
+    // Tentukan lokasi penyimpanan
+    const uploadPath = "uploads/po/" + tanggalPO + "/" + nomorPO + "/";
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+
+    // Tentukan nama file baru
+    const newFileName = `titikbongkar-${nomorUrut}.jpg`;
+    const filePath = path.join(uploadPath, newFileName);
+
+    // Simpan file dari buffer ke disk dengan nama yang diinginkan
+    fs.writeFile(filePath, req.file.buffer, async (err) => {
+      if (err) {
+        return res.status(500).json({ error: "Gagal menyimpan file" });
+      }
+      try {
+        // Update database dengan nama file baru
+        const fileFoto = uploadPath + "" + newFileName;
+        const updateTitikBongkar = await TitikBongkar.uploadTitikBongkar(id_titik_bongkar, fileFoto);
+          res.status(200).json({
+            status: "success",
+            data: updateTitikBongkar,
+            message: "LO updated successfully.",
+          });
+      } catch (error) {
+        console.error("Error updating LO:", error);
+        res.status(500).json({
+          status: "error",
+          message: "Internal Server Error",
+        });
+      }
+    });
+  });
 };

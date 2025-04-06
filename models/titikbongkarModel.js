@@ -1,4 +1,5 @@
 import sequelize from "../config/config.js";
+import { uploadTitikBongkar } from "../controller/titikbongkarController.js";
 
 const TitikBongkar = {
   // Mendapatkan semua titik bongkar
@@ -20,12 +21,11 @@ const TitikBongkar = {
     const [results] = await sequelize.query(
       `
       SELECT 
-        id_titik_bongkar,
-        id_po,
-        id_kabupaten_kota,
-        alamat_titik_bongkar,
-        jam_bongkar
+      titik_bongkar.*,
+      po.nomor_po,
+      po.tanggal_po
       FROM titik_bongkar
+      JOIN po ON titik_bongkar.id_po = po.id_po
       WHERE id_titik_bongkar = ?
     `,
       { replacements: [id_titik_bongkar] }
@@ -97,6 +97,20 @@ const TitikBongkar = {
     );
     return result.affectedRows > 0;
   },
+
+  uploadTitikBongkar: async (id_titik_bongkar, FileFoto) => {
+    const [result] = await sequelize.query(
+      `
+      UPDATE titik_bongkar
+      SET foto_bongkar = ?
+      WHERE id_titik_bongkar = ?
+    `,
+      {
+        replacements: [FileFoto, id_titik_bongkar],
+      }
+    );
+    return result.affectedRows > 0;
+  }
 };
 
 export default TitikBongkar;
