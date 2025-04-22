@@ -149,9 +149,9 @@ export const getPOByDriverId = async (req, res) => {
 
 // Add a new PO
 export const addPO = async (req, res) => {
-  const { nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po, origin, jenis_muatan } = req.body;
+  const { nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po, origin, jenis_muatan, catatan_po, } = req.body;
   try {
-    const id_po = await PO.addPO(nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po, origin, jenis_muatan);
+    const id_po = await PO.addPO(nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po, origin, jenis_muatan, catatan_po,);
     console.log(id_po);
     res.status(201).json({
       status: "success",
