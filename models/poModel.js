@@ -141,10 +141,12 @@ const PO = {
         po.status_po,
         po.origin,
         po.jenis_muatan,
+        po.catatan_po,
         customer.nama_customer,
         customer.alamat_customer,
         driver.nama_driver,
         armada.nopol_armada,
+        jenis_kendaraan.id_jenis_kendaraan,
         jenis_kendaraan.nama_jenis_kendaraan,
         jenis_kendaraan.rasio_perkalian,
         jenis_kendaraan.rasio_perkalian_kosong,
@@ -354,14 +356,14 @@ const PO = {
   },
 
   // Menambahkan PO baru
-  addPO: async (nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po, origin, jenis_muatan) => {
+  addPO: async (nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po, origin, jenis_muatan, catatan_po) => {
     const result = await sequelize.query(
       `
-      INSERT INTO po (nomor_po,tanggal_po,jam_pemesanan_po,jam_muat,id_customer,id_armada,id_driver,destination,status_po,origin,jenis_muatan)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO po (nomor_po,tanggal_po,jam_pemesanan_po,jam_muat,id_customer,id_armada,id_driver,destination,status_po,origin,jenis_muatan,catatan_po)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `,
       {
-        replacements: [nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po, origin, jenis_muatan],
+        replacements: [nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po, origin, jenis_muatan, catatan_po],
       }
     );
     return result[0];
@@ -369,15 +371,15 @@ const PO = {
 
   // Memperbarui PO
   updatePO: async (id_po, poData) => {
-    const { nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, status_po, origin, jenis_muatan, destination } = poData;
+    const { nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, status_po, origin, catatan_po, jenis_muatan, destination } = poData;
     const [result] = await sequelize.query(
       `
       UPDATE po
-      SET nomor_po = ?, tanggal_po = ?, jam_pemesanan_po = ?, jam_muat = ?, id_customer = ?, id_armada = ?, id_driver = ?, status_po = ?, origin = ?, jenis_muatan = ?, destination = ?
+      SET nomor_po = ?, tanggal_po = ?, jam_pemesanan_po = ?, jam_muat = ?, id_customer = ?, id_armada = ?, id_driver = ?, status_po = ?, origin = ?, catatan_po = ?, jenis_muatan = ?, destination = ?
       WHERE id_po = ?
     `,
       {
-        replacements: [nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, status_po, origin, jenis_muatan, destination, id_po],
+        replacements: [nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, status_po, origin, catatan_po, jenis_muatan, destination, id_po],
       }
     );
     return result.affectedRows > 0;
