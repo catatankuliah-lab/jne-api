@@ -96,13 +96,14 @@ const Kasjalan = {
       e_toll,
       keterangan_rute,
       tonase,
-      status_kas_jalan  // Added field
+      status_kas_jalan,
+      catatan_kasja  // Added field
     } = kasjalanData;
     const [result] = await sequelize.query(`
       INSERT INTO kas_jalan 
-        (id_po, jenis_kas_jalan, jarak_isi, jarak_kosong, jam_tunggu, gaji_driver, e_toll, keterangan_rute, tonase, status_kas_jalan)
+        (id_po, jenis_kas_jalan, jarak_isi, jarak_kosong, jam_tunggu, gaji_driver, e_toll, keterangan_rute, tonase, status_kas_jalan, catatan_kasja)
       VALUES 
-        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, {
       replacements: [
         id_po,
@@ -114,7 +115,8 @@ const Kasjalan = {
         e_toll,
         keterangan_rute,
         tonase,
-        status_kas_jalan  // Added field
+        status_kas_jalan,
+        catatan_kasja  // Added field
       ],
     });
     return { id_kas_jalan: result.insertId, ...kasjalanData };
@@ -132,7 +134,8 @@ const Kasjalan = {
       e_toll,
       keterangan_rute,
       tonase,
-      status_kas_jalan  // Added field
+      status_kas_jalan,
+      catatan_kasja // Added field
     } = kasjalanData;
     const [result] = await sequelize.query(`
       UPDATE kas_jalan
@@ -146,7 +149,8 @@ const Kasjalan = {
         e_toll = ?, 
         keterangan_rute = ?, 
         tonase = ?, 
-        status_kas_jalan = ?  
+        status_kas_jalan = ?,
+        catatan_kasja = ?
       WHERE 
         id_kas_jalan = ?
     `, {
@@ -160,7 +164,8 @@ const Kasjalan = {
         e_toll,
         keterangan_rute,
         tonase,
-        status_kas_jalan,  // Added field
+        status_kas_jalan, 
+        catatan_kasja, // Added field
         id_kas_jalan
       ],
     });

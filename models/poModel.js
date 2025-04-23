@@ -150,6 +150,7 @@ const PO = {
         jenis_kendaraan.nama_jenis_kendaraan,
         jenis_kendaraan.rasio_perkalian,
         jenis_kendaraan.rasio_perkalian_kosong,
+        jenis_kendaraan.rasio_perkalian_kosong,
         COALESCE(
           JSON_OBJECT(
             'REGULER', (
@@ -178,7 +179,8 @@ const PO = {
                 'gaji_driver', kas_jalan.gaji_driver,
                 'e_toll', kas_jalan.e_toll,
                 'keterangan_rute', kas_jalan.keterangan_rute,
-                'tonase', kas_jalan.tonase
+                'tonase', kas_jalan.tonase,
+                'catatan_kasja', kas_jalan.catatan_kasja
               )
               FROM kas_jalan
               WHERE kas_jalan.id_po = po.id_po AND kas_jalan.jenis_kas_jalan = 'KOSONGAN'
