@@ -34,13 +34,13 @@ const upload = multer({ storage });
 
 // Get all drivers
 export const getAllDriver = async (req, res) => {
-  const { page = 1, limit = 10, nik, nama_driver, status_driver } = req.query;
+  const { page = 1, limit = 10, nik, nama_driver, status_driver,startDate, endDate } = req.query;
 
   try {
     const { data, total } = await Driver.getAllDriver(
       parseInt(page),
       parseInt(limit),
-      { nik, nama_driver, status_driver }
+      { nik, nama_driver, status_driver, startDate, endDate }
     );
 
     res.json({
