@@ -3,12 +3,12 @@ import multer from "multer";
 const upload = multer();
 
 export const getAllCustomers = async (req, res) => {
-  const { page = 1, limit = 10, nama_customer, alamat_customer} = req.query;
+  const { page = 1, limit = 10, nama_customer, alamat_customer, startDate, endDate} = req.query;
     try {
       const { data, total } = await Customer.getAllCustomers(
         parseInt(page),
         parseInt(limit),
-        { nama_customer, alamat_customer}
+        { nama_customer, alamat_customer, startDate, endDate}
       );
   
       res.json({

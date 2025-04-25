@@ -17,10 +17,28 @@ const Customer = {
         whereClause += " AND customer.alamat_customer LIKE :alamat_customer";
         replacements.alamat_customer = `%${filters.alamat_customer}%`;
       }
+      
+      if (filters.startDate && filters.endDate) {
+        whereClause += " AND po.tanggal_po BETWEEN :startDate AND :endDate";
+        replacements.startDate = filters.startDate;
+        replacements.endDate = filters.endDate;
+      } else if (filters.startDate) {
+        whereClause += " AND po.tanggal_po >= :startDate";
+        replacements.startDate = filters.startDate;
+      } else if (filters.endDate) {
+        whereClause += " AND po.tanggal_po <= :endDate";
+        replacements.endDate = filters.endDate;
+      }
 
       const query = `
-      SELECT * FROM customer
+      SELECT 
+        customer.nama_customer, 
+        customer.alamat_customer,
+        COUNT(po.id_po) AS total_po
+      FROM customer
+      LEFT JOIN po ON po.id_customer = customer.id_customer
       ${whereClause}
+      GROUP BY customer.id_customer, customer.nama_customer, customer.alamat_customer
       LIMIT :per_page OFFSET :offset;
     `;
 
