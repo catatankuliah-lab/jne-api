@@ -4,6 +4,7 @@ const Armada = {
   // Get all Armada
   getAllArmada: async (page = 1, per_page = 10, filters = {}) => {
     try {
+      console.log(filters);
       const offset = (page - 1) * per_page;
       let whereClause = "WHERE 1=1";
       let replacements = { per_page: parseInt(per_page), offset: parseInt(offset) };
@@ -23,6 +24,18 @@ const Armada = {
         replacements.status_armada = `%${filters.status_armada}%`;
       }
 
+      if (filters.startDate && filters.endDate) {
+        whereClause += " AND po.tanggal_po BETWEEN :startDate AND :endDate";
+        replacements.startDate = filters.startDate;
+        replacements.endDate = filters.endDate;
+      } else if (filters.startDate) {
+        whereClause += " AND po.tanggal_po >= :startDate";
+        replacements.startDate = filters.startDate;
+      } else if (filters.endDate) {
+        whereClause += " AND po.tanggal_po <= :endDate";
+        replacements.endDate = filters.endDate;
+      }
+
       const query = `
         SELECT
           armada.id_armada,
@@ -30,14 +43,23 @@ const Armada = {
           armada.nopol_armada,
           armada.lokasi_terakhir,
           armada.status_armada,
-          jenis_kendaraan.nama_jenis_kendaraan
+          jenis_kendaraan.nama_jenis_kendaraan,
+          po.tanggal_po,
+          COUNT(po.id_po) AS total_po
         FROM
           armada
         LEFT JOIN
-          jenis_kendaraan
-        ON
-          armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
+          jenis_kendaraan ON armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
+        LEFT JOIN
+          po ON armada.id_armada = po.id_armada
         ${whereClause}
+        GROUP BY
+          armada.id_armada,
+          armada.id_jenis_kendaraan,
+          armada.nopol_armada,
+          armada.lokasi_terakhir,
+          armada.status_armada,
+          jenis_kendaraan.nama_jenis_kendaraan 
       LIMIT :per_page OFFSET :offset;
       `;
 
@@ -48,6 +70,10 @@ const Armada = {
 
       const countQuery = `
       SELECT COUNT(*) AS total FROM armada
+      LEFT JOIN
+          jenis_kendaraan ON armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
+        LEFT JOIN
+          po ON armada.id_armada = po.id_armada
       ${whereClause};
     `;
 
