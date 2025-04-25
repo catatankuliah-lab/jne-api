@@ -34,6 +34,7 @@ const Customer = {
       SELECT 
         customer.nama_customer, 
         customer.alamat_customer,
+        po.tanggal_po,
         COUNT(po.id_po) AS total_po
       FROM customer
       LEFT JOIN po ON po.id_customer = customer.id_customer
@@ -67,6 +68,15 @@ const Customer = {
       throw new Error("Error fetching paginated data: " + error.message);
     }
     
+  },
+
+  getSelectOptionCustomers: async () => {
+    const [results] = await sequelize.query(`
+      SELECT
+        customer.*
+      FROM customer
+    `);
+    return results;
   },
 
   getCustomerById: async (id_customer) => {

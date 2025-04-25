@@ -27,6 +27,23 @@ export const getAllCustomers = async (req, res) => {
   }
 };
 
+export const getSelectOptionCustomers = async (req, res) => {
+  try {
+    const customer = await Customer.getSelectOptionCustomers();
+    res.status(200).json({
+      status: "success",
+      data: customer,
+      message: "Cutstomer fetched successfully."
+    });
+  } catch (error) {
+    console.error("Error fetching Customer:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
 export const getCustomerById = async (req, res) => {
   const { id_customer } = req.params;
 

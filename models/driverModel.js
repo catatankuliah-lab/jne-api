@@ -37,20 +37,24 @@ const Driver = {
 
       const query = `
         SELECT
-          id_driver,
-          id_user,
-          nik,
-          nama_driver,
-          telpon_driver,
-          nama_kontak_darurat_driver,
-          telpon_kontak_darurat_driver,
-          masa_berlaku_sim,
-          foto_ktp_driver,
-          foto_sim_driver,
-          status_driver
+          driver.id_driver,
+          driver.id_user,
+          driver.nik,
+          driver.nama_driver,
+          driver.telpon_driver,
+          driver.nama_kontak_darurat_driver,
+          driver.telpon_kontak_darurat_driver,
+          driver.masa_berlaku_sim,
+          driver.foto_ktp_driver,
+          driver.foto_sim_driver,
+          driver.status_driver,
+          po.tanggal_po,
+          COUNT(po.id_po) AS total_po
         FROM
             driver
+        LEFT JOIN po ON po.id_driver = driver.id_driver
       ${whereClause}
+      GROUP BY driver.id_driver, driver.nik, driver.nama_driver, driver.status_driver
       LIMIT :per_page OFFSET :offset;
       `;
       const data = await sequelize.query(query, {
