@@ -40,7 +40,10 @@ const Customer = {
       FROM customer
       LEFT JOIN po ON customer.id_customer = po.id_customer
       ${whereClause}
-      GROUP BY customer.id_customer, customer.nama_customer, customer.alamat_customer
+      GROUP BY customer.id_customer, 
+      customer.nama_customer, 
+      customer.alamat_customer, 
+      po.tanggal_po
       LIMIT :per_page OFFSET :offset;
     `;
 

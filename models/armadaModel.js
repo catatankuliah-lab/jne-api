@@ -59,7 +59,8 @@ const Armada = {
           armada.nopol_armada,
           armada.lokasi_terakhir,
           armada.status_armada,
-          jenis_kendaraan.nama_jenis_kendaraan 
+          jenis_kendaraan.nama_jenis_kendaraan,
+          po.tanggal_po
       LIMIT :per_page OFFSET :offset;
       `;
 
