@@ -3,12 +3,12 @@ import multer from "multer";
 const upload = multer();
 
 export const getAllCustomers = async (req, res) => {
-  const { page = 1, limit = 10, nama_customer, alamat_customer} = req.query;
+  const { page = 1, limit = 10, nama_customer, alamat_customer, startDate, endDate} = req.query;
     try {
       const { data, total } = await Customer.getAllCustomers(
         parseInt(page),
         parseInt(limit),
-        { nama_customer, alamat_customer}
+        { nama_customer, alamat_customer, startDate, endDate}
       );
   
       res.json({
@@ -20,6 +20,23 @@ export const getAllCustomers = async (req, res) => {
       });
   } catch (error) {
     console.error("Error fetching customers:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
+export const getSelectOptionCustomers = async (req, res) => {
+  try {
+    const customer = await Customer.getSelectOptionCustomers();
+    res.status(200).json({
+      status: "success",
+      data: customer,
+      message: "Cutstomer fetched successfully."
+    });
+  } catch (error) {
+    console.error("Error fetching Customer:", error);
     res.status(500).json({
       status: "error",
       message: "Internal Server Error"

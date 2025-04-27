@@ -17,10 +17,30 @@ const Customer = {
         whereClause += " AND customer.alamat_customer LIKE :alamat_customer";
         replacements.alamat_customer = `%${filters.alamat_customer}%`;
       }
+      
+      if (filters.startDate && filters.endDate) {
+        whereClause += " AND po.tanggal_po BETWEEN :startDate AND :endDate";
+        replacements.startDate = filters.startDate;
+        replacements.endDate = filters.endDate;
+      } else if (filters.startDate) {
+        whereClause += " AND po.tanggal_po >= :startDate";
+        replacements.startDate = filters.startDate;
+      } else if (filters.endDate) {
+        whereClause += " AND po.tanggal_po <= :endDate";
+        replacements.endDate = filters.endDate;
+      }
 
       const query = `
-      SELECT * FROM customer
+      SELECT 
+        customer.id_customer,
+        customer.nama_customer, 
+        customer.alamat_customer,
+        po.tanggal_po,
+        COUNT(po.id_po) AS total_po
+      FROM customer
+      LEFT JOIN po ON customer.id_customer = po.id_customer
       ${whereClause}
+      GROUP BY customer.id_customer, customer.nama_customer, customer.alamat_customer
       LIMIT :per_page OFFSET :offset;
     `;
 
@@ -31,6 +51,8 @@ const Customer = {
 
       const countQuery = `
       SELECT COUNT(*) AS total FROM customer
+              LEFT JOIN
+          po ON customer.id_customer = po.id_customer
       ${whereClause};
     `;
 
@@ -49,6 +71,15 @@ const Customer = {
       throw new Error("Error fetching paginated data: " + error.message);
     }
     
+  },
+
+  getSelectOptionCustomers: async () => {
+    const [results] = await sequelize.query(`
+      SELECT
+        customer.*
+      FROM customer
+    `);
+    return results;
   },
 
   getCustomerById: async (id_customer) => {

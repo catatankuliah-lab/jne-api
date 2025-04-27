@@ -4,13 +4,13 @@ const upload = multer();
 
 // Get all Armada
 export const getAllArmada = async (req, res) => {
-  const { page = 1, limit = 10, nama_jenis_kendaraan, nopol_armada, status_armada } = req.query;
+  const { page = 1, limit = 10, nama_jenis_kendaraan, nopol_armada, status_armada, startDate, endDate } = req.query;
 
   try {
     const { data, total } = await Armada.getAllArmada(
       parseInt(page),
       parseInt(limit),
-      { nama_jenis_kendaraan, nopol_armada, status_armada }
+      { nama_jenis_kendaraan, nopol_armada, status_armada, startDate, endDate }
     );
 
     res.json({

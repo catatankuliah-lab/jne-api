@@ -23,22 +23,38 @@ const Driver = {
         replacements.status_driver = `%${filters.status_driver}%`;
       }
 
+      if (filters.startDate && filters.endDate) {
+        whereClause += " AND po.tanggal_po BETWEEN :startDate AND :endDate";
+        replacements.startDate = filters.startDate;
+        replacements.endDate = filters.endDate;
+      } else if (filters.startDate) {
+        whereClause += " AND po.tanggal_po >= :startDate";
+        replacements.startDate = filters.startDate;
+      } else if (filters.endDate) {
+        whereClause += " AND po.tanggal_po <= :endDate";
+        replacements.endDate = filters.endDate;
+      }
+
       const query = `
         SELECT
-          id_driver,
-          id_user,
-          nik,
-          nama_driver,
-          telpon_driver,
-          nama_kontak_darurat_driver,
-          telpon_kontak_darurat_driver,
-          masa_berlaku_sim,
-          foto_ktp_driver,
-          foto_sim_driver,
-          status_driver
+          driver.id_driver,
+          driver.id_user,
+          driver.nik,
+          driver.nama_driver,
+          driver.telpon_driver,
+          driver.nama_kontak_darurat_driver,
+          driver.telpon_kontak_darurat_driver,
+          driver.masa_berlaku_sim,
+          driver.foto_ktp_driver,
+          driver.foto_sim_driver,
+          driver.status_driver,
+          po.tanggal_po,
+          COUNT(po.id_po) AS total_po
         FROM
             driver
+        LEFT JOIN po ON po.id_driver = driver.id_driver
       ${whereClause}
+      GROUP BY driver.id_driver, driver.nik, driver.nama_driver, driver.status_driver
       LIMIT :per_page OFFSET :offset;
       `;
       const data = await sequelize.query(query, {
