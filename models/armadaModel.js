@@ -69,13 +69,17 @@ const Armada = {
       });
 
       const countQuery = `
-      SELECT COUNT(*) AS total FROM armada
-      LEFT JOIN
-          jenis_kendaraan ON armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
-        LEFT JOIN
-          po ON armada.id_armada = po.id_armada
-      ${whereClause};
+      SELECT
+        COUNT(DISTINCT armada.id_armada) AS total
+      FROM
+        armada
+      LEFT JOIN 
+        jenis_kendaraan ON armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
+      LEFT JOIN 
+        po ON armada.id_armada = po.id_armada
+      ${whereClause}
     `;
+
 
       const [countResult] = await sequelize.query(countQuery, {
         replacements,
