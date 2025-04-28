@@ -66,8 +66,13 @@ const Driver = {
       });
 
       const countQuery = `
-      SELECT COUNT(*) AS total FROM driver
-      ${whereClause};
+      SELECT
+        COUNT(DISTINCT driver.id_driver) AS total
+      FROM
+        driver
+      LEFT JOIN 
+        po ON driver.id_driver = po.id_driver
+      ${whereClause}
     `;
 
       const [countResult] = await sequelize.query(countQuery, {
