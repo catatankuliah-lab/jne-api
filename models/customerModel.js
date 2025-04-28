@@ -34,7 +34,7 @@ const Customer = {
       SELECT 
         customer.nama_customer, 
         customer.alamat_customer,
-        po.tanggal_po,
+        MIN(po.tanggal_po) AS tanggal_po,
         COUNT(po.id_po) AS total_po
       FROM customer
       LEFT JOIN po ON po.id_customer = customer.id_customer

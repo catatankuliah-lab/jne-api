@@ -44,7 +44,7 @@ const Armada = {
           armada.lokasi_terakhir,
           armada.status_armada,
           jenis_kendaraan.nama_jenis_kendaraan,
-          po.tanggal_po,
+          MIN(po.tanggal_po) AS tanggal_po,
           COUNT(po.id_po) AS total_po
         FROM
           armada
@@ -52,14 +52,14 @@ const Armada = {
           jenis_kendaraan ON armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
         LEFT JOIN
           po ON armada.id_armada = po.id_armada
-        ${whereClause}
+        WHERE 1=1
         GROUP BY
           armada.id_armada,
           armada.id_jenis_kendaraan,
           armada.nopol_armada,
           armada.lokasi_terakhir,
           armada.status_armada,
-          jenis_kendaraan.nama_jenis_kendaraan 
+          jenis_kendaraan.nama_jenis_kendaraan
       LIMIT :per_page OFFSET :offset;
       `;
 
