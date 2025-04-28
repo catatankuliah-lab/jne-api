@@ -44,7 +44,7 @@ const Armada = {
           armada.lokasi_terakhir,
           armada.status_armada,
           jenis_kendaraan.nama_jenis_kendaraan,
-          po.tanggal_po,
+          MIN(po.tanggal_po) AS tanggal_po,
           COUNT(po.id_po) AS total_po
         FROM
           armada
@@ -60,7 +60,6 @@ const Armada = {
           armada.lokasi_terakhir,
           armada.status_armada,
           jenis_kendaraan.nama_jenis_kendaraan,
-          po.tanggal_po
       LIMIT :per_page OFFSET :offset;
       `;
 

@@ -48,7 +48,7 @@ const Driver = {
           driver.foto_ktp_driver,
           driver.foto_sim_driver,
           driver.status_driver,
-          po.tanggal_po,
+          MIN(po.tanggal_po) AS tanggal_po,
           COUNT(po.id_po) AS total_po
         FROM
             driver
@@ -58,7 +58,6 @@ const Driver = {
       driver.nik, 
       driver.nama_driver, 
       driver.status_driver,
-      po.tanggal_po
       LIMIT :per_page OFFSET :offset;
       `;
       const data = await sequelize.query(query, {
