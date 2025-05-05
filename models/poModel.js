@@ -142,6 +142,7 @@ const PO = {
         po.origin,
         po.jenis_muatan,
         po.catatan_po,
+        po.file_sj,
         customer.nama_customer,
         customer.alamat_customer,
         driver.nama_driver,
@@ -422,6 +423,20 @@ const PO = {
     const [result] = await sequelize.query(
       `DELETE FROM po WHERE id_po = ?`,
       { replacements: [id_po] }
+    );
+    return result.affectedRows > 0;
+  },
+
+  uploadSJ: async (id_po, FileFoto) => {
+    const [result] = await sequelize.query(
+      `
+      UPDATE po
+      SET file_sj = ?
+      WHERE id_po = ?
+    `,
+      {
+        replacements: [FileFoto, id_po],
+      }
     );
     return result.affectedRows > 0;
   }
