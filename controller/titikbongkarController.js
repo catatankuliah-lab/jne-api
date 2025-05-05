@@ -188,11 +188,11 @@ export const uploadTitikBongkar = async (req, res) => {
         // Update database dengan nama file baru
         const fileFoto = uploadPath + "" + newFileName;
         const updateTitikBongkar = await TitikBongkar.uploadTitikBongkar(id_titik_bongkar, fileFoto);
-          res.status(200).json({
-            status: "success",
-            data: updateTitikBongkar,
-            message: "LO updated successfully.",
-          });
+        res.status(200).json({
+          status: "success",
+          data: updateTitikBongkar,
+          message: "LO updated successfully.",
+        });
       } catch (error) {
         console.error("Error updating LO:", error);
         res.status(500).json({
