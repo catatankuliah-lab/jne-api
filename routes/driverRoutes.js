@@ -49,14 +49,14 @@ router.post(
 router.put(
   "/driver/status/:id_driver",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 2, 3, 9, 10]),
+  authMiddleware.authorizeRole([1, 3, 2, 3, 9, 10, 13]),
   driverController.updateStatusDriver
 );
 
 router.put(
   "/driver/:id_driver",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 7, 9, 10]),
+  authMiddleware.authorizeRole([1, 3, 7, 9, 10, 13]),
   driverController.updateDriver
 );
 

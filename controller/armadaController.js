@@ -189,6 +189,27 @@ export const updateStatusArmada = async (req, res) => {
     });
   }
 };
+
+export const updateStatusLokasiArmada = async (req, res) => {
+  const { id_armada } = req.params;
+  const armadaData = req.body;
+  console.log(armadaData, id_armada);
+  try {
+    const updatedStatusArmada = await Armada.updateStatusLokasiArmada(id_armada, armadaData);
+    res.status(200).json({
+      status: "success",
+      data: updatedStatusArmada,
+      message: "Armada updated successfully."
+    });
+  } catch (error) {
+    console.error("Error updating Armada:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
 // Update Armada
 export const updateArmada = async (req, res) => {
   const { id_armada } = req.params;

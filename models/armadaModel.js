@@ -214,6 +214,22 @@ const Armada = {
   },
 
   // Update Armada
+  updateStatusLokasiArmada: async (id_armada, armadaData) => {
+    const { lokasi_terakhir, status_armada } = armadaData;
+    const [result] = await sequelize.query(
+      `
+      UPDATE armada
+      SET lokasi_terakhir = ?, status_armada = ?
+      WHERE id_armada = ?
+    `,
+      {
+        replacements: [lokasi_terakhir, status_armada, id_armada],
+      }
+    );
+    return result.affectedRows > 0;
+  },
+
+  // Update Armada
   updateArmada: async (id_armada, armadaData) => {
     const { id_jenis_kendaraan, nopol_armada, lokasi_terakhir, status_armada } = armadaData;
     const [result] = await sequelize.query(
