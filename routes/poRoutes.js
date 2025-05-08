@@ -56,7 +56,7 @@ router.post(
 router.put(
   "/po/status/:id_po",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10]),
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 13]),
   poController.updateStatusPO
 );
 

@@ -13,6 +13,7 @@ import armadaRoutes from "./routes/armadaRoutes.js";
 import kasjalanRoutes from "./routes/kasjalanRoutes.js";
 import poRoutes from "./routes/poRoutes.js";
 import titikbongkarRoutes from "./routes/titikbongkarRoutes.js";
+import riwayatPORoutes from "./routes/riwayatPORoutes.js";
 import cicilanRoutes from "./routes/cicilanRoutes.js";
 
 const app = express();
@@ -51,6 +52,7 @@ const init = async () => {
         app.use("/api/v1", kasjalanRoutes);
         app.use("/api/v1", poRoutes);
         app.use("/api/v1", titikbongkarRoutes);
+        app.use("/api/v1", riwayatPORoutes);
         app.use("/api/v1", cicilanRoutes);
 
         app.listen(PORT, () => {

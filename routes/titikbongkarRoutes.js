@@ -26,6 +26,13 @@ router.get(
   titikBongkarController.getTitikBongkarByPO
 );
 
+router.get(
+  "/titikbongkar/statusbongkar/:id_po",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 13]),
+  titikBongkarController.getStatusUploadBongkarByPO
+);
+
 router.post(
   "/titikbongkar",
   authMiddleware.authenticate,

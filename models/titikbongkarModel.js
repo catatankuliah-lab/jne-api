@@ -23,7 +23,8 @@ const TitikBongkar = {
       SELECT 
       titik_bongkar.*,
       po.nomor_po,
-      po.tanggal_po
+      po.tanggal_po,
+      po.status_po
       FROM titik_bongkar
       JOIN po ON titik_bongkar.id_po = po.id_po
       WHERE id_titik_bongkar = ?
@@ -49,11 +50,39 @@ const TitikBongkar = {
         kabupaten_kota.nama_kabupaten_kota
       FROM titik_bongkar
       JOIN kabupaten_kota ON titik_bongkar.id_kabupaten_kota = kabupaten_kota.id_kabupaten_kota
-      WHERE id_po = ?
+      WHERE titik_bongkar.id_po = ?
     `,
       { replacements: [id_po] }
     );
     return results;
+  },
+
+  // Mendapatkan titik bongkar berdasarkan ID PO
+  getStatusUploadBongkarByPO: async (id_po) => {
+    const [results] = await sequelize.query(
+      `
+      SELECT
+          titik_bongkar.id_po,
+          po.id_armada,
+          po.id_driver,
+          COUNT(titik_bongkar.id_titik_bongkar) AS total_titik_bongkar,
+          SUM(CASE
+              WHEN titik_bongkar.foto_bongkar IS NOT NULL AND titik_bongkar.foto_bongkar != '' THEN 1
+              ELSE 0
+          END) AS jumlah_foto_terisi,
+          CASE
+              WHEN COUNT(*) = SUM(CASE WHEN titik_bongkar.foto_bongkar IS NOT NULL AND titik_bongkar.foto_bongkar != '' THEN 1 ELSE 0 END) THEN 'Lengkap'
+              ELSE 'Belum Lengkap'
+          END AS status_foto
+      FROM
+          titik_bongkar
+      LEFT JOIN
+          po ON po.id_po = titik_bongkar.id_po
+      WHERE titik_bongkar.id_po = ?
+    `,
+      { replacements: [id_po] }
+    );
+    return results[0];
   },
 
   // Menambahkan titik bongkar baru
