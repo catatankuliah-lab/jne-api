@@ -61,6 +61,13 @@ router.put(
 );
 
 router.put(
+  "/po/sj/upload/:id_po",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 13]),
+  poController.uploadSJ
+);
+
+router.put(
   "/po/:id_po",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10]),
