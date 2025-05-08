@@ -151,6 +151,7 @@ const PO = {
         jenis_kendaraan.rasio_perkalian,
         jenis_kendaraan.rasio_perkalian_kosong,
         jenis_kendaraan.rasio_perkalian_kosong,
+        kas_jalan.id_kas_jalan,
         COALESCE(
           JSON_OBJECT(
             'REGULER', (
@@ -206,6 +207,7 @@ const PO = {
       LEFT JOIN jenis_kendaraan ON armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
       LEFT JOIN titik_bongkar ON po.id_po = titik_bongkar.id_po
       LEFT JOIN kabupaten_kota ON titik_bongkar.id_kabupaten_kota = kabupaten_kota.id_kabupaten_kota
+      LEFT JOIN kas_jalan ON po.id_po = kas_jalan.id_po
       WHERE po.id_po = ?
       GROUP BY po.id_po;
     `,
