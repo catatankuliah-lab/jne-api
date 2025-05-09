@@ -21,7 +21,7 @@ import itemdetailarmadaRoutes from "./routes/itemdetailarmadaRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3090;
-const upload = multer(); // Inisialisasi multer
+const upload = multer();
 
 app.use(
     cors({
