@@ -146,59 +146,67 @@ export const deleteItemDetailArmada = async (req, res) => {
   }
 };
 
+
 export const uploadItemDetailArmada = async (req, res) => {
-  const { id_item_detail_armada } = req.params;
-  // const foto = req.body;
-  const { kondisi_mobil_tampak_depan, keterangan_mobil_tampak_depan } = req.body;
-  console.log("id",id_item_detail_armada);
-  console.log("coba",kondisi_mobil_tampak_depan, keterangan_mobil_tampak_depan);
-  // upload.single(req.body.foto)(req, res, async (err) => {
+  const { id_item_detail_armada, namafile } = req.params;
 
-  //   if (err) {
-  //     return res.status(400).json({ error: err.message });
-  //   }
+  console.log(req.params);
+  upload.single(namafile)(req, res, async (err) => {
 
-  //   if (!req.file) {
-  //     return res.status(400).json({ error: "File tidak ditemukan" });
-  //   }
+    if (err) {
+      return res.status(400).json({ error: err.message });
+    }
 
-    // const nomorPO = req.body.nomor_po;
-    // const tanggalPO = req.body.tanggal_po;
-    // if (!nomorPO) {
-    //   return res.status(400).json({ error: "Nomor PO tidak ditemukan" });
-    // }
-
-    // Tentukan lokasi penyimpanan
-  //   const uploadPath = "uploads/";
-  //   if (!fs.existsSync(uploadPath)) {
-  //     fs.mkdirSync(uploadPath, { recursive: true });
-  //   }
-
-  //   // Tentukan nama file baru
-  //   const newFileName = `itemdetail.jpg`;
-  //   const filePath = path.join(uploadPath, newFileName);
-
-  //   // Simpan file dari buffer ke disk dengan nama yang diinginkan
-  //   fs.writeFile(filePath, req.file.buffer, async (err) => {
-  //     if (err) {
-  //       return res.status(500).json({ error: "Gagal menyimpan file" });
-  //     }
-  //     try {
-  //       // Update database dengan nama file baru
-  //       const fileFoto = uploadPath + "" + newFileName;
-  //       const updateItemDetailArmada = await ItemDetailArmada.uploadItemDetailArmada(id_item_detail_armada, fileFoto);
-  //       res.status(200).json({
-  //         status: "success",
-  //         data: updateItemDetailArmada,
-  //         message: "Item Detail Armada updated successfully.",
-  //       });
-  //     } catch (error) {
-  //       console.error("Error updating Item Detail Armada:", error);
-  //       res.status(500).json({
-  //         status: "error",
-  //         message: "Internal Server Error",
-  //       });
-  //     }
-  //   });
-  // });
+    if (!req.file) {
+      return res.status(400).json({ error: "File tidak ditemukan" });
+    }
+    const nopol_armada = req.body.nopol_armada;
+    const nama_driver = req.body.nama_driver;
+    const kondisi = req.body.kondisi;
+    const keterangan = req.body.keterangan;
+    const today = new Date();
+    const tanggal = today.getDate();
+    const bulan = today.toLocaleString('id-ID', { month: 'long' });
+    const tahun = today.getFullYear();
+    const uploadPath = "uploads/pengecekan_armada/" + tahun + "/" + bulan + "/" + tanggal + "/" + nopol_armada + " - " + nama_driver + "/";
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+    // Tentukan nama file baru
+    const newFileName = `${namafile}.jpg`;
+    const filePath = path.join(uploadPath, newFileName);
+    // Simpan file dari buffer ke disk dengan nama yang diinginkan
+    fs.writeFile(filePath, req.file.buffer, async (err) => {
+      if (err) {
+        return res.status(500).json({ error: "Gagal menyimpan file" });
+      }
+      try {
+        const fileFoto = uploadPath + "" + newFileName;
+        const listKeySaja = Object.keys(Object.assign({}, req.body));
+        const filteredKeys = listKeySaja.filter(
+          key => key !== 'nama_driver' && key !== 'nopol_armada'
+        );
+        filteredKeys.unshift(namafile);
+        const valuesOnly = Object.values(req.body);
+        const filteredValues = valuesOnly.slice(0, -2);
+        filteredValues.unshift(fileFoto);
+        const dataUpdate = {};
+        filteredKeys.forEach((key, index) => {
+          dataUpdate[key] = filteredValues[index];
+        });
+        const updatePengecekanArmada = await ItemDetailArmada.uploadItemDetailArmada(id_item_detail_armada, dataUpdate);
+        res.status(200).json({
+          status: "success",
+          data: updatePengecekanArmada,
+          message: "Foto lampiran updated successfully.",
+        });
+      } catch (error) {
+        console.error("Error updating LO:", error);
+        res.status(500).json({
+          status: "error",
+          message: "Internal Server Error",
+        });
+      }
+    });
+  });
 };

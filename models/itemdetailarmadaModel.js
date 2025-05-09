@@ -37,14 +37,18 @@ const ItemDetailArmada = {
   getByIdKendaraanMasuk: async (id_kendaraan_masuk) => {
     const [results] = await sequelize.query(
       `
-    SELECT 
-      ida.*, 
-      km.id_driver, 
-      km.id_armada, 
-      km.tanggal_masuk
-    FROM item_detail_armada ida
-    LEFT JOIN kendaraan_masuk km ON ida.id_kendaraan_masuk = km.id_kendaraan_masuk
-    WHERE ida.id_kendaraan_masuk = ?
+      SELECT
+        ida.*,
+        km.id_driver,
+        km.id_armada,
+        km.tanggal_masuk,
+        a.nopol_armada,
+        d.nama_driver
+      FROM item_detail_armada ida
+      LEFT JOIN kendaraan_masuk km ON ida.id_kendaraan_masuk = km.id_kendaraan_masuk
+      LEFT JOIN armada a ON km.id_armada = a.id_armada
+      LEFT JOIN driver d ON km.id_driver = d.id_driver
+      WHERE ida.id_kendaraan_masuk = ?
     `,
       {
         replacements: [id_kendaraan_masuk],
@@ -69,20 +73,24 @@ const ItemDetailArmada = {
     return result[0].insertId;
   },
 
-  uploadItemDetailArmada: async (id_item_detail_armada, FileFoto) => {
+  uploadItemDetailArmada: async (id_item_detail_armada, data) => {
+    const fields = Object.keys(data);
+    const values = Object.values(data);
+    const updates = fields.map((field) => `${field} = ?`).join(", ");
+
     const [result] = await sequelize.query(
       `
       UPDATE item_detail_armada
-      SET foto_mobil_tampak_depan = ?
+      SET ${updates}
       WHERE id_item_detail_armada = ?
-    `,
+      `,
       {
-        replacements: [FileFoto, id_item_detail_armada],
+        replacements: [...values, id_item_detail_armada],
       }
     );
     return result.affectedRows > 0;
   },
-  
+
   // Update data berdasarkan ID
   update: async (id_item_detail_armada, data) => {
     const fields = Object.keys(data);

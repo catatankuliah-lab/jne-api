@@ -20,7 +20,7 @@ router.get(
 );
 
 router.put(
-  "/itemdetailarmada/upload/:id_item_detail_armada",
+  "/itemdetailarmada/upload/:id_item_detail_armada/:namafile",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([15]),
   itemDetailArmadaController.uploadItemDetailArmada
