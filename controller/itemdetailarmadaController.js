@@ -1,4 +1,4 @@
-import ItemDetailArmada from "../models/itemDetailArmadaModel.js";
+import ItemDetailArmada from "../models/itemdetailArmadaModel.js";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
