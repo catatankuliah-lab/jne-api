@@ -19,7 +19,8 @@ const KendaraanMasuk = {
         kendaraan_masuk.fisik_kendaraan
       FROM kendaraan_masuk
       JOIN armada ON kendaraan_masuk.id_armada = armada.id_armada
-      JOIN driver ON kendaraan_masuk.id_driver = driver.id_driver;
+      JOIN driver ON kendaraan_masuk.id_driver = driver.id_driver
+      ORDER BY kendaraan_masuk.id_kendaraan_masuk DESC;
     `);
     return results;
   },

@@ -9,7 +9,6 @@ const SECRET_KEY = process.env.SECRET_KEY;
 
 export const login = async (req, res) => {
   const { username, password } = req.body;
-
   try {
     const [user] = await sequelize.query(
       `SELECT user.*, role.* FROM

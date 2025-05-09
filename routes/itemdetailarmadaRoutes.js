@@ -13,6 +13,13 @@ router.get(
 );
 
 router.get(
+  "/itemdetailarmada/kendaraanmasuk/:id_kendaraan_masuk",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([15]),
+  itemDetailArmadaController.getItemDetailArmadaByIdKendaraanMasuk
+);
+
+router.get(
   "/itemdetailarmada/:id_item_detail_armada",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([15]),
