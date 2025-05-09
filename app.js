@@ -31,7 +31,7 @@ app.use(
     })
 );
 
-// Middleware untuk membaca JSON dan URL-encoded
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
