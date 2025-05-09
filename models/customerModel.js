@@ -61,6 +61,7 @@ const Customer = {
       ${whereClause}
     `;
 
+
       const [countResult] = await sequelize.query(countQuery, {
         replacements,
         type: sequelize.QueryTypes.SELECT,

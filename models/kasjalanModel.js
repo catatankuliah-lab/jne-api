@@ -164,7 +164,7 @@ const Kasjalan = {
         e_toll,
         keterangan_rute,
         tonase,
-        status_kas_jalan, 
+        status_kas_jalan,
         catatan_kasja, // Added field
         id_kas_jalan
       ],

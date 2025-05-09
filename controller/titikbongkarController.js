@@ -48,6 +48,31 @@ export const getTitikBongkarById = async (req, res) => {
     });
   }
 };
+// Get Kelengkapan File Titik Bongkar by ID PO
+export const getStatusUploadBongkarByPO = async (req, res) => {
+  const { id_po } = req.params;
+  try {
+    const titikBongkar = await TitikBongkar.getStatusUploadBongkarByPO(id_po);
+    if (titikBongkar) {
+      res.status(200).json({
+        status: "success",
+        data: titikBongkar,
+        message: "Titik Bongkar fetched successfully."
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        message: "Titik Bongkar not found."
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching Titik Bongkar by ID:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
 
 // Get Titik Bongkar by PO ID
 export const getTitikBongkarByPO = async (req, res) => {
@@ -188,11 +213,11 @@ export const uploadTitikBongkar = async (req, res) => {
         // Update database dengan nama file baru
         const fileFoto = uploadPath + "" + newFileName;
         const updateTitikBongkar = await TitikBongkar.uploadTitikBongkar(id_titik_bongkar, fileFoto);
-          res.status(200).json({
-            status: "success",
-            data: updateTitikBongkar,
-            message: "LO updated successfully.",
-          });
+        res.status(200).json({
+          status: "success",
+          data: updateTitikBongkar,
+          message: "LO updated successfully.",
+        });
       } catch (error) {
         console.error("Error updating LO:", error);
         res.status(500).json({

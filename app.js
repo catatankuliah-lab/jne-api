@@ -13,7 +13,11 @@ import armadaRoutes from "./routes/armadaRoutes.js";
 import kasjalanRoutes from "./routes/kasjalanRoutes.js";
 import poRoutes from "./routes/poRoutes.js";
 import titikbongkarRoutes from "./routes/titikbongkarRoutes.js";
+import riwayatPORoutes from "./routes/riwayatPORoutes.js";
 import cicilanRoutes from "./routes/cicilanRoutes.js";
+import transaksiRoutes from "./routes/transaksiRoutes.js";
+import kendaraanmasukRoutes from "./routes/kendaraanmasukRoutes.js";
+import itemdetailarmadaRoutes from "./routes/itemdetailarmadaRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3090;
@@ -21,7 +25,7 @@ const upload = multer(); // Inisialisasi multer
 
 app.use(
     cors({
-        origin: "https://kasma.delapandelapanlogistics.com",
+        origin: "http://localhost:5173",
         methods: ["GET", "POST", "PUT", "DELETE"],
         allowedHeaders: ["Content-Type", "Authorization"],
     })
@@ -51,7 +55,11 @@ const init = async () => {
         app.use("/api/v1", kasjalanRoutes);
         app.use("/api/v1", poRoutes);
         app.use("/api/v1", titikbongkarRoutes);
+        app.use("/api/v1", riwayatPORoutes);
         app.use("/api/v1", cicilanRoutes);
+        app.use("/api/v1", transaksiRoutes);
+        app.use("/api/v1", kendaraanmasukRoutes);
+        app.use("/api/v1", itemdetailarmadaRoutes);
 
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);

@@ -75,6 +75,7 @@ const Driver = {
       ${whereClause}
     `;
 
+
       const [countResult] = await sequelize.query(countQuery, {
         replacements,
         type: sequelize.QueryTypes.SELECT,

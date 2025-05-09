@@ -7,14 +7,14 @@ const router = express.Router();
 router.get(
   "/armada",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 12, 13]),
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 12, 13, 15]),
   armadaController.getAllArmada
 );
 
 router.get(
   "/armadadetailpage/:id_armada",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 12, 13]),
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 12, 13, 15]),
   armadaController.getAllArmadaDetailPage
 );
 
@@ -68,9 +68,16 @@ router.put(
 );
 
 router.put(
+  "/armada/statusdanlokasi/:id_armada",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 12, 13]),
+  armadaController.updateStatusLokasiArmada
+);
+
+router.put(
   "/armada/:id_armada",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 12]),
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 12, 13]),
   armadaController.updateArmada
 );
 

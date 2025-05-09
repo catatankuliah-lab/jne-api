@@ -52,14 +52,18 @@ const Armada = {
           jenis_kendaraan ON armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
         LEFT JOIN
           po ON armada.id_armada = po.id_armada
-        ${whereClause}
+        WHERE 1=1
         GROUP BY
           armada.id_armada,
           armada.id_jenis_kendaraan,
           armada.nopol_armada,
           armada.lokasi_terakhir,
           armada.status_armada,
+<<<<<<< HEAD
           jenis_kendaraan.nama_jenis_kendaraan,
+=======
+          jenis_kendaraan.nama_jenis_kendaraan
+>>>>>>> dev
       LIMIT :per_page OFFSET :offset;
       `;
 
@@ -79,6 +83,7 @@ const Armada = {
         po ON armada.id_armada = po.id_armada
       ${whereClause}
     `;
+
 
       const [countResult] = await sequelize.query(countQuery, {
         replacements,
@@ -207,6 +212,22 @@ const Armada = {
         `,
       {
         replacements: [status_armada, id_armada],
+      }
+    );
+    return result.affectedRows > 0;
+  },
+
+  // Update Armada
+  updateStatusLokasiArmada: async (id_armada, armadaData) => {
+    const { lokasi_terakhir, status_armada } = armadaData;
+    const [result] = await sequelize.query(
+      `
+      UPDATE armada
+      SET lokasi_terakhir = ?, status_armada = ?
+      WHERE id_armada = ?
+    `,
+      {
+        replacements: [lokasi_terakhir, status_armada, id_armada],
       }
     );
     return result.affectedRows > 0;

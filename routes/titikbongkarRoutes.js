@@ -8,49 +8,56 @@ const router = express.Router();
 router.get(
   "/titikbongkar",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10]), // Adjust roles that are allowed
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10]), // Adjust roles that are allowed
   titikBongkarController.getAllTitikBongkar
 );
 
 router.get(
   "/titikbongkar/:id_titik_bongkar",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 13]),
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 13]),
   titikBongkarController.getTitikBongkarById
 );
 
 router.get(
   "/titikbongkar/po/:id_po",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 13]),
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 13]),
   titikBongkarController.getTitikBongkarByPO
+);
+
+router.get(
+  "/titikbongkar/statusbongkar/:id_po",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 13]),
+  titikBongkarController.getStatusUploadBongkarByPO
 );
 
 router.post(
   "/titikbongkar",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10]), // Adjust roles that are allowed to add data
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10]), // Adjust roles that are allowed to add data
   titikBongkarController.addTitikBongkar
 );
 
 router.put(
   "/titikbongkar/upload/:id_titik_bongkar",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 13]), // Adjust roles that are allowed to update data
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 13]), // Adjust roles that are allowed to update data
   titikBongkarController.uploadTitikBongkar
 );
 
 router.put(
   "/titikbongkar/:id_titik_bongkar",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10]), // Adjust roles that are allowed to update data
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10]), // Adjust roles that are allowed to update data
   titikBongkarController.updateTitikBongkar
 );
 
 router.delete(
   "/titikbongkar/:id_titik_bongkar",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 9, 10]), // Adjust roles that are allowed to delete data
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10]), // Adjust roles that are allowed to delete data
   titikBongkarController.deleteTitikBongkar
 );
 
