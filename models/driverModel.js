@@ -57,7 +57,7 @@ const Driver = {
       GROUP BY driver.id_driver, 
       driver.nik, 
       driver.nama_driver, 
-      driver.status_driver,
+      driver.status_driver
       LIMIT :per_page OFFSET :offset;
       `;
       const data = await sequelize.query(query, {

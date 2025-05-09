@@ -59,11 +59,7 @@ const Armada = {
           armada.nopol_armada,
           armada.lokasi_terakhir,
           armada.status_armada,
-<<<<<<< HEAD
-          jenis_kendaraan.nama_jenis_kendaraan,
-=======
           jenis_kendaraan.nama_jenis_kendaraan
->>>>>>> dev
       LIMIT :per_page OFFSET :offset;
       `;
 

@@ -42,7 +42,7 @@ const Customer = {
       ${whereClause}
       GROUP BY customer.id_customer, 
       customer.nama_customer, 
-      customer.alamat_customer, 
+      customer.alamat_customer
       LIMIT :per_page OFFSET :offset;
     `;
 
