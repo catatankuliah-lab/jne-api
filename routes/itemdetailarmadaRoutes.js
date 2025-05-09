@@ -19,6 +19,13 @@ router.get(
   itemDetailArmadaController.getItemDetailArmadaByIdKendaraanMasuk
 );
 
+router.put(
+  "/itemdetailarmada/upload/:id_item_detail_armada",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([15]),
+  itemDetailArmadaController.uploadItemDetailArmada
+);
+
 router.get(
   "/itemdetailarmada/:id_item_detail_armada",
   authMiddleware.authenticate,
@@ -32,6 +39,8 @@ router.post(
   authMiddleware.authorizeRole([15]),
   itemDetailArmadaController.addItemDetailArmada
 );
+
+
 
 router.put(
   "/itemdetailarmada/:id_item_detail_armada",

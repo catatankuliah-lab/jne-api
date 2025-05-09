@@ -1,4 +1,8 @@
 import ItemDetailArmada from "../models/itemDetailArmadaModel.js";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+const upload = multer();
 
 // Get all records
 export const getAllItemDetailArmada = async (req, res) => {
@@ -140,4 +144,61 @@ export const deleteItemDetailArmada = async (req, res) => {
       message: "Gagal menghapus data."
     });
   }
+};
+
+export const uploadItemDetailArmada = async (req, res) => {
+  const { id_item_detail_armada } = req.params;
+  // const foto = req.body;
+  const { kondisi_mobil_tampak_depan, keterangan_mobil_tampak_depan } = req.body;
+  console.log("id",id_item_detail_armada);
+  console.log("coba",kondisi_mobil_tampak_depan, keterangan_mobil_tampak_depan);
+  // upload.single(req.body.foto)(req, res, async (err) => {
+
+  //   if (err) {
+  //     return res.status(400).json({ error: err.message });
+  //   }
+
+  //   if (!req.file) {
+  //     return res.status(400).json({ error: "File tidak ditemukan" });
+  //   }
+
+    // const nomorPO = req.body.nomor_po;
+    // const tanggalPO = req.body.tanggal_po;
+    // if (!nomorPO) {
+    //   return res.status(400).json({ error: "Nomor PO tidak ditemukan" });
+    // }
+
+    // Tentukan lokasi penyimpanan
+  //   const uploadPath = "uploads/";
+  //   if (!fs.existsSync(uploadPath)) {
+  //     fs.mkdirSync(uploadPath, { recursive: true });
+  //   }
+
+  //   // Tentukan nama file baru
+  //   const newFileName = `itemdetail.jpg`;
+  //   const filePath = path.join(uploadPath, newFileName);
+
+  //   // Simpan file dari buffer ke disk dengan nama yang diinginkan
+  //   fs.writeFile(filePath, req.file.buffer, async (err) => {
+  //     if (err) {
+  //       return res.status(500).json({ error: "Gagal menyimpan file" });
+  //     }
+  //     try {
+  //       // Update database dengan nama file baru
+  //       const fileFoto = uploadPath + "" + newFileName;
+  //       const updateItemDetailArmada = await ItemDetailArmada.uploadItemDetailArmada(id_item_detail_armada, fileFoto);
+  //       res.status(200).json({
+  //         status: "success",
+  //         data: updateItemDetailArmada,
+  //         message: "Item Detail Armada updated successfully.",
+  //       });
+  //     } catch (error) {
+  //       console.error("Error updating Item Detail Armada:", error);
+  //       res.status(500).json({
+  //         status: "error",
+  //         message: "Internal Server Error",
+  //       });
+  //     }
+  //   });
+  // });
 };

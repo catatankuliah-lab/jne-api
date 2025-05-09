@@ -69,7 +69,20 @@ const ItemDetailArmada = {
     return result[0].insertId;
   },
 
-
+  uploadItemDetailArmada: async (id_item_detail_armada, FileFoto) => {
+    const [result] = await sequelize.query(
+      `
+      UPDATE item_detail_armada
+      SET foto_mobil_tampak_depan = ?
+      WHERE id_item_detail_armada = ?
+    `,
+      {
+        replacements: [FileFoto, id_item_detail_armada],
+      }
+    );
+    return result.affectedRows > 0;
+  },
+  
   // Update data berdasarkan ID
   update: async (id_item_detail_armada, data) => {
     const fields = Object.keys(data);
