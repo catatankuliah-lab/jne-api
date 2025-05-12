@@ -2,18 +2,25 @@ import KendaraanMasuk from "../models/kendaraanmasukModel.js";
 
 // Get all records
 export const getAllKendaraanMasuk = async (req, res) => {
+  const { page = 1, limit = 10, nama_driver, nopol_armada, startDate, endDate } = req.query;
   try {
-    const data = await KendaraanMasuk.getAll();
-    res.status(200).json({
-      status: "success",
+    const { data, total } = await KendaraanMasuk.getAll(parseInt(page),
+      parseInt(limit),
+      { nama_driver, nopol_armada, startDate, endDate }
+    );;
+
+    res.json({
       data,
-      message: "Data kendaraan masuk berhasil diambil."
+      currentPage: parseInt(page),
+      limit: parseInt(limit),
+      totalData: total,
+      totalPages: Math.ceil(total / parseInt(limit)),
     });
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error("Error fetching Kendaraan Masuk:", error);
     res.status(500).json({
       status: "error",
-      message: "Terjadi kesalahan saat mengambil data."
+      message: "Internal Server Error"
     });
   }
 };
@@ -53,7 +60,7 @@ export const addKendaraanMasuk = async (req, res) => {
 
     res.status(201).json({
       status: "success",
-      data: { id_kendaraan_masuk},
+      data: { id_kendaraan_masuk },
       message: "Data kendaraan masuk berhasil ditambahkan."
     });
   } catch (error) {

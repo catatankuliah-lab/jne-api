@@ -8,35 +8,35 @@ const router = express.Router();
 router.get(
   "/kendaraanmasuk",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 15]),
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 15, 16]),
   kendaraanMasukController.getAllKendaraanMasuk
 );
 
 router.get(
   "/kendaraanmasuk/:id_kendaraan_masuk",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 13, 15]),
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 13, 15, 16]),
   kendaraanMasukController.getKendaraanMasukById
 );
 
 router.post(
   "/kendaraanmasuk",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 15]),
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 15, 16]),
   kendaraanMasukController.addKendaraanMasuk
 );
 
 router.put(
   "/kendaraanmasuk/:id_kendaraan_masuk",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 15]),
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 15, 16]),
   kendaraanMasukController.updateKendaraanMasuk
 );
 
 router.delete(
   "/kendaraanmasuk/:id_kendaraan_masuk",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 15]),
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 15, 16]),
   kendaraanMasukController.deleteKendaraanMasuk
 );
 

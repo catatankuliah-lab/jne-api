@@ -7,14 +7,14 @@ const router = express.Router();
 router.get(
   "/driver",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 7, 8, 9, 10, 13, 15]),
+  authMiddleware.authorizeRole([1, 2, 3, 7, 8, 9, 10, 13, 15, 16]),
   driverController.getAllDriver
 );
 
 router.get(
   "/driverdetailpage/:id_driver",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 7, 8, 9, 10, 13, 15]),
+  authMiddleware.authorizeRole([1, 2, 3, 7, 8, 9, 10, 13, 15, 16]),
   driverController.getAllDriverDetailPage
 );
 

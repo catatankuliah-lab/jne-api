@@ -8,35 +8,35 @@ const router = express.Router();
 router.get(
   "/itemdetailarmada",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([15]),
+  authMiddleware.authorizeRole([15, 16]),
   itemDetailArmadaController.getAllItemDetailArmada
 );
 
 router.get(
   "/itemdetailarmada/kendaraanmasuk/:id_kendaraan_masuk",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([15]),
+  authMiddleware.authorizeRole([15, 16]),
   itemDetailArmadaController.getItemDetailArmadaByIdKendaraanMasuk
 );
 
 router.put(
   "/itemdetailarmada/upload/:id_item_detail_armada/:namafile",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([15]),
+  authMiddleware.authorizeRole([15, 16]),
   itemDetailArmadaController.uploadItemDetailArmada
 );
 
 router.get(
   "/itemdetailarmada/:id_item_detail_armada",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([15]),
+  authMiddleware.authorizeRole([15, 16]),
   itemDetailArmadaController.getItemDetailArmadaById
 );
 
 router.post(
   "/itemdetailarmada",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([15]),
+  authMiddleware.authorizeRole([15, 16]),
   itemDetailArmadaController.addItemDetailArmada
 );
 
@@ -45,14 +45,14 @@ router.post(
 router.put(
   "/itemdetailarmada/:id_item_detail_armada",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([15]),
+  authMiddleware.authorizeRole([15, 16]),
   itemDetailArmadaController.updateItemDetailArmada
 );
 
 router.delete(
   "/itemdetailarmada/:id_item_detail_armada",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([15]),
+  authMiddleware.authorizeRole([15, 16]),
   itemDetailArmadaController.deleteItemDetailArmada
 );
 
