@@ -1,7 +1,6 @@
 import sequelize from "../config/config.js";
 
 const KendaraanMasuk = {
-  // Ambil semua data kendaraan masuk dengan pagination dan filter
   getAll: async (page = 1, per_page = 10, filters = {}) => {
     try {
       const offset = (page - 1) * per_page;
@@ -57,8 +56,22 @@ const KendaraanMasuk = {
         type: sequelize.QueryTypes.SELECT,
       });
 
+      const countQuery = `
+        SELECT COUNT(*) AS total
+        FROM kendaraan_masuk
+        JOIN armada ON kendaraan_masuk.id_armada = armada.id_armada
+        JOIN driver ON kendaraan_masuk.id_driver = driver.id_driver
+        ${whereClause};
+      `;
+
+      const [countResult] = await sequelize.query(countQuery, {
+        replacements,
+        type: sequelize.QueryTypes.SELECT,
+      });
+
       return {
         data,
+        total: countResult.total,
         page,
         per_page,
       };
@@ -66,6 +79,8 @@ const KendaraanMasuk = {
       throw new Error("Error fetching kendaraan masuk: " + error.message);
     }
   },
+
+
 
   // Ambil data berdasarkan ID
   getById: async (id_kendaraan_masuk) => {
