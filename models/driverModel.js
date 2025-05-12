@@ -54,7 +54,10 @@ const Driver = {
             driver
         LEFT JOIN po ON po.id_driver = driver.id_driver
       ${whereClause}
-      GROUP BY driver.id_driver, driver.nik, driver.nama_driver, driver.status_driver
+      GROUP BY driver.id_driver, 
+      driver.nik, 
+      driver.nama_driver, 
+      driver.status_driver
       LIMIT :per_page OFFSET :offset;
       `;
       const data = await sequelize.query(query, {

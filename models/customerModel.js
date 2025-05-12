@@ -40,7 +40,9 @@ const Customer = {
       FROM customer
       LEFT JOIN po ON customer.id_customer = po.id_customer
       ${whereClause}
-      GROUP BY customer.id_customer, customer.nama_customer, customer.alamat_customer
+      GROUP BY customer.id_customer, 
+      customer.nama_customer, 
+      customer.alamat_customer
       LIMIT :per_page OFFSET :offset;
     `;
 
@@ -50,12 +52,12 @@ const Customer = {
       });
 
       const countQuery = `
-          SELECT
-        COUNT(DISTINCT customer.id_customer) AS total
-      FROM
-        customer
-      LEFT JOIN 
-        po ON customer.id_customer = po.id_customer
+      SELECT
+      COUNT(DISTINCT customer.id_customer) AS total
+    FROM
+      customer
+    LEFT JOIN 
+      po ON customer.id_customer = po.id_customer
       ${whereClause}
     `;
 
