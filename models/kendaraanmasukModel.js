@@ -42,10 +42,46 @@ const KendaraanMasuk = {
           kendaraan_masuk.solar_amper,
           kendaraan_masuk.solar_aplikasi,
           kendaraan_masuk.kebersihan_kendaraan,
-          kendaraan_masuk.fisik_kendaraan
+          kendaraan_masuk.fisik_kendaraan,
+          item_detail_armada.id_item_detail_armada,
+          CASE 
+            WHEN 
+              item_detail_armada.kondisi_mobil_tampak_depan = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_mobil_tampak_belakang = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_mobil_tampak_kanan = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_mobil_tampak_kiri = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_mesin_atas = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_mesin_kanan = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_mesin_kiri = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_power_stering = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_draglink = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_frame_mounting_dudukan_kabin = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_gardan = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_accu_aki = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_ban_depan_kanan = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_ban_depan_kiri = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_ban_belakang_kanan_luar = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_ban_belakang_kanan_dalam = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_ban_belakang_kiri_luar = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_ban_belakang_kiri_dalam = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_kembang_ban_depan_kanan = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_kembang_ban_depan_kiri = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_kembang_ban_belakang_kanan = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_kembang_ban_belakang_kiri = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_nomor_ban_depan_kanan = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_nomor_ban_depan_kiri = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_nomor_ban_belakang_kanan_luar = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_nomor_ban_belakang_kanan_dalam = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_nomor_ban_belakang_kiri_luar = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_nomor_ban_belakang_kiri_dalam = 'TIDAK NORMAL' OR
+              item_detail_armada.kondisi_kompresor = 'TIDAK NORMAL'
+            THEN 1
+            ELSE 0
+          END AS ada_tidak_normal
         FROM kendaraan_masuk
         JOIN armada ON kendaraan_masuk.id_armada = armada.id_armada
         JOIN driver ON kendaraan_masuk.id_driver = driver.id_driver
+        LEFT JOIN item_detail_armada ON kendaraan_masuk.id_kendaraan_masuk = item_detail_armada.id_kendaraan_masuk
         ${whereClause}
         ORDER BY kendaraan_masuk.id_kendaraan_masuk DESC
         LIMIT :per_page OFFSET :offset;

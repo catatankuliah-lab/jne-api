@@ -52,7 +52,7 @@ const Armada = {
           jenis_kendaraan ON armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
         LEFT JOIN
           po ON armada.id_armada = po.id_armada
-        WHERE 1=1
+        ${whereClause}
         GROUP BY
           armada.id_armada,
           armada.id_jenis_kendaraan,
