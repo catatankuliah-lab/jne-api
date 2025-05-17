@@ -117,7 +117,6 @@ const KendaraanMasuk = {
   },
 
 
-
   // Ambil data berdasarkan ID
   getById: async (id_kendaraan_masuk) => {
     const [results] = await sequelize.query(

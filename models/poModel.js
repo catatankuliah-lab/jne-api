@@ -151,8 +151,6 @@ const PO = {
         jenis_kendaraan.nama_jenis_kendaraan,
         jenis_kendaraan.rasio_perkalian,
         jenis_kendaraan.rasio_perkalian_kosong,
-        jenis_kendaraan.rasio_perkalian_kosong,
-        kas_jalan.id_kas_jalan,
         COALESCE(
           JSON_OBJECT(
             'REGULER', (
