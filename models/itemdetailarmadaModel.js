@@ -1,8 +1,9 @@
 import sequelize from "../config/config.js";
 
-const ItemDetailArmada = {
-  getAll: async () => {
-    const [results] = await sequelize.query(`
+const
+  ItemDetailArmada = {
+    getAll: async () => {
+      const [results] = await sequelize.query(`
       SELECT 
         ida.*, 
         km.id_driver, 
@@ -11,13 +12,13 @@ const ItemDetailArmada = {
       FROM item_detail_armada ida
       LEFT JOIN kendaraan_masuk km ON ida.id_kendaraan_masuk = km.id_kendaraan_masuk
     `);
-    return results;
-  },
+      return results;
+    },
 
-  // Ambil data berdasarkan ID item_detail_armada
-  getById: async (id_item_detail_armada) => {
-    const [results] = await sequelize.query(
-      `
+    // Ambil data berdasarkan ID item_detail_armada
+    getById: async (id_item_detail_armada) => {
+      const [results] = await sequelize.query(
+        `
       SELECT 
         ida.*, 
         km.id_driver, 
@@ -27,16 +28,16 @@ const ItemDetailArmada = {
       LEFT JOIN kendaraan_masuk km ON ida.id_kendaraan_masuk = km.id_kendaraan_masuk
       WHERE ida.id_item_detail_armada = ?
       `,
-      {
-        replacements: [id_item_detail_armada],
-      }
-    );
-    return results[0];
-  },
+        {
+          replacements: [id_item_detail_armada],
+        }
+      );
+      return results[0];
+    },
 
-  getByIdKendaraanMasuk: async (id_kendaraan_masuk) => {
-    const [results] = await sequelize.query(
-      `
+    getByIdKendaraanMasuk: async (id_kendaraan_masuk) => {
+      const [results] = await sequelize.query(
+        `
       SELECT
         ida.*,
         km.id_driver,
@@ -50,76 +51,76 @@ const ItemDetailArmada = {
       LEFT JOIN driver d ON km.id_driver = d.id_driver
       WHERE ida.id_kendaraan_masuk = ?
     `,
-      {
-        replacements: [id_kendaraan_masuk],
-      }
-    );
-    return results;
-  },
+        {
+          replacements: [id_kendaraan_masuk],
+        }
+      );
+      return results;
+    },
 
-  add: async (id_kendaraan_masuk) => {
-    const result = await sequelize.query(
-      `
+    add: async (id_kendaraan_masuk) => {
+      const result = await sequelize.query(
+        `
     INSERT INTO item_detail_armada (
       id_kendaraan_masuk
     ) VALUES (
       ?
     )
   `,
-      {
-        replacements: [id_kendaraan_masuk],
-      }
-    );
-    return result[0].insertId;
-  },
+        {
+          replacements: [id_kendaraan_masuk],
+        }
+      );
+      return result[0].insertId;
+    },
 
-  uploadItemDetailArmada: async (id_item_detail_armada, data) => {
-    const fields = Object.keys(data);
-    const values = Object.values(data);
-    const updates = fields.map((field) => `${field} = ?`).join(", ");
+    uploadItemDetailArmada: async (id_item_detail_armada, data) => {
+      const fields = Object.keys(data);
+      const values = Object.values(data);
+      const updates = fields.map((field) => `${field} = ?`).join(", ");
 
-    const [result] = await sequelize.query(
-      `
+      const [result] = await sequelize.query(
+        `
       UPDATE item_detail_armada
       SET ${updates}
       WHERE id_item_detail_armada = ?
       `,
-      {
-        replacements: [...values, id_item_detail_armada],
-      }
-    );
-    return result.affectedRows > 0;
-  },
+        {
+          replacements: [...values, id_item_detail_armada],
+        }
+      );
+      return result.affectedRows > 0;
+    },
 
-  // Update data berdasarkan ID
-  update: async (id_item_detail_armada, data) => {
-    const fields = Object.keys(data);
-    const values = Object.values(data);
-    const updates = fields.map((field) => `${field} = ?`).join(", ");
+    // Update data berdasarkan ID
+    update: async (id_item_detail_armada, data) => {
+      const fields = Object.keys(data);
+      const values = Object.values(data);
+      const updates = fields.map((field) => `${field} = ?`).join(", ");
 
-    const [result] = await sequelize.query(
-      `
+      const [result] = await sequelize.query(
+        `
       UPDATE item_detail_armada
       SET ${updates}
       WHERE id_item_detail_armada = ?
       `,
-      {
-        replacements: [...values, id_item_detail_armada],
-      }
-    );
-    return result.affectedRows > 0;
-  },
+        {
+          replacements: [...values, id_item_detail_armada],
+        }
+      );
+      return result.affectedRows > 0;
+    },
 
-  // Hapus data
-  delete: async (id_item_detail_armada) => {
-    const [result] = await sequelize.query(
-      `DELETE FROM item_detail_armada WHERE id_item_detail_armada = ?`,
-      {
-        replacements: [id_item_detail_armada],
-      }
-    );
-    return result.affectedRows > 0;
-  },
-};
+    // Hapus data
+    delete: async (id_item_detail_armada) => {
+      const [result] = await sequelize.query(
+        `DELETE FROM item_detail_armada WHERE id_item_detail_armada = ?`,
+        {
+          replacements: [id_item_detail_armada],
+        }
+      );
+      return result.affectedRows > 0;
+    },
+  };
 
 export default ItemDetailArmada;
