@@ -48,13 +48,16 @@ const Driver = {
           driver.foto_ktp_driver,
           driver.foto_sim_driver,
           driver.status_driver,
-          po.tanggal_po,
+          MIN(po.tanggal_po) AS tanggal_po,
           COUNT(po.id_po) AS total_po
         FROM
             driver
         LEFT JOIN po ON po.id_driver = driver.id_driver
       ${whereClause}
-      GROUP BY driver.id_driver, driver.nik, driver.nama_driver, driver.status_driver
+      GROUP BY driver.id_driver, 
+      driver.nik, 
+      driver.nama_driver, 
+      driver.status_driver
       LIMIT :per_page OFFSET :offset;
       `;
       const data = await sequelize.query(query, {
@@ -63,9 +66,15 @@ const Driver = {
       });
 
       const countQuery = `
-      SELECT COUNT(*) AS total FROM driver
-      ${whereClause};
+      SELECT
+        COUNT(DISTINCT driver.id_driver) AS total
+      FROM
+        driver
+      LEFT JOIN 
+        po ON driver.id_driver = po.id_driver
+      ${whereClause}
     `;
+
 
       const [countResult] = await sequelize.query(countQuery, {
         replacements,

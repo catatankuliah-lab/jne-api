@@ -17,7 +17,7 @@ const Customer = {
         whereClause += " AND customer.alamat_customer LIKE :alamat_customer";
         replacements.alamat_customer = `%${filters.alamat_customer}%`;
       }
-      
+
       if (filters.startDate && filters.endDate) {
         whereClause += " AND po.tanggal_po BETWEEN :startDate AND :endDate";
         replacements.startDate = filters.startDate;
@@ -35,12 +35,14 @@ const Customer = {
         customer.id_customer,
         customer.nama_customer, 
         customer.alamat_customer,
-        po.tanggal_po,
+        MIN(po.tanggal_po) AS tanggal_po,
         COUNT(po.id_po) AS total_po
       FROM customer
       LEFT JOIN po ON customer.id_customer = po.id_customer
       ${whereClause}
-      GROUP BY customer.id_customer, customer.nama_customer, customer.alamat_customer
+      GROUP BY customer.id_customer, 
+      customer.nama_customer, 
+      customer.alamat_customer
       LIMIT :per_page OFFSET :offset;
     `;
 
@@ -50,11 +52,15 @@ const Customer = {
       });
 
       const countQuery = `
-      SELECT COUNT(*) AS total FROM customer
-              LEFT JOIN
-          po ON customer.id_customer = po.id_customer
-      ${whereClause};
+      SELECT
+      COUNT(DISTINCT customer.id_customer) AS total
+    FROM
+      customer
+    LEFT JOIN 
+      po ON customer.id_customer = po.id_customer
+      ${whereClause}
     `;
+
 
       const [countResult] = await sequelize.query(countQuery, {
         replacements,
@@ -70,7 +76,7 @@ const Customer = {
     } catch (error) {
       throw new Error("Error fetching paginated data: " + error.message);
     }
-    
+
   },
 
   getSelectOptionCustomers: async () => {
