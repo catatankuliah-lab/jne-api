@@ -18,6 +18,20 @@ router.get(
   customerController.getCustomerById
 );
 
+router.get(
+  "/customerselectoption",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 13]),
+  customerController.getSelectOptionCustomers
+);
+
+router.get(
+  "/customer/:id_customer",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 13]),
+  customerController.getCustomerById
+);
+
 router.post(
   "/customer",
   authMiddleware.authenticate,
