@@ -58,6 +58,7 @@ const PO = {
         po.status_po,
         po.origin,
         po.jenis_muatan,
+        po.tarif_po,
         customer.nama_customer,
         customer.alamat_customer,
         driver.nama_driver,
@@ -69,6 +70,7 @@ const PO = {
       LEFT JOIN armada ON po.id_armada = armada.id_armada
       LEFT JOIN jenis_kendaraan ON armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
       ${whereClause}
+      ORDER BY po.id_po DESC
       LIMIT :per_page OFFSET :offset;
     `;
 
@@ -143,6 +145,7 @@ const PO = {
         po.jenis_muatan,
         po.catatan_po,
         po.file_sj,
+        po.tarif_po,
         customer.nama_customer,
         customer.alamat_customer,
         driver.nama_driver,
@@ -401,6 +404,21 @@ const PO = {
     `,
       {
         replacements: [status_po, id_po],
+      }
+    );
+    return result.affectedRows > 0;
+  },
+
+    updateTarifPO: async (id_po, tarifPO) => {
+    const { tarif_po } = tarifPO;
+    const [result] = await sequelize.query(
+      `
+          UPDATE po
+          SET tarif_po = ?
+          WHERE id_po = ?
+        `,
+      {
+        replacements: [tarif_po, id_po],
       }
     );
     return result.affectedRows > 0;

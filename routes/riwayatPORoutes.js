@@ -1,9 +1,10 @@
 import express from "express";
+import multer from "multer";
 import * as riwayatPOController from "../controller/riwayatPOController.js";
 import * as authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
-
+const upload = multer();
 router.get(
   "/riwayatpo",
   authMiddleware.authenticate,
@@ -13,6 +14,7 @@ router.get(
 
 router.post(
   "/riwayatpo",
+  upload.none(),
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 9, 10]),
   riwayatPOController.addRiwayatPO

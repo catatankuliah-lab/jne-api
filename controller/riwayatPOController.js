@@ -5,19 +5,22 @@ import fs from "fs";
 const upload = multer();
 
 export const getRiwayatPO = async (req, res) => {
+  const { page = 1, limit = 10, nomor_po, nama_customer, armada, driver, startDate, endDate, status_riwayat_po } = req.query;
   try {
-    const riwayatPO = await RiwayatPO.getRiwayatPO();
-    res.status(200).json({
-      status: "success",
-      data: riwayatPO,
-      message: "Riwayat PO records fetched successfully."
+    const { data, total } = await RiwayatPO.getRiwayatPO(
+      parseInt(page),
+      parseInt(limit),
+      { nomor_po, nama_customer, armada, driver, startDate, endDate, status_riwayat_po }
+    );
+    res.json({
+      data,
+      currentPage: parseInt(page),
+      limit: parseInt(limit),
+      totalData: total,
+      totalPages: Math.ceil(total / parseInt(limit)),
     });
   } catch (error) {
-    console.error("Error fetching Riwayat PO records:", error);
-    res.status(500).json({
-      status: "error",
-      message: "Internal Server Error"
-    });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -74,10 +77,95 @@ export const getRiwayatPOByIdPO = async (req, res) => {
 };
 
 export const addRiwayatPO = async (req, res) => {
-  const { id_po, id_kabupaten_kota, alamat_titik_bongkar, jam_bongkar, shareloc, nama_penerima, nomor_penerima } = req.body;
+  const {
+    id_po,
+    nomor_po,
+    tanggal_po,
+    jam_stanby,
+    jam_muat,
+    nama_customer,
+    origin,
+    destination,
+    armada,
+    driver,
+    jenis_muatan,
+    catatan_po,
+    file_sj,
+    reguler_jarak_isi,
+    reguler_solar_isi,
+    reguler_jarak_kosong,
+    reguler_solar_kosong,
+    reguler_jam_tunggu,
+    reguler_solar_tunggu,
+    reguler_gaji_driver,
+    reguler_tonase,
+    reguler_kas_jalan,
+    reguler_rute,
+    reguler_catatan,
+    kosongan_jarak_isi,
+    kosongan_solar_isi,
+    kosongan_jarak_kosong,
+    kosongan_solar_kosong,
+    kosongan_jam_tunggu,
+    kosongan_solar_tunggu,
+    kosongan_gaji_driver,
+    kosongan_tonase,
+    kosongan_kas_jalan,
+    kosongan_rute,
+    kosongan_catatan,
+    tarif_ac,
+    tarif_ban,
+    tarif_po,
+    status_riwayat_po
+  } = req.body;
+
+  // ✅ Validasi: wajib isi tarif_po
+  if (!tarif_po || tarif_po.trim() === "") {
+    return res.status(400).json({ error: "Tarif PO wajib diisi." });
+  }
 
   try {
-    const riwayatPO = await RiwayatPO.addRiwayatPO(id_po, id_kabupaten_kota, alamat_titik_bongkar, jam_bongkar, shareloc, nama_penerima, nomor_penerima);
+    const riwayatPO = await RiwayatPO.addRiwayatPO(
+      id_po,
+      nomor_po,
+      tanggal_po,
+      jam_stanby,
+      jam_muat,
+      nama_customer,
+      origin,
+      destination,
+      armada,
+      driver,
+      jenis_muatan,
+      catatan_po,
+      file_sj,
+      reguler_jarak_isi,
+      reguler_solar_isi,
+      reguler_jarak_kosong,
+      reguler_solar_kosong,
+      reguler_jam_tunggu,
+      reguler_solar_tunggu,
+      reguler_gaji_driver,
+      reguler_tonase,
+      reguler_kas_jalan,
+      reguler_rute,
+      reguler_catatan,
+      kosongan_jarak_isi,
+      kosongan_solar_isi,
+      kosongan_jarak_kosong,
+      kosongan_solar_kosong,
+      kosongan_jam_tunggu,
+      kosongan_solar_tunggu,
+      kosongan_gaji_driver,
+      kosongan_tonase,
+      kosongan_kas_jalan,
+      kosongan_rute,
+      kosongan_catatan,
+      tarif_ac,
+      tarif_ban,
+      tarif_po,
+      status_riwayat_po
+    );
     res.status(201).json({
       status: "success",
       data: riwayatPO,
@@ -91,6 +179,7 @@ export const addRiwayatPO = async (req, res) => {
     });
   }
 };
+
 
 export const updateStatusRiwayatPO = async (req, res) => {
   const { id_riwayat_po } = req.params;

@@ -212,6 +212,26 @@ export const updateStatusPO = async (req, res) => {
   }
 };
 
+export const updateTarifPO = async (req, res) => {
+  const { id_po } = req.params;
+  const tarifPO = req.body;
+  console.log(tarifPO, id_po);
+  try {
+    const updatedTarifPO = await PO.updateTarifPO(id_po, tarifPO);
+    res.status(200).json({
+      status: "success",
+      data: updatedTarifPO,
+      message: "PO updated successfully."
+    });
+  } catch (error) {
+    console.error("Error updating PO:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error"
+    });
+  }
+};
+
 export const updateTBPO = async (req, res) => {
   const { id_po } = req.params;
   const poData = req.body;

@@ -54,6 +54,13 @@ router.post(
 );
 
 router.put(
+  "/po/tarifpo/:id_po",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 9, 10, 12]),
+  poController.updateTarifPO
+);
+
+router.put(
   "/po/status/:id_po",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 13]),
