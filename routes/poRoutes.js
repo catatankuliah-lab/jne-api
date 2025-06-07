@@ -46,6 +46,13 @@ router.get(
   poController.getPOByDriverId
 );
 
+router.get(
+  "/po/khususdriver/:id_driver",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 8, 9, 10, 13]),
+  poController.getPOByDriverIdKhusus
+);
+
 router.post(
   "/po",
   authMiddleware.authenticate,

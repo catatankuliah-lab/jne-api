@@ -151,6 +151,29 @@ export const getPOByDriverId = async (req, res) => {
   }
 };
 
+// Get PO by Driver ID
+export const getPOByDriverIdKhusus = async (req, res) => {
+  const { page = 1, limit = 10, id_user, nomor_po, customer, nopol_armada, nama_driver, startDate, endDate, status_po } = req.query;
+  try {
+    const { data, total } = await PO.getPOByDriverIdKhusus(
+      parseInt(page),
+      parseInt(limit),
+      parseInt(id_user),
+      { nomor_po, customer, nopol_armada, nama_driver, startDate, endDate, status_po }
+    );
+
+    res.json({
+      data,
+      currentPage: parseInt(page),
+      limit: parseInt(limit),
+      totalData: total,
+      totalPages: Math.ceil(total / parseInt(limit)),
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Add a new PO
 export const addPO = async (req, res) => {
   const { nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po, origin, jenis_muatan, catatan_po, } = req.body;

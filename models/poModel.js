@@ -361,6 +361,71 @@ const PO = {
       throw new Error("Error fetching paginated data: " + error.message);
     }
   },
+  // Mendapatkan PO berdasarkan ID Driver
+  getPOByDriverIdKhusus: async (page = 1, per_page = 10, id_user, filters = {}) => {
+    console.log("model" + id_user);
+    try {
+      const offset = (page - 1) * per_page;
+      let replacements = { per_page: parseInt(per_page), offset: parseInt(offset), id_user };
+      let whereClause = "WHERE driver.id_user = :id_user";
+      whereClause += " AND po.status_po != 'SELESAI'";
+
+      const query = `
+      SELECT
+        po.id_po,
+        po.nomor_po,
+        po.tanggal_po,
+        po.jam_pemesanan_po,
+        po.jam_muat,
+        po.id_customer,
+        po.id_armada,
+        po.id_driver,
+        po.destination,
+        po.status_po,
+        customer.nama_customer,
+        customer.alamat_customer,
+        driver.nama_driver,
+        armada.nopol_armada,
+        jenis_kendaraan.nama_jenis_kendaraan
+      FROM po
+      LEFT JOIN customer ON po.id_customer = customer.id_customer
+      LEFT JOIN driver ON po.id_driver = driver.id_driver
+      LEFT JOIN armada ON po.id_armada = armada.id_armada
+      LEFT JOIN jenis_kendaraan ON armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
+      ${whereClause}
+      ORDER BY po.id_po DESC
+      LIMIT 1;
+    `;
+
+      const data = await sequelize.query(query, {
+        replacements,
+        type: sequelize.QueryTypes.SELECT,
+      });
+
+      const countQuery = `
+      SELECT COUNT(*) AS total FROM po
+      LEFT JOIN customer ON po.id_customer = customer.id_customer
+      LEFT JOIN driver ON po.id_driver = driver.id_driver
+      LEFT JOIN armada ON po.id_armada = armada.id_armada
+      LEFT JOIN jenis_kendaraan ON armada.id_jenis_kendaraan = jenis_kendaraan.id_jenis_kendaraan
+      ${whereClause};
+    `;
+
+      const [countResult] = await sequelize.query(countQuery, {
+        replacements,
+        type: sequelize.QueryTypes.SELECT,
+      });
+
+      return {
+        data,
+        total: countResult.total,
+        page,
+        per_page,
+      };
+    } catch (error) {
+      throw new Error("Error fetching paginated data: " + error.message);
+    }
+  },
 
   // Menambahkan PO baru
   addPO: async (nomor_po, tanggal_po, jam_pemesanan_po, jam_muat, id_customer, id_armada, id_driver, destination, status_po, origin, jenis_muatan, catatan_po) => {
@@ -408,7 +473,7 @@ const PO = {
     return result.affectedRows > 0;
   },
 
-    updateTarifPO: async (id_po, tarifPO) => {
+  updateTarifPO: async (id_po, tarifPO) => {
     const { tarif_po } = tarifPO;
     const [result] = await sequelize.query(
       `
