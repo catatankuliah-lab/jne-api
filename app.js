@@ -5,7 +5,9 @@ import sequelize from "./config/config.js";
 import authRoutes from "./routes/authRoutes.js";
 import roleRoutes from "./routes/roleRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import customerRoutes from "./routes/customerRoutes.js";
 import woRoutes from "./routes/woRoutes.js";
+import ProvinsiRoutes from "./routes/provinsiRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3090;
@@ -35,7 +37,11 @@ const init = async () => {
         app.use("/api/v1", authRoutes);
         app.use("/api/v1", roleRoutes);
         app.use("/api/v1", userRoutes);
+
         app.use("/api/v1", woRoutes);
+
+        app.use("/api/v1", ProvinsiRoutes);
+
 
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
