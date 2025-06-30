@@ -8,6 +8,11 @@ import userRoutes from "./routes/userRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
 import woRoutes from "./routes/woRoutes.js";
 import ProvinsiRoutes from "./routes/provinsiRoutes.js";
+import KabupatenRoutes from "./routes/kabupatenRoutes.js";
+import KemacamatanRoutes from "./routes/kecamatanRoutes.js";
+import DesaRoutes from "./routes/desaRoutes.js";
+
+
 
 const app = express();
 const PORT = process.env.PORT || 3090;
@@ -41,6 +46,10 @@ const init = async () => {
         app.use("/api/v1", woRoutes);
 
         app.use("/api/v1", ProvinsiRoutes);
+        app.use("/api/v1", KabupatenRoutes);
+        app.use("/api/v1", KemacamatanRoutes);
+        app.use("/api/v1", DesaRoutes);
+
 
 
         app.listen(PORT, () => {
