@@ -3,22 +3,24 @@ import sequelize from "../config/config.js";
 const Wo = {
   // Tambah data WO
   addWo: async (woData) => {
-    const keys = Object.keys(woData);
+    const fields = Object.keys(woData);
     const values = Object.values(woData);
 
-    const fields = keys.join(', ');
-    const placeholders = keys.map(() => '?').join(', ');
+    const placeholders = fields.map(() => '?').join(', ');
+    const fieldList = fields.join(', ');
 
     const query = `
-      INSERT INTO wo (${fields})
+      INSERT INTO wo (${fieldList})
       VALUES (${placeholders})
     `;
 
-    const result = await sequelize.query(query, {
+    await sequelize.query(query, {
       replacements: values,
     });
 
-    return result[0];
+    const [[idResult]] = await sequelize.query("SELECT LAST_INSERT_ID() AS id_wo");
+
+    return idResult.id_wo;
   },
 
   // Ambil semua data WO
@@ -39,6 +41,30 @@ const Wo = {
       }
     );
     return result[0];
+  },
+
+  // Ambil detail WO berdasarkan ID Kantor
+  getWoByIdKantor: async (id_kantor) => {
+    const result = await sequelize.query(
+      `SELECT * FROM wo WHERE id_kantor = ?`,
+      {
+        replacements: [id_kantor],
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    return result;
+  },
+
+  // Ambil detail WO berdasarkan ID Gudang
+  getWoByIdGudang: async (id_gudang) => {
+    const result = await sequelize.query(
+      `SELECT * FROM wo WHERE id_gudang = ?`,
+      {
+        replacements: [id_gudang],
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    return result;
   },
 
   // Update WO
