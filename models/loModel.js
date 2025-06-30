@@ -31,6 +31,40 @@ const Lo = {
     return result[0];
   },
 
+    // Ambil semua LO berdasarkan id_kantor
+    getLoByIdKantor: async (id_kantor) => {
+    const result = await sequelize.query(
+        `
+        SELECT lo.* 
+        FROM lo
+        JOIN wo ON lo.id_wo = wo.id_wo
+        WHERE wo.id_kantor = ?
+        `,
+        {
+        replacements: [id_kantor],
+        type: sequelize.QueryTypes.SELECT,
+        }
+    );
+    return result;
+    },
+
+    // Ambil semua LO berdasarkan id_gudang
+    getLoByIdGudang: async (id_gudang) => {
+    const result = await sequelize.query(
+        `
+        SELECT lo.* 
+        FROM lo
+        JOIN wo ON lo.id_wo = wo.id_wo
+        WHERE wo.id_gudang = ?
+        `,
+        {
+        replacements: [id_gudang],
+        type: sequelize.QueryTypes.SELECT,
+        }
+    );
+    return result;
+    },
+
   updateLo: async (id_lo, loData) => {
     const keys = Object.keys(loData);
     const values = Object.values(loData);

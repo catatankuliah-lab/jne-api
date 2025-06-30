@@ -25,6 +25,20 @@ router.get(
   loController.getLoById
 );
 
+router.get(
+  "/lo/kantor/:id",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3]),
+  loController.getLoByIdKantor
+);
+
+router.get(
+  "/lo/gudang/:id",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3]),
+  loController.getLoByIdGudang
+);
+
 router.put(
   "/lo/:id",
   authMiddleware.authenticate,

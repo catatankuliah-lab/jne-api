@@ -46,7 +46,13 @@ const Wo = {
   // Ambil detail WO berdasarkan ID Kantor
   getWoByIdKantor: async (id_kantor) => {
     const result = await sequelize.query(
-      `SELECT * FROM wo WHERE id_kantor = ?`,
+      `
+      SELECT wo.*, gudang.nama_gudang, kantor.nama_kantor, user.nama_lengkap
+      FROM wo
+      JOIN gudang ON wo.id_gudang = gudang.id_gudang
+      JOIN kantor ON wo.id_kantor = kantor.id_kantor
+      JOIN user ON wo.id_pic = user.id_user
+      WHERE id_kantor = ?`,
       {
         replacements: [id_kantor],
         type: sequelize.QueryTypes.SELECT,

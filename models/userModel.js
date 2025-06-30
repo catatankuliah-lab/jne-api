@@ -25,7 +25,13 @@ const User = {
   // Ambil PIC
   getPIC: async () => {
     const result = await sequelize.query(
-      `SELECT * FROM user WHERE id_role = 3`,
+      `
+      SELECT user.*, gudang.nama_gudang, kantor.nama_kantor
+      FROM user
+      JOIN gudang ON user.id_gudang = gudang.id_gudang
+      JOIN kantor ON user.id_kantor = kantor.id_kantor
+      WHERE id_role = 3
+      `,
       {
         type: sequelize.QueryTypes.SELECT,
       }

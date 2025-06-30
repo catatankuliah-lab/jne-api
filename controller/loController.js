@@ -45,6 +45,58 @@ export const getLoById = async (req, res) => {
   }
 };
 
+export const getLoByIdKantor = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const data = await Lo.getLoByIdKantor(id);
+
+    if (!data) {
+      return res.status(404).json({
+        status: "error",
+        message: "LO not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      data,
+    });
+  } catch (error) {
+    console.error("Error fetching LO:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export const getLoByIdGudang = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const data = await Lo.getLoByIdGudang(id);
+
+    if (!data) {
+      return res.status(404).json({
+        status: "error",
+        message: "LO not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      data,
+    });
+  } catch (error) {
+    console.error("Error fetching LO:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
+    });
+  }
+};
+
 export const updateLo = async (req, res) => {
   const { id } = req.params;
   const { id_wo, nomor_lo, tanggal_lo, driver, nopol, status_lo } = req.body;
