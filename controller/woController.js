@@ -1,22 +1,23 @@
 import Wo from "../models/woModel.js";
 
 export const createWo = async (req, res) => {
-  const { nomor_wo, tanggal_muat, tanggal_distribusi, id_gudang, id_pic } = req.body;
+  const { nomor_wo, tanggal_muat, tanggal_distribusi, id_kantor, id_gudang, id_pic } = req.body;
 
   try {
     const woData = {
       nomor_wo,
       tanggal_muat,
       tanggal_distribusi,
+      id_kantor,
       id_gudang,
       id_pic,
     };
 
-    const result = await Wo.addWo(woData);
+    const id_wo = await Wo.addWo(woData);
 
     res.status(201).json({
       status: "success",
-      data: woData,
+      data: { id_wo, ...woData },
       message: "WO created successfully.",
     });
   } catch (error) {
@@ -70,15 +71,68 @@ export const getWoById = async (req, res) => {
   }
 };
 
+export const getWoByIdKantor = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const data = await Wo.getWoByIdKantor(id);
+
+    if (!data) {
+      return res.status(404).json({
+        status: "error",
+        message: "WO not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      data,
+    });
+  } catch (error) {
+    console.error("Error fetching WO:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export const getWoByIdGudang = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const data = await Wo.getWoByIdGudang(id);
+
+    if (!data) {
+      return res.status(404).json({
+        status: "error",
+        message: "WO not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      data,
+    });
+  } catch (error) {
+    console.error("Error fetching WO:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
+    });
+  }
+};
+
 export const updateWo = async (req, res) => {
   const { id } = req.params;
-  const { nomor_wo, tanggal_muat, tanggal_distribusi, id_gudang, id_pic } = req.body;
+  const { nomor_wo, tanggal_muat, tanggal_distribusi, id_kantor, id_gudang, id_pic } = req.body;
 
   try {
     const woData = {
       nomor_wo,
       tanggal_muat,
       tanggal_distribusi,
+      id_kantor,
       id_gudang,
       id_pic,
     };

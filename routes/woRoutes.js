@@ -25,6 +25,20 @@ router.get(
   woController.getWoById
 );
 
+router.get(
+  "/wo/kantor/:id",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3]),
+  woController.getWoByIdKantor
+);
+
+router.get(
+  "/wo/gudang/:id",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3]),
+  woController.getWoByIdGudang
+);
+
 router.put(
   "/wo/:id",
   authMiddleware.authenticate,
