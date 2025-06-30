@@ -5,8 +5,8 @@ import sequelize from "./config/config.js";
 import authRoutes from "./routes/authRoutes.js";
 import roleRoutes from "./routes/roleRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-import customerRoutes from "./routes/customerRoutes.js";
 import woRoutes from "./routes/woRoutes.js";
+import loRoutes from "./routes/loRoutes.js";
 import detailWORoutes from "./routes/detailWORoutes.js";
 import ProvinsiRoutes from "./routes/provinsiRoutes.js";
 
@@ -41,6 +41,7 @@ const init = async () => {
 
         app.use("/api/v1", woRoutes);
         app.use("/api/v1", detailWORoutes);
+        app.use("/api/v1", loRoutes);
 
         app.use("/api/v1", ProvinsiRoutes);
 

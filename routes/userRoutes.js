@@ -11,6 +11,13 @@ router.post(
   userController.createUser
 );
 
+router.get(
+  "/user/pic",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3]),
+  userController.getPIC
+);
+
 router.post("/dev/user", userController.createUser);
 
 export default router;

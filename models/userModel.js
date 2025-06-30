@@ -20,7 +20,18 @@ const User = {
     });
 
     return result[0];
-  }
+  },
+
+  // Ambil PIC
+  getPIC: async () => {
+    const result = await sequelize.query(
+      `SELECT * FROM user WHERE id_role = 3`,
+      {
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    return result;
+  },
 };
 
 export default User;

@@ -5,6 +5,7 @@ export const createUser = async (req, res) => {
   const {
     id_role,
     id_kantor,
+    id_gudang,
     username,
     password,
     nama_lengkap,
@@ -18,6 +19,7 @@ export const createUser = async (req, res) => {
     const userData = {
       id_role,
       id_kantor,
+      id_gudang,
       username,
       password: hashedPassword,
       nama_lengkap,
@@ -37,6 +39,32 @@ export const createUser = async (req, res) => {
     res.status(500).json({
       status: "error",
       data: null,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export const getPIC = async (req, res) => {
+
+  try {
+    const data = await User.getPIC();
+
+    if (!data) {
+      return res.status(404).json({
+        status: "error",
+        message: "PIC not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "Success fatching PIC",
+      data,
+    });
+  } catch (error) {
+    console.error("Error fetching PIC:", error);
+    res.status(500).json({
+      status: "error",
       message: "Internal Server Error",
     });
   }
