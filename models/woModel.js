@@ -25,7 +25,12 @@ const Wo = {
 
   // Ambil semua data WO
   getAllWo: async () => {
-    const result = await sequelize.query(`SELECT * FROM wo`, {
+    const result = await sequelize.query(`
+      SELECT wo.*, gudang.nama_gudang, kantor.nama_kantor, user.nama_lengkap
+      FROM wo
+      JOIN gudang ON wo.id_gudang = gudang.id_gudang
+      JOIN kantor ON wo.id_kantor = kantor.id_kantor
+      JOIN user ON wo.id_pic = user.id_user`, {
       type: sequelize.QueryTypes.SELECT,
     });
     return result;
@@ -34,7 +39,12 @@ const Wo = {
   // Ambil detail WO berdasarkan ID
   getWoById: async (id_wo) => {
     const result = await sequelize.query(
-      `SELECT * FROM wo WHERE id_wo = ?`,
+      `SELECT wo.*, gudang.nama_gudang, kantor.nama_kantor, user.nama_lengkap
+      FROM wo
+      JOIN gudang ON wo.id_gudang = gudang.id_gudang
+      JOIN kantor ON wo.id_kantor = kantor.id_kantor
+      JOIN user ON wo.id_pic = user.id_user
+      WHERE wo.id_wo = ?`,
       {
         replacements: [id_wo],
         type: sequelize.QueryTypes.SELECT,
@@ -64,7 +74,13 @@ const Wo = {
   // Ambil detail WO berdasarkan ID Gudang
   getWoByIdGudang: async (id_gudang) => {
     const result = await sequelize.query(
-      `SELECT * FROM wo WHERE id_gudang = ?`,
+      `
+      SELECT wo.*, gudang.nama_gudang, kantor.nama_kantor, user.nama_lengkap
+      FROM wo
+      JOIN gudang ON wo.id_gudang = gudang.id_gudang
+      JOIN kantor ON wo.id_kantor = kantor.id_kantor
+      JOIN user ON wo.id_pic = user.id_user
+      WHERE wo.id_gudang = ?`,
       {
         replacements: [id_gudang],
         type: sequelize.QueryTypes.SELECT,
