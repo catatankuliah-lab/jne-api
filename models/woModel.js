@@ -52,7 +52,7 @@ const Wo = {
       JOIN gudang ON wo.id_gudang = gudang.id_gudang
       JOIN kantor ON wo.id_kantor = kantor.id_kantor
       JOIN user ON wo.id_pic = user.id_user
-      WHERE id_kantor = ?`,
+      WHERE wo.id_kantor = ?`,
       {
         replacements: [id_kantor],
         type: sequelize.QueryTypes.SELECT,
