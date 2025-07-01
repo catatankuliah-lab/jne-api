@@ -50,19 +50,19 @@ const Lo = {
 
     // Ambil semua LO berdasarkan id_gudang
     getLoByIdGudang: async (id_gudang) => {
-    const result = await sequelize.query(
-        `
-        SELECT lo.* 
-        FROM lo
-        JOIN wo ON lo.id_wo = wo.id_wo
-        WHERE wo.id_gudang = ?
-        `,
-        {
-        replacements: [id_gudang],
-        type: sequelize.QueryTypes.SELECT,
-        }
-    );
-    return result;
+        const result = await sequelize.query(
+            `
+            SELECT lo.* 
+            FROM lo
+            JOIN wo ON lo.id_wo = wo.id_wo
+            WHERE wo.id_gudang = ?
+            `,
+            {
+            replacements: [id_gudang],
+            type: sequelize.QueryTypes.SELECT,
+            }
+        );
+        return result;
     },
 
   updateLo: async (id_lo, loData) => {

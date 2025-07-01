@@ -8,6 +8,7 @@ import userRoutes from "./routes/userRoutes.js";
 import woRoutes from "./routes/woRoutes.js";
 import loRoutes from "./routes/loRoutes.js";
 import detailWORoutes from "./routes/detailWORoutes.js";
+import detailLORoutes from "./routes/detailLORoutes.js";
 import ProvinsiRoutes from "./routes/provinsiRoutes.js";
 import KabupatenRoutes from "./routes/kabupatenRoutes.js";
 import KemacamatanRoutes from "./routes/kecamatanRoutes.js";
@@ -47,6 +48,7 @@ const init = async () => {
         app.use("/api/v1", woRoutes);
         app.use("/api/v1", detailWORoutes);
         app.use("/api/v1", loRoutes);
+        app.use("/api/v1", detailLORoutes);
 
         app.use("/api/v1", ProvinsiRoutes);
         app.use("/api/v1", KabupatenRoutes);
