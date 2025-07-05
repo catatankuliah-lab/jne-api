@@ -30,6 +30,24 @@ export const getDetailWOByIdWO = async (req, res) => {
   }
 };
 
+export const updateDetailWO = async (req, res) => {
+  try {
+    const { id_detail_wo } = req.params;
+    const updatedData = req.body;
+
+    await DetailWO.updateDetailWO(id_detail_wo, updatedData);
+
+    res.status(200).json({
+      status: "success",
+      message: "Detail WO updated successfully",
+      data: { id_detail_wo, ...updatedData },
+    });
+  } catch (error) {
+    console.error("Error updating detail WO:", error);
+    res.status(500).json({ status: "error", message: "Internal Server Error" });
+  }
+};
+
 export const deleteDetailWO = async (req, res) => {
   try {
     const { id_detail_wo } = req.params;

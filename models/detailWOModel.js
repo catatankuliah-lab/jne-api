@@ -38,6 +38,22 @@ const DetailWO = {
     return result;
   },
 
+  updateDetailWO: async (id_detail_wo, data) => {
+    const fields = Object.keys(data);
+    const values = Object.values(data);
+
+    const setClause = fields.map((field) => `${field} = ?`).join(", ");
+    const query = `
+      UPDATE detail_wo
+      SET ${setClause}
+      WHERE id_detail_wo = ?
+    `;
+
+    await sequelize.query(query, {
+      replacements: [...values, id_detail_wo],
+    });
+  },
+
   deleteDetailWO: async (id_detail_wo) => {
     const query = `DELETE FROM detail_wo WHERE id_detail_wo = ?`;
 

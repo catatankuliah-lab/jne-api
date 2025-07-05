@@ -18,6 +18,13 @@ router.get(
   detailWOController.getDetailWOByIdWO
 );
 
+router.put(
+  "/detail-wo/:id_detail_wo",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3]),
+  detailWOController.updateDetailWO
+);
+
 router.delete(
   "/detail-wo/:id_detail_wo",
   authMiddleware.authenticate,
