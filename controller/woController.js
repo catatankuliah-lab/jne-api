@@ -1,7 +1,7 @@
 import Wo from "../models/woModel.js";
 
 export const createWo = async (req, res) => {
-  const { nomor_wo, tanggal_muat, tanggal_distribusi, id_kantor, id_gudang, id_pic } = req.body;
+  const { nomor_wo, tanggal_muat, tanggal_distribusi, id_kantor, id_gudang, id_pic, id_alokasi } = req.body;
 
   try {
     const woData = {
@@ -11,6 +11,7 @@ export const createWo = async (req, res) => {
       id_kantor,
       id_gudang,
       id_pic,
+      id_alokasi,
     };
 
     const id_wo = await Wo.addWo(woData);
@@ -125,7 +126,7 @@ export const getWoByIdGudang = async (req, res) => {
 
 export const updateWo = async (req, res) => {
   const { id } = req.params;
-  const { nomor_wo, tanggal_muat, tanggal_distribusi, id_kantor, id_gudang, id_pic } = req.body;
+  const { nomor_wo, tanggal_muat, tanggal_distribusi, id_kantor, id_gudang, id_pic, id_alokasi } = req.body;
 
   try {
     const woData = {
@@ -135,6 +136,7 @@ export const updateWo = async (req, res) => {
       id_kantor,
       id_gudang,
       id_pic,
+      id_alokasi,
     };
 
     await Wo.updateWo(id, woData);

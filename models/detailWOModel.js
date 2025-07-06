@@ -28,7 +28,7 @@ const DetailWO = {
     JOIN kabupaten_kota ON kabupaten_kota.kode_kabupaten_kota = detail_wo.kode_kabupaten_kota
     JOIN kecamatan ON kecamatan.kode_kecamatan = detail_wo.kode_kecamatan
     JOIN desa_kelurahan ON desa_kelurahan.kode_desa_kelurahan = detail_wo.kode_desa_kelurahan
-    WHERE detail_wo.id_wo = ?`;
+    WHERE detail_wo.id_wo = ? ORDER BY nama_desa_kelurahan ASC`;
 
     const result = await sequelize.query(query, {
       replacements: [id_wo],

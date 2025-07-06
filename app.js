@@ -13,6 +13,7 @@ import ProvinsiRoutes from "./routes/provinsiRoutes.js";
 import KabupatenRoutes from "./routes/kabupatenRoutes.js";
 import KemacamatanRoutes from "./routes/kecamatanRoutes.js";
 import DesaRoutes from "./routes/desaRoutes.js";
+import AlokasiRoutes from "./routes/alokasiRoutes.js";
 
 
 
@@ -54,6 +55,7 @@ const init = async () => {
         app.use("/api/v1", KabupatenRoutes);
         app.use("/api/v1", KemacamatanRoutes);
         app.use("/api/v1", DesaRoutes);
+        app.use("/api/v1", AlokasiRoutes);
 
 
 
