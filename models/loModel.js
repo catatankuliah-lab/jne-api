@@ -52,10 +52,11 @@ const Lo = {
     getLoByIdGudang: async (id_gudang) => {
         const result = await sequelize.query(
             `
-            SELECT lo.* 
+            SELECT lo.*, wo.id_alokasi, wo.nomor_wo, user.nama_lengkap, user.telpon_user
             FROM lo
             JOIN wo ON lo.id_wo = wo.id_wo
-            WHERE wo.id_gudang = ?
+            JOIN user ON user.id_user = lo.id_checker
+            WHERE wo.id_gudang = ? ORDER BY wo.nomor_wo ASC
             `,
             {
             replacements: [id_gudang],

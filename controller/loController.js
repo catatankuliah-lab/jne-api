@@ -1,10 +1,11 @@
+import { isColString } from "sequelize/lib/utils";
 import Lo from "../models/loModel.js";
 
 export const createLo = async (req, res) => {
-  const { id_wo, nomor_lo, tanggal_lo, driver, nopol, status_lo, nomor_do, nomor_sjt_bulog } = req.body;
+  const { id_wo, nomor_lo, tanggal_lo, driver, nopol, status_lo, nomor_do, nomor_sjt_bulog, telpon_driver, id_checker } = req.body;
 
   try {
-    const loData = { id_wo, nomor_lo, tanggal_lo, driver, nopol, status_lo, nomor_do, nomor_sjt_bulog};
+    const loData = { id_wo, nomor_lo, tanggal_lo, driver, nopol, status_lo, nomor_do, nomor_sjt_bulog, telpon_driver, id_checker};
     const id_lo = await Lo.addLo(loData);
 
     res.status(201).json({
@@ -99,10 +100,10 @@ export const getLoByIdGudang = async (req, res) => {
 
 export const updateLo = async (req, res) => {
   const { id } = req.params;
-  const { id_wo, nomor_lo, tanggal_lo, driver, nopol, status_lo, nomor_do, nomor_sjt_bulog } = req.body;
+  const { id_wo, nomor_lo, tanggal_lo, driver, nopol, status_lo, nomor_do, nomor_sjt_bulog, id_checker } = req.body;
 
   try {
-    const loData = { id_wo, nomor_lo, tanggal_lo, driver, nopol, status_lo, nomor_do, nomor_sjt_bulog };
+    const loData = { id_wo, nomor_lo, tanggal_lo, driver, nopol, status_lo, nomor_do, nomor_sjt_bulog, id_checker };
     await Lo.updateLo(id, loData);
 
     res.status(200).json({ status: "success", message: "LO updated successfully." });

@@ -57,12 +57,21 @@ const Wo = {
   getWoByIdKantor: async (id_kantor) => {
     const result = await sequelize.query(
       `
-      SELECT wo.*, gudang.nama_gudang, kantor.nama_kantor, user.nama_lengkap
+      SELECT 
+        wo.*, 
+        gudang.nama_gudang, 
+        kantor.nama_kantor, 
+        user.nama_lengkap, 
+        user.telpon_user,
+        SUM(detail_wo.jumlah_pbp) AS total_jumlah_pbp,
+        SUM(detail_wo.jumlah_quantum) AS jumlah_quantum
       FROM wo
       JOIN gudang ON wo.id_gudang = gudang.id_gudang
       JOIN kantor ON wo.id_kantor = kantor.id_kantor
       JOIN user ON wo.id_pic = user.id_user
-      WHERE wo.id_kantor = ?`,
+      LEFT JOIN detail_wo ON detail_wo.id_wo = wo.id_wo
+      WHERE wo.id_kantor = ?
+      GROUP BY wo.id_wo`,
       {
         replacements: [id_kantor],
         type: sequelize.QueryTypes.SELECT,
@@ -75,12 +84,21 @@ const Wo = {
   getWoByIdGudang: async (id_gudang) => {
     const result = await sequelize.query(
       `
-      SELECT wo.*, gudang.nama_gudang, kantor.nama_kantor, user.nama_lengkap
+      SELECT 
+        wo.*, 
+        gudang.nama_gudang, 
+        kantor.nama_kantor, 
+        user.nama_lengkap, 
+        user.telpon_user,
+        SUM(detail_wo.jumlah_pbp) AS total_jumlah_pbp,
+        SUM(detail_wo.jumlah_quantum) AS jumlah_quantum
       FROM wo
       JOIN gudang ON wo.id_gudang = gudang.id_gudang
       JOIN kantor ON wo.id_kantor = kantor.id_kantor
       JOIN user ON wo.id_pic = user.id_user
-      WHERE wo.id_gudang = ?`,
+      LEFT JOIN detail_wo ON detail_wo.id_wo = wo.id_wo
+      WHERE wo.id_gudang = ?
+      GROUP BY wo.id_wo`,
       {
         replacements: [id_gudang],
         type: sequelize.QueryTypes.SELECT,

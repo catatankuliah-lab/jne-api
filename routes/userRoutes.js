@@ -15,7 +15,28 @@ router.get(
   "/user/pic",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3]),
-  userController.getPIC
+  userController.getAllPIC
+);
+
+router.get(
+  "/user/pic/kantor/:id_kantor",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3]),
+  userController.getAllPICKantor
+);
+
+router.get(
+  "/user/checker",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3]),
+  userController.getAllChecker
+);
+
+router.get(
+  "/user/checker/gudang/:id_gudang",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3]),
+  userController.getAllCheckerGudang
 );
 
 router.post("/dev/user", userController.createUser);

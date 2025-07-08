@@ -9,6 +9,7 @@ export const createUser = async (req, res) => {
     username,
     password,
     nama_lengkap,
+    telpon_user,
     status_user,
   } = req.body;
 
@@ -23,6 +24,7 @@ export const createUser = async (req, res) => {
       username,
       password: hashedPassword,
       nama_lengkap,
+      telpon_user,
       status_user,
     };
 
@@ -44,10 +46,9 @@ export const createUser = async (req, res) => {
   }
 };
 
-export const getPIC = async (req, res) => {
-
+export const getAllPIC = async (req, res) => {
   try {
-    const data = await User.getPIC();
+    const data = await User.getAllPIC();
 
     if (!data) {
       return res.status(404).json({
@@ -55,7 +56,80 @@ export const getPIC = async (req, res) => {
         message: "PIC not found",
       });
     }
+    res.status(200).json({
+      status: "success",
+      message: "Success fatching PIC",
+      data,
+    });
+  } catch (error) {
+    console.error("Error fetching PIC:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
+    });
+  }
+};
 
+export const getAllPICKantor = async (req, res) => {
+  const { id_kantor } = req.params;
+  try {
+    const data = await User.getAllPICKantor(id_kantor);
+
+    if (!data) {
+      return res.status(404).json({
+        status: "error",
+        message: "PIC not found",
+      });
+    }
+    res.status(200).json({
+      status: "success",
+      message: "Success fatching PIC",
+      data,
+    });
+  } catch (error) {
+    console.error("Error fetching PIC:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export const getAllChecker = async (req, res) => {
+  try {
+    const data = await User.getAllChecker();
+
+    if (!data) {
+      return res.status(404).json({
+        status: "error",
+        message: "PIC not found",
+      });
+    }
+    res.status(200).json({
+      status: "success",
+      message: "Success fatching PIC",
+      data,
+    });
+  } catch (error) {
+    console.error("Error fetching PIC:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export const getAllCheckerGudang = async (req, res) => {
+  const { id_gudang } = req.params;
+  try {
+    const data = await User.getAllCheckerGudang(id_gudang);
+
+    if (!data) {
+      return res.status(404).json({
+        status: "error",
+        message: "PIC not found",
+      });
+    }
     res.status(200).json({
       status: "success",
       message: "Success fatching PIC",
