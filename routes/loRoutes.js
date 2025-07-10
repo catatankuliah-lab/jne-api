@@ -53,4 +53,11 @@ router.delete(
   loController.deleteLo
 );
 
+router.put(
+  "/lo/:id_lo/fotodokumenlo",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3]),
+  loController.updateLODokumen
+);
+
 export default router;

@@ -8,7 +8,7 @@ router.post(
   "/detail-lo",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3]),
-  detailLOController.createDetailLO
+  detailLOController.createOrUpdateDetailLO
 );
 
 router.get(
@@ -32,18 +32,32 @@ router.get(
   detailLOController.getAllDetailLOByIdKantor
 );
 
-router.get(
-  "/detail-lo/lo/gudang/:id_gudang",
-  authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3]),
-  detailLOController.getAllDetailLOByIdGudang
-);
-
 router.delete(
   "/detail-lo/:id_detail_lo",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3]),
   detailLOController.deleteDetailLO
+);
+
+router.put(
+  "/detail-lo/:id_detail_lo/foto",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3]),
+  detailLOController.updateFotoDetailLO
+);
+
+router.put(
+  "/detail-lo/:id_detail_lo/fotodokumen",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3]),
+  detailLOController.updateFotoDetailLODokumen
+);
+
+router.get(
+  "/detail-lo/lo/gudang/:id_gudang",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3]),
+  detailLOController.getAllDetailLOByIdGudang
 );
 
 export default router;

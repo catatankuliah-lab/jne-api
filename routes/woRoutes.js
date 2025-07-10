@@ -33,7 +33,7 @@ router.get(
 );
 
 router.get(
-  "/wo/gudang/:id",
+  "/wo/gudang/:id/alokasi/:id_alokasi",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3]),
   woController.getWoByIdGudang

@@ -24,7 +24,14 @@ const Lo = {
   },
 
   getLoById: async (id_lo) => {
-    const result = await sequelize.query(`SELECT * FROM lo WHERE id_lo = ?`, {
+    const result = await sequelize.query(`
+      SELECT lo.*, alokasi.nama_alokasi, kantor.nama_kantor, gudang.nama_gudang FROM lo
+      JOIN alokasi ON alokasi.id_alokasi = lo.id_alokasi
+      JOIN wo ON wo.id_wo = lo.id_wo
+      JOIN kantor ON kantor.id_kantor = wo.id_kantor
+      JOIN gudang ON gudang.id_gudang = wo.id_gudang
+      WHERE lo.id_lo = ?
+      `, {
       replacements: [id_lo],
       type: sequelize.QueryTypes.SELECT,
     });
@@ -81,6 +88,17 @@ const Lo = {
       replacements: [id_lo],
     });
   },
+
+  updateLODokumen: async (id_lo, path_lo) => {
+        const query = `
+            UPDATE lo 
+            SET path_lo = ?
+            WHERE id_lo = ?
+        `;
+        await sequelize.query(query, {
+            replacements: [path_lo, id_lo],
+        });
+    }
 };
 
 export default Lo;

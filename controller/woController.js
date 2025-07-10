@@ -99,10 +99,10 @@ export const getWoByIdKantor = async (req, res) => {
 };
 
 export const getWoByIdGudang = async (req, res) => {
-  const { id } = req.params;
+  const { id, id_alokasi} = req.params;
 
   try {
-    const data = await Wo.getWoByIdGudang(id);
+    const data = await Wo.getWoByIdGudang(id, id_alokasi);
 
     if (!data) {
       return res.status(404).json({

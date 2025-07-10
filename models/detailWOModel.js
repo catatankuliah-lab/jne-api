@@ -22,13 +22,29 @@ const DetailWO = {
 
   getDetailWOByIdWO: async (id_wo) => {
     const query = `
-    SELECT detail_wo.*, provinsi.nama_provinsi, kabupaten_kota.nama_kabupaten_kota, kecamatan.nama_kecamatan, desa_kelurahan.nama_desa_kelurahan
+    SELECT 
+      detail_wo.*,
+      provinsi.nama_provinsi,
+      kabupaten_kota.nama_kabupaten_kota,
+      kecamatan.nama_kecamatan,
+      desa_kelurahan.nama_desa_kelurahan,
+      COALESCE(SUM(detail_lo.jumlah_pbp_salur), 0) AS total_salur,
+      detail_wo.jumlah_pbp - COALESCE(SUM(detail_lo.jumlah_pbp_salur), 0) AS sisa_pbp
     FROM detail_wo
     JOIN provinsi ON provinsi.kode_provinsi = detail_wo.kode_provinsi
     JOIN kabupaten_kota ON kabupaten_kota.kode_kabupaten_kota = detail_wo.kode_kabupaten_kota
     JOIN kecamatan ON kecamatan.kode_kecamatan = detail_wo.kode_kecamatan
     JOIN desa_kelurahan ON desa_kelurahan.kode_desa_kelurahan = detail_wo.kode_desa_kelurahan
-    WHERE detail_wo.id_wo = ? ORDER BY nama_desa_kelurahan ASC`;
+    LEFT JOIN detail_lo ON detail_lo.id_detail_wo = detail_wo.id_detail_wo
+    WHERE detail_wo.id_wo = ?
+    GROUP BY 
+      detail_wo.id_detail_wo,
+      provinsi.nama_provinsi,
+      kabupaten_kota.nama_kabupaten_kota,
+      kecamatan.nama_kecamatan,
+      desa_kelurahan.nama_desa_kelurahan
+    ORDER BY nama_desa_kelurahan ASC;
+    `;
 
     const result = await sequelize.query(query, {
       replacements: [id_wo],

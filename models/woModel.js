@@ -81,7 +81,7 @@ const Wo = {
   },
 
   // Ambil detail WO berdasarkan ID Gudang
-  getWoByIdGudang: async (id_gudang) => {
+  getWoByIdGudang: async (id_gudang, id_alokasi) => {
     const result = await sequelize.query(
       `
       SELECT 
@@ -98,9 +98,10 @@ const Wo = {
       JOIN user ON wo.id_pic = user.id_user
       LEFT JOIN detail_wo ON detail_wo.id_wo = wo.id_wo
       WHERE wo.id_gudang = ?
+      AND wo.id_alokasi = ?
       GROUP BY wo.id_wo`,
       {
-        replacements: [id_gudang],
+        replacements: [id_gudang, id_alokasi],
         type: sequelize.QueryTypes.SELECT,
       }
     );
