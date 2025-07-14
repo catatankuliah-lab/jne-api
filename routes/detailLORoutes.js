@@ -46,13 +46,6 @@ router.put(
   detailLOController.updateFotoDetailLO
 );
 
-router.put(
-  "/detail-lo/:id_detail_lo/fotodokumen",
-  authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3]),
-  detailLOController.updateFotoDetailLODokumen
-);
-
 router.get(
   "/detail-lo/lo/gudang/:id_gudang",
   authMiddleware.authenticate,

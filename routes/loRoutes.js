@@ -54,10 +54,17 @@ router.delete(
 );
 
 router.put(
-  "/lo/:id_lo/fotodokumenlo",
+  "/lo/:id_lo/fotomuat",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3]),
-  loController.updateLODokumen
+  loController.uploadMuatLO
+);
+
+router.put(
+  "/lo/:id_lo/scandokumen",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3]),
+  loController.uploadScanDokumen
 );
 
 export default router;

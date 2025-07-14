@@ -239,17 +239,6 @@ const DetailLO = {
         await sequelize.query(query, {
             replacements: [path_detail_lo, id_detail_lo],
         });
-    },
-
-    updatePathFotoDetailLODokumen: async (id_detail_lo, path_detail_lo_dokumen) => {
-        const query = `
-            UPDATE detail_lo 
-            SET path_detail_lo_dokumen = ?
-            WHERE id_detail_lo = ?
-        `;
-        await sequelize.query(query, {
-            replacements: [path_detail_lo_dokumen, id_detail_lo],
-        });
     }
     
 };

@@ -89,7 +89,7 @@ const Lo = {
     });
   },
 
-  updateLODokumen: async (id_lo, path_lo) => {
+  uploadMuatLO: async (id_lo, path_lo) => {
         const query = `
             UPDATE lo 
             SET path_lo = ?
@@ -97,6 +97,17 @@ const Lo = {
         `;
         await sequelize.query(query, {
             replacements: [path_lo, id_lo],
+        });
+    },
+
+    uploadScanDokumen: async (id_lo, path_scan_lo) => {
+        const query = `
+            UPDATE lo 
+            SET path_scan_lo = ?
+            WHERE id_lo = ?
+        `;
+        await sequelize.query(query, {
+            replacements: [path_scan_lo, id_lo],
         });
     }
 };

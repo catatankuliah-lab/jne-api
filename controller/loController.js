@@ -134,10 +134,10 @@ export const deleteLo = async (req, res) => {
   }
 };
 
-export const updateLODokumen = async (req, res) => {
+export const uploadMuatLO = async (req, res) => {
   const { id_lo } = req.params;
 
-  upload.single("foto_lo")(req, res, async (err) => {
+  upload.single("foto_muat")(req, res, async (err) => {
     if (err) {
       return res.status(400).json({ error: err.message });
     }
@@ -147,6 +147,7 @@ export const updateLODokumen = async (req, res) => {
     }
 
     const {
+      nomor_lo,
       nama_alokasi,
       nama_kantor,
       nama_gudang,
@@ -164,7 +165,7 @@ export const updateLODokumen = async (req, res) => {
 
 
     const uploadPath = path.join(
-      "uploads/lo",
+      "uploads/muat",
       nama_alokasi,
       nama_kantor,
       nama_gudang,
@@ -177,7 +178,7 @@ export const updateLODokumen = async (req, res) => {
     }
 
     // Tentukan nama file dan path
-    const newFileName = `LO-${nomor_urut}.jpg`;
+    const newFileName = `MUAT-${nomor_lo}-${nomor_urut}.jpg`;
     const filePath = path.join(uploadPath, newFileName);
 
     try {
@@ -189,7 +190,7 @@ export const updateLODokumen = async (req, res) => {
       const relativePath = filePath.replace(/\\/g, "/");
 
       // Update path ke database
-      await Lo.updateLODokumen(id_lo, relativePath);
+      await Lo.uploadMuatLO(id_lo, relativePath);
       return res.status(200).json({
         status: "success",
         message: "File berhasil diupload & dikompres.",
@@ -198,6 +199,71 @@ export const updateLODokumen = async (req, res) => {
     } catch (err) {
       console.error("Gagal resize/compress:", err);
       return res.status(500).json({ error: "Gagal memproses file" });
+    }
+  });
+};
+
+export const uploadScanDokumen = async (req, res) => {
+  const { id_lo } = req.params;
+
+  upload.single("scan_dokumen")(req, res, async (err) => {
+    if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: "File tidak ditemukan" });
+    }
+
+    const {
+      nomor_lo,
+      nama_alokasi,
+      nama_kantor,
+      nama_gudang,
+      tanggal_lo
+    } = req.body;
+
+    // Generate nomor_urut dari timestamp
+    const now = new Date();
+    const nomor_urut = now.getFullYear().toString()
+      + ("0" + (now.getMonth() + 1)).slice(-2)
+      + ("0" + now.getDate()).slice(-2)
+      + ("0" + now.getHours()).slice(-2)
+      + ("0" + now.getMinutes()).slice(-2)
+      + ("0" + now.getSeconds()).slice(-2);
+
+    const uploadPath = path.join(
+      "uploads/dokumen/lo",
+      nama_alokasi,
+      nama_kantor,
+      nama_gudang,
+      tanggal_lo,
+    );
+
+    try {
+      // Buat folder jika belum ada
+      if (!fs.existsSync(uploadPath)) {
+        fs.mkdirSync(uploadPath, { recursive: true });
+      }
+
+      // Simpan file PDF langsung
+      const newFileName = `LO-${nomor_lo}-${nomor_urut}.pdf`;
+      const filePath = path.join(uploadPath, newFileName);
+      fs.writeFileSync(filePath, req.file.buffer);
+
+      const relativePath = filePath.replace(/\\/g, "/");
+
+      // Simpan path ke DB
+      await Lo.uploadScanDokumen(id_lo, relativePath);
+
+      return res.status(200).json({
+        status: "success",
+        message: "File PDF berhasil diupload.",
+        url_hasil: relativePath,
+      });
+    } catch (err) {
+      console.error("Gagal simpan file PDF:", err);
+      return res.status(500).json({ error: "Gagal menyimpan file PDF" });
     }
   });
 };
