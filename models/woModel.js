@@ -137,6 +137,17 @@ const Wo = {
     );
     return result[0];
   },
+
+  uploadScanDokumenDO: async (id_wo, path_scan_do) => {
+    const query = `
+            UPDATE wo 
+            SET path_scan_do = ?
+            WHERE id_wo = ?
+        `;
+    await sequelize.query(query, {
+      replacements: [path_scan_do, id_wo],
+    });
+  }
 };
 
 export default Wo;

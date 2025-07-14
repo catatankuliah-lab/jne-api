@@ -1,4 +1,14 @@
 import Wo from "../models/woModel.js";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+import sharp from "sharp";
+
+export const upload = multer({
+  limits: {
+    fileSize: 20 * 1024 * 1024,
+  },
+});
 
 export const createWo = async (req, res) => {
   const { nomor_wo, tanggal_muat, tanggal_distribusi, id_kantor, id_gudang, id_pic, id_alokasi } = req.body;
@@ -171,4 +181,61 @@ export const deleteWo = async (req, res) => {
       message: "Internal Server Error",
     });
   }
+};
+
+export const uploadScanDokumenDO = async (req, res) => {
+  const { id_wo } = req.params;
+
+  upload.single("scan_dokumendo")(req, res, async (err) => {
+    if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: "File tidak ditemukan" });
+    }
+
+    const {
+      nomor_wo
+    } = req.body;
+
+    // Generate nomor_urut dari timestamp
+    const now = new Date();
+    const nomor_urut = now.getFullYear().toString()
+      + ("0" + (now.getMonth() + 1)).slice(-2)
+      + ("0" + now.getDate()).slice(-2)
+      + ("0" + now.getHours()).slice(-2)
+      + ("0" + now.getMinutes()).slice(-2)
+      + ("0" + now.getSeconds()).slice(-2);
+
+    const uploadPath = path.join(
+      "uploads/dokumen/do",
+    );
+
+    try {
+      // Buat folder jika belum ada
+      if (!fs.existsSync(uploadPath)) {
+        fs.mkdirSync(uploadPath, { recursive: true });
+      }
+
+      // Simpan file PDF langsung
+      const newFileName = `DO-${nomor_wo}-${nomor_urut}.pdf`;
+      const filePath = path.join(uploadPath, newFileName);
+      fs.writeFileSync(filePath, req.file.buffer);
+
+      const relativePath = filePath.replace(/\\/g, "/");
+
+      // Simpan path ke DB
+      await Wo.uploadScanDokumenDO(id_wo, relativePath);
+
+      return res.status(200).json({
+        status: "success",
+        message: "File PDF berhasil diupload.",
+        url_hasil: relativePath,
+      });
+    } catch (err) {
+      console.error("Gagal simpan file PDF:", err);
+      return res.status(500).json({ error: "Gagal menyimpan file PDF" });
+    }
+  });
 };
