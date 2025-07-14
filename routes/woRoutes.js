@@ -53,4 +53,11 @@ router.delete(
   woController.deleteWo
 );
 
+router.put(
+  "/wo/:id_wo/scandokumendo",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3]),
+  woController.uploadScanDokumenDO
+);
+
 export default router;
