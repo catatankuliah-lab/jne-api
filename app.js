@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import multer from "multer"; // Tambahkan multer
+import multer from "multer";
 import sequelize from "./config/config.js";
 import authRoutes from "./routes/authRoutes.js";
 import roleRoutes from "./routes/roleRoutes.js";
