@@ -109,6 +109,16 @@ const Lo = {
         await sequelize.query(query, {
             replacements: [path_scan_lo, id_lo],
         });
+    },
+    uploadScanDokumenSO: async (id_lo, path_scan_so) => {
+        const query = `
+            UPDATE lo 
+            SET path_scan_so = ?
+            WHERE id_lo = ?
+        `;
+        await sequelize.query(query, {
+            replacements: [path_scan_so, id_lo],
+        });
     }
 };
 

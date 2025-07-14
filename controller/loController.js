@@ -267,3 +267,67 @@ export const uploadScanDokumen = async (req, res) => {
     }
   });
 };
+export const uploadScanDokumenSO = async (req, res) => {
+  const { id_lo } = req.params;
+
+  upload.single("scan_dokumenso")(req, res, async (err) => {
+    if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: "File tidak ditemukan" });
+    }
+
+    const {
+      nomor_lo,
+      nama_alokasi,
+      nama_kantor,
+      nama_gudang,
+      tanggal_lo
+    } = req.body;
+
+    // Generate nomor_urut dari timestamp
+    const now = new Date();
+    const nomor_urut = now.getFullYear().toString()
+      + ("0" + (now.getMonth() + 1)).slice(-2)
+      + ("0" + now.getDate()).slice(-2)
+      + ("0" + now.getHours()).slice(-2)
+      + ("0" + now.getMinutes()).slice(-2)
+      + ("0" + now.getSeconds()).slice(-2);
+
+    const uploadPath = path.join(
+      "uploads/dokumen/so",
+      nama_alokasi,
+      nama_kantor,
+      nama_gudang,
+      tanggal_lo,
+    );
+
+    try {
+      // Buat folder jika belum ada
+      if (!fs.existsSync(uploadPath)) {
+        fs.mkdirSync(uploadPath, { recursive: true });
+      }
+
+      // Simpan file PDF langsung
+      const newFileName = `LO-${nomor_lo}-${nomor_urut}.pdf`;
+      const filePath = path.join(uploadPath, newFileName);
+      fs.writeFileSync(filePath, req.file.buffer);
+
+      const relativePath = filePath.replace(/\\/g, "/");
+
+      // Simpan path ke DB
+      await Lo.uploadScanDokumenSO(id_lo, relativePath);
+
+      return res.status(200).json({
+        status: "success",
+        message: "File PDF berhasil diupload.",
+        url_hasil: relativePath,
+      });
+    } catch (err) {
+      console.error("Gagal simpan file PDF:", err);
+      return res.status(500).json({ error: "Gagal menyimpan file PDF" });
+    }
+  });
+};

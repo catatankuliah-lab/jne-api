@@ -67,4 +67,11 @@ router.put(
   loController.uploadScanDokumen
 );
 
+router.put(
+  "/lo/:id_lo/scandokumenso",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3]),
+  loController.uploadScanDokumenSO
+);
+
 export default router;

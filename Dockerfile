@@ -1,20 +1,26 @@
-# Gunakan Node.js versi 22.12 sebagai base image
-FROM node:22.12
+FROM node:18
 
-# Set working directory di dalam container
+# Install libvips dan tools build untuk sharp
+RUN apt-get update && apt-get install -y \
+    libvips-dev \
+    build-essential \
+    python3 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
 WORKDIR /usr/src/app
 
-# Salin package.json dan package-lock.json
+# Salin dependencies
 COPY package*.json ./
 
-# Install dependencies
+# Install dependencies (termasuk sharp)
 RUN npm install
 
-# Salin semua file ke dalam container
+# Salin semua file project
 COPY . .
 
-# Expose port yang digunakan oleh aplikasi (port 3006)
+# Jalankan di port sesuai ENV
 EXPOSE 3006
 
-# Command untuk menjalankan aplikasi
+# Jalankan aplikasi
 CMD ["npm", "start"]
