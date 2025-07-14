@@ -3,7 +3,11 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import sharp from "sharp";
-const upload = multer();
+export const upload = multer({
+  limits: {
+    fileSize: 20 * 1024 * 1024,
+  },
+});
 
 export const createOrUpdateDetailLO = async (req, res) => {
   try {
