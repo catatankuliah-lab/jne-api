@@ -7,14 +7,14 @@ const router = express.Router();
 router.get(
     "/kecamatan",
     authMiddleware.authenticate,
-    authMiddleware.authorizeRole([1, 2, 3]),
+    authMiddleware.authorizeRole([1, 2, 3, 4]),
     KecamatanController.getAllKecamatan
 );
 
 router.get(
     "/kecamatan/kabupaten/:id",
     authMiddleware.authenticate,
-    authMiddleware.authorizeRole([1, 2, 3]),
+    authMiddleware.authorizeRole([1, 2, 3, 4]),
     KecamatanController.getByKodeKabupaten
 );
 

@@ -7,7 +7,7 @@ const router = express.Router();
 router.get(
     "/provinsi",
     authMiddleware.authenticate,
-    authMiddleware.authorizeRole([1, 2, 3]),
+    authMiddleware.authorizeRole([1, 2, 3, 4]),
     provinsiController.getAllProvinsi
 );
 
