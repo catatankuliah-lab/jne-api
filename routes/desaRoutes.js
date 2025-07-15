@@ -7,14 +7,14 @@ const router = express.Router();
 router.get(
     "/desa",
     authMiddleware.authenticate,
-    authMiddleware.authorizeRole([1, 2, 3]),
+    authMiddleware.authorizeRole([1, 2, 3, 4]),
     DesaController.getAllDesa
 );
 
 router.get(
     "/desa/kecamatan/:id",
     authMiddleware.authenticate,
-    authMiddleware.authorizeRole([1, 2, 3]),
+    authMiddleware.authorizeRole([1, 2, 3, 4]),
     DesaController.getDesaByKodekecamatan
 );
 
