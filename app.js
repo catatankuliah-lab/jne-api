@@ -24,7 +24,7 @@ const upload = multer();
 
 app.use(
     cors({
-        origin: "https://simba.delapandelapanlogistics.com",
+        origin: "http://localhost:5173",
         methods: ["GET", "POST", "PUT", "DELETE"],
         allowedHeaders: ["Content-Type", "Authorization"],
     })
@@ -58,8 +58,6 @@ const init = async () => {
         app.use("/api/v1", DesaRoutes);
         app.use("/api/v1", AlokasiRoutes);
         app.use("/api/v1", AbsensiRoutes);
-
-
 
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
