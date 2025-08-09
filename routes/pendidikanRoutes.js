@@ -1,16 +1,16 @@
 import express from "express";
-import * as userController from "../controller/userController.js";
+import * as pendidikanController from "../controller/pendidikanController.js";
 import * as authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.post(
-  "/user",
+// Get semua Pendidikan
+router.get(
+  "/pendidikan",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 4]),
-  userController.createUser
+  pendidikanController.getAllPendidikan
 );
 
-router.post("/dev/user", userController.createUser);
 
 export default router;

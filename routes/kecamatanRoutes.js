@@ -1,6 +1,6 @@
 import express from "express";
-import * as KecamatanController from "../controller/kecamatanController.js"; // Ensure the controller file is created
-import * as authMiddleware from "../middlewares/authMiddleware.js"; // Ensure the middleware is available
+import * as KecamatanController from "../controller/kecamatanController.js";
+import * as authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 

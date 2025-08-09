@@ -1,6 +1,6 @@
 import express from "express";
-import * as kabupatenController from "../controller/kabupatenController.js"; // Ensure the controller file is created
-import * as authMiddleware from "../middlewares/authMiddleware.js"; // Ensure the middleware is available
+import * as kabupatenController from "../controller/kabupatenController.js";
+import * as authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -17,6 +17,7 @@ router.get(
     authMiddleware.authorizeRole([1, 2, 3, 4]),
     kabupatenController.getByKodeProvinsi
 );
+
 
 
 export default router;

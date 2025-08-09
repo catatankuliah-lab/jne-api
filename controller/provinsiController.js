@@ -18,3 +18,5 @@ export const getAllProvinsi = async (req, res) => {
         });
     }
 };
+
+

@@ -1,97 +1,55 @@
 import sequelize from "../config/config.js";
 
 const User = {
-  // ADD USER 
-  addUser: async (userData) => {
-
+  // ADD USER
+  addUser: async (userData, options = {}) => {
     const keys = Object.keys(userData);
     const values = Object.values(userData);
 
-    const fields = keys.join(', ');
-    const placeholders = keys.map(() => '?').join(', ');
+    const fields = keys.join(", ");
+    const placeholders = keys.map(() => "?").join(", ");
 
     const query = `
-      INSERT INTO user (${fields})
-      VALUES (${placeholders})
-    `;
+    INSERT INTO users (${fields})
+    VALUES (${placeholders})
+  `;
 
     const result = await sequelize.query(query, {
       replacements: values,
+      type: sequelize.QueryTypes.INSERT,
+      ...options,
     });
 
-    return result[0];
+    const insertedId = result[0];
+    return { id_user: insertedId };
   },
 
-  // Ambil All PIC
-  getAllPIC: async () => {
-    const result = await sequelize.query(
-      `
-      SELECT user.*, gudang.nama_gudang, kantor.nama_kantor
-      FROM user
-      JOIN gudang ON user.id_gudang = gudang.id_gudang
-      JOIN kantor ON user.id_kantor = kantor.id_kantor
-      WHERE id_role = 3
-      `,
-      {
-        type: sequelize.QueryTypes.SELECT,
-      }
-    );
+  updateUser: async (id_user, userData, options = {}) => {
+    const keys = Object.keys(userData);
+    const values = Object.values(userData);
+
+    if (keys.length === 0) {
+      console.warn("Tidak ada field yang dikirim untuk update user.");
+      return [0];
+    }
+
+    const setClause = keys.map((key) => `${key} = ?`).join(", ");
+    values.push(id_user);
+
+    const query = `
+    UPDATE users
+    SET ${setClause}
+    WHERE id_user = ?
+  `;
+
+    const result = await sequelize.query(query, {
+      replacements: values,
+      type: sequelize.QueryTypes.UPDATE,
+      ...options,
+    });
+
     return result;
   },
-
-  // Ambil All PIC Kantor
-  getAllPICKantor: async (id_kantor) => {
-    const result = await sequelize.query(
-      `
-      SELECT user.*, gudang.nama_gudang, kantor.nama_kantor
-      FROM user
-      JOIN gudang ON user.id_gudang = gudang.id_gudang
-      JOIN kantor ON user.id_kantor = kantor.id_kantor
-      WHERE id_role = 3 AND user.id_kantor = ?
-      `,
-      {
-        replacements: [id_kantor],
-        type: sequelize.QueryTypes.SELECT,
-      }
-    );
-    return result;
-  },
-
-  // Ambil All Checker
-  getAllChecker: async () => {
-    const result = await sequelize.query(
-      `
-      SELECT user.*, gudang.nama_gudang, kantor.nama_kantor
-      FROM user
-      JOIN gudang ON user.id_gudang = gudang.id_gudang
-      JOIN kantor ON user.id_kantor = kantor.id_kantor
-      WHERE id_role = 4
-      `,
-      {
-        type: sequelize.QueryTypes.SELECT,
-      }
-    );
-    return result;
-  },
-
-  // Ambil All Checker Gudang
-  getAllCheckerGudang: async (id_gudang) => {
-    const result = await sequelize.query(
-      `
-      SELECT user.*, gudang.nama_gudang, kantor.nama_kantor
-      FROM user
-      JOIN gudang ON user.id_gudang = gudang.id_gudang
-      JOIN kantor ON user.id_kantor = kantor.id_kantor
-      WHERE id_role = 4 AND user.id_gudang = ?
-      `,
-      {
-        replacements: [id_gudang],
-        type: sequelize.QueryTypes.SELECT,
-      }
-    );
-    return result;
-  },
-
 };
 
 export default User;

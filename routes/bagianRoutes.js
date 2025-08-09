@@ -1,63 +1,62 @@
 import express from "express";
-import * as woController from "../controller/woController.js";
+import * as bagianController from "../controller/bagianController.js";
 import * as authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
+// Tambah Bagian
 router.post(
-  "/wo",
+  "/bagian",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 4]),
-  woController.createWo
+  bagianController.addBagian
 );
 
+// Get semua Bagian
 router.get(
-  "/wo",
+  "/bagian",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 4]),
-  woController.getAllWo
+  bagianController.getAllBagian
 );
 
+// Get detail Bagian by ID
 router.get(
-  "/wo/:id",
+  "/bagian/:id",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 4]),
-  woController.getWoById
+  bagianController.getBagianById
 );
 
+// Get detail Bagian by ID Bagian
 router.get(
-  "/wo/kantor/:id",
+  "/bagian/departemen/:id",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 4]),
-  woController.getWoByIdKantor
+  bagianController.getBagianByIdDepartemen
 );
 
-router.get(
-  "/wo/gudang/:id/alokasi/:id_alokasi",
-  authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3, 4]),
-  woController.getWoByIdGudang
-);
-
+// Update Bagian
 router.put(
-  "/wo/:id",
+  "/bagian/:id",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 4]),
-  woController.updateWo
+  bagianController.updateBagian
 );
 
+// Soft Delete Bagian
 router.delete(
-  "/wo/:id",
+  "/bagian/:id",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 4]),
-  woController.deleteWo
+  bagianController.deleteBagian
 );
 
-router.put(
-  "/wo/:id_wo/scandokumendo",
+router.post(
+  "/bagian/by-departemen",
   authMiddleware.authenticate,
-  authMiddleware.authorizeRole([1, 2, 3]),
-  woController.uploadScanDokumenDO
+  authMiddleware.authorizeRole([1, 2, 3, 4]),
+  bagianController.getBagianByDepartemenMultiple
 );
 
 export default router;

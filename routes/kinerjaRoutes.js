@@ -1,35 +1,46 @@
 import express from "express";
-import * as detailWOController from "../controller/detailWOController.js";
+import * as konerjaController from "../controller/kinerjaController.js";
 import * as authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
+// Tambah Kinerja
 router.post(
-  "/detail-wo",
+  "/kinerja",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 4]),
-  detailWOController.createDetailWO
+  konerjaController.addKinerja
 );
 
 router.get(
-  "/detail-wo/:id_wo",
+  "/kinerja/karyawan/:id",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 4]),
-  detailWOController.getDetailWOByIdWO
+  konerjaController.getAllKinerjaByKaryawan
 );
 
+
+// Get detail Kinerja by ID
+router.get(
+  "/kinerja/:id",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 4]),
+  konerjaController.getKinerjaById
+);
+
+// Update Kinerja
 router.put(
-  "/detail-wo/:id_detail_wo",
+  "/kinerja/:id",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 4]),
-  detailWOController.updateDetailWO
+  konerjaController.updateKinerja
 );
 
+// Soft Delete Kinerja
 router.delete(
-  "/detail-wo/:id_detail_wo",
+  "/kinerja/:id",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 4]),
-  detailWOController.deleteDetailWO
+  konerjaController.deleteKinerja
 );
-
 export default router;
