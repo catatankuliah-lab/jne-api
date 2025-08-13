@@ -23,7 +23,11 @@ export const addAbsensiMasuk = async (req, res) => {
       const { id_karyawan, tanggal } = req.body;
       const tanggalFolder = tanggal || new Date().toISOString().split("T")[0];
 
-      const uploadDir = path.join("uploads/absensi/masuk", id_karyawan, tanggalFolder);
+      const uploadDir = path.join(
+        "uploads/absensi/masuk",
+        id_karyawan,
+        tanggalFolder
+      );
       if (!fs.existsSync(uploadDir)) {
         fs.mkdirSync(uploadDir, { recursive: true });
       }
@@ -39,7 +43,9 @@ export const addAbsensiMasuk = async (req, res) => {
 
         fotoPath = fullPath.replace(/\\/g, "/");
       } catch (e) {
-        return res.status(500).json({ message: "Gagal memproses file", error: e.message });
+        return res
+          .status(500)
+          .json({ message: "Gagal memproses file", error: e.message });
       }
     }
 
@@ -69,7 +75,9 @@ export const addAbsensiMasuk = async (req, res) => {
       const result = await Absensi.addAbsensiMasuk(data);
       res.status(201).json({ message: "Absen masuk berhasil", result });
     } catch (error) {
-      res.status(500).json({ message: "Gagal absen masuk", error: error.message });
+      res
+        .status(500)
+        .json({ message: "Gagal absen masuk", error: error.message });
     }
   });
 };
@@ -106,16 +114,23 @@ export const cekAbsensiHariIni = async (req, res) => {
 export const addAbsensiPulang = async (req, res) => {
   upload.single("foto_pulang")(req, res, async (err) => {
     if (err) {
-      return res.status(400).json({ message: "Upload gagal", error: err.message });
+      return res
+        .status(400)
+        .json({ message: "Upload gagal", error: err.message });
     }
 
     let fotoPath = null;
 
     if (req.file) {
       const { id_karyawan, tanggal_pulang } = req.body;
-      const tanggalFolder = tanggal_pulang || new Date().toISOString().split("T")[0];
+      const tanggalFolder =
+        tanggal_pulang || new Date().toISOString().split("T")[0];
 
-      const uploadDir = path.join("uploads/absensi/pulang", id_karyawan, tanggalFolder);
+      const uploadDir = path.join(
+        "uploads/absensi/pulang",
+        id_karyawan,
+        tanggalFolder
+      );
       if (!fs.existsSync(uploadDir)) {
         fs.mkdirSync(uploadDir, { recursive: true });
       }
@@ -131,14 +146,14 @@ export const addAbsensiPulang = async (req, res) => {
 
         fotoPath = fullPath.replace(/\\/g, "/");
       } catch (e) {
-        return res.status(500).json({ message: "Gagal memproses file", error: e.message });
+        return res
+          .status(500)
+          .json({ message: "Gagal memproses file", error: e.message });
       }
     }
 
     try {
-      const {
-        id_absensi
-      } = req.params;
+      const { id_absensi } = req.params;
 
       const {
         jam_pulang,
@@ -164,7 +179,35 @@ export const addAbsensiPulang = async (req, res) => {
 
       res.status(200).json({ message: "Absen pulang berhasil", result });
     } catch (error) {
-      res.status(500).json({ message: "Gagal absen pulang", error: error.message });
+      res
+        .status(500)
+        .json({ message: "Gagal absen pulang", error: error.message });
     }
   });
+};
+
+export const getAbsensiByBulanTahun = async (req, res) => {
+  try {
+    console.log("REQ PARAMS:", req.params);
+
+    const { id_karyawan, bulan, tahun } = req.params;
+
+    if (!id_karyawan || !bulan || !tahun) {
+      return res.status(400).json({ message: "id_karyawan, bulan, dan tahun wajib diisi" });
+    }
+
+    const data = await Absensi.getAbsensiByBulanTahun(id_karyawan, parseInt(bulan), parseInt(tahun));
+
+    return res.json({
+      status: "success",
+      data,
+    });
+  } catch (error) {
+    console.error("Error di getAbsensiByBulanTahun controller:", error);
+    return res.status(500).json({
+      status: "error",
+      message: "Gagal mengambil data absensi",
+      error: error.message,
+    });
+  }
 };

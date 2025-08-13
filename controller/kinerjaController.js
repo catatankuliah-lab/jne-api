@@ -16,6 +16,22 @@ export const addKinerja = async (req, res) => {
 };
 
 // Get Semua Kinerja berdasarkan karyawan dan tanggal (opsional filter)
+export const getAllKinerja = async (req, res) => {
+  try {
+    const { start_date, end_date } = req.query;
+
+    const result = await Kinerja.getAllKinerja({
+      start_date,
+      end_date,
+    });
+
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: "Gagal mengambil data kinerja", error: error.message });
+  }
+};
+
+// Get Semua Kinerja berdasarkan karyawan dan tanggal (opsional filter)
 export const getAllKinerjaByKaryawan = async (req, res) => {
   try {
     const id_karyawan = req.params.id;

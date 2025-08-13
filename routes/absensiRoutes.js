@@ -25,4 +25,11 @@ router.get(
   absensiController.cekAbsensiHariIni
 );
 
+router.get(
+  "/absensi-bulan/:id_karyawan/:bulan/:tahun",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 4]),
+  absensiController.getAbsensiByBulanTahun
+);
+
 export default router;

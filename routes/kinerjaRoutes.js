@@ -13,6 +13,13 @@ router.post(
 );
 
 router.get(
+  "/kinerja",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 4]),
+  konerjaController.getAllKinerja
+);
+
+router.get(
   "/kinerja/karyawan/:id",
   authMiddleware.authenticate,
   authMiddleware.authorizeRole([1, 2, 3, 4]),

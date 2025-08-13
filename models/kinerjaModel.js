@@ -22,8 +22,39 @@ const Kinerja = {
     return result[0];
   },
 
+  getAllKinerja: async ({ start_date, end_date }) => {
+    let query = `
+    SELECT 
+      rekap_kinerja.*,
+      departemen.id_departemen,
+      departemen.nama_departemen,
+      bagian.id_bagian,
+      bagian.nama_bagian,
+      karyawan.nama
+    FROM rekap_kinerja
+    JOIN karyawan ON karyawan.id_karyawan = rekap_kinerja.id_karyawan
+    JOIN bagian ON bagian.id_bagian = karyawan.id_bagian
+    JOIN departemen ON departemen.id_departemen = bagian.id_departemen
+    WHERE rekap_kinerja.is_deleted = 0
+  `;
+
+    // Tambahkan filter tanggal kalau ada
+    if (start_date && end_date) {
+      query += ` AND rekap_kinerja.tanggal BETWEEN :start_date AND :end_date`;
+    }
+
+    query += ` ORDER BY rekap_kinerja.created_at DESC`;
+
+    const result = await sequelize.query(query, {
+      replacements: {start_date, end_date },
+      type: sequelize.QueryTypes.SELECT,
+    });
+
+    return result;
+  },
+
   getAllKinerjaByKaryawan: async ({ id_karyawan, start_date, end_date }) => {
-  let query = `
+    let query = `
     SELECT 
       rekap_kinerja.*,
       departemen.id_departemen,
@@ -38,20 +69,20 @@ const Kinerja = {
     WHERE rekap_kinerja.is_deleted = 0 AND rekap_kinerja.id_karyawan = :id_karyawan
   `;
 
-  // Tambahkan filter tanggal kalau ada
-  if (start_date && end_date) {
-    query += ` AND rekap_kinerja.tanggal BETWEEN :start_date AND :end_date`;
-  }
+    // Tambahkan filter tanggal kalau ada
+    if (start_date && end_date) {
+      query += ` AND rekap_kinerja.tanggal BETWEEN :start_date AND :end_date`;
+    }
 
-  query += ` ORDER BY rekap_kinerja.created_at DESC`;
+    query += ` ORDER BY rekap_kinerja.created_at DESC`;
 
-  const result = await sequelize.query(query, {
-    replacements: { id_karyawan, start_date, end_date },
-    type: sequelize.QueryTypes.SELECT,
-  });
+    const result = await sequelize.query(query, {
+      replacements: { id_karyawan, start_date, end_date },
+      type: sequelize.QueryTypes.SELECT,
+    });
 
-  return result;
-},
+    return result;
+  },
 
   // ✅ Get Detail Kinerja by ID
   getKinerjaById: async (id) => {
@@ -114,7 +145,7 @@ const Kinerja = {
     });
 
     return result[0];
-  }
+  },
 };
 
 export default Kinerja;

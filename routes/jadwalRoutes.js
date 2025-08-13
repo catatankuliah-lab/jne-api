@@ -12,7 +12,20 @@ router.post(
   jadwalController.addBulkJadwal
 );
 
-// Ambil jadwal berdasarkan id_karyawan, tanggal, bulan, dan tahun
+router.post(
+  "/jadwal-shift/filters",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 4]),
+  jadwalController.getJadwalFiltered
+);
+
+router.post(
+  "/jadwal-shift/detail",
+  authMiddleware.authenticate,
+  authMiddleware.authorizeRole([1, 2, 3, 4]),
+  jadwalController.getDetailJadwal
+);
+
 router.get(
   "/jadwal-shift/:id_karyawan/:tanggal/:bulan/:tahun",
   authMiddleware.authenticate,
